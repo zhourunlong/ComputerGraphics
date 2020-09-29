@@ -22,9 +22,9 @@ public:
         int x[3]{};
     };
 
-    std::vector<Vector3f> v;
-    std::vector<TriangleIndex> t;
-    std::vector<Vector3f> n;
+    std::vector<Vector3f> v; // point index pool
+    std::vector<TriangleIndex> t; // point indices for each triangle
+    std::vector<Vector3f> n; // normal vectors for each triangle
     bool intersect(const Ray &r, Hit &h, float tmin) override;
 
 private:

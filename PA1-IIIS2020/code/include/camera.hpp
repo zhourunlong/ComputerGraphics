@@ -12,8 +12,9 @@ public:
     Camera(const Vector3f &center, const Vector3f &direction, const Vector3f &up, int imgW, int imgH) {
         this->center = center;
         this->direction = direction.normalized();
-        this->horizontal = Vector3f::cross(this->direction, up);
-        this->up = Vector3f::cross(this->horizontal, this->direction);
+        this->up = up.normalized();
+        this->horizontal = Vector3f::cross(this->direction, this->up);
+        //this->up = Vector3f::cross(this->horizontal, this->direction);
         this->width = imgW;
         this->height = imgH;
     }
@@ -36,19 +37,23 @@ protected:
     int height;
 };
 
-// TODO: Implement Perspective camera
-// You can add new functions or variables whenever needed.
 class PerspectiveCamera : public Camera {
 
 public:
     PerspectiveCamera(const Vector3f &center, const Vector3f &direction,
             const Vector3f &up, int imgW, int imgH, float angle) : Camera(center, direction, up, imgW, imgH) {
-        // angle is in radian.
+        cx = imgW / 2.0; cy = imgH / 2.0;
+        d = cy / tan(angle / 2);
+        d = sqrt(d * d - cx * cx);
     }
 
     Ray generateRay(const Vector2f &point) override {
-        // 
+        Vector3f dir = (point.x() - cx) * horizontal + (point.y() - cy) * up + d * direction; // fx = fy = d
+        return Ray(center, dir);
     }
+
+protected:
+    float cx, cy, d; // d is the distance from camera to pic plane
 };
 
 #endif //CAMERA_H

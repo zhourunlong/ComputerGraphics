@@ -1,0 +1,6 @@
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/build/CMakeFiles/rebuild_cache.dir
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/build/CMakeFiles/edit_cache.dir
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/build/CMakeFiles/PA1.dir
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/build/deps/vecmath/CMakeFiles/rebuild_cache.dir
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/build/deps/vecmath/CMakeFiles/edit_cache.dir
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/build/deps/vecmath/CMakeFiles/vecmath.dir
