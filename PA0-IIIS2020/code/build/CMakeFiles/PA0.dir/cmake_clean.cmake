@@ -1,9 +1,9 @@
 file(REMOVE_RECURSE
+  "../bin/PA0"
+  "../bin/PA0.pdb"
+  "CMakeFiles/PA0.dir/src/canvas_parser.cpp.o"
   "CMakeFiles/PA0.dir/src/image.cpp.o"
   "CMakeFiles/PA0.dir/src/main.cpp.o"
-  "CMakeFiles/PA0.dir/src/canvas_parser.cpp.o"
-  "../bin/PA0.pdb"
-  "../bin/PA0"
 )
 
 # Per-language clean rules from dependency scanning.

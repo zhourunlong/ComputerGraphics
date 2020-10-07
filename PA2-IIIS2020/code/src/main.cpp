@@ -91,8 +91,12 @@ void drawScene() {
     // Setup MODELVIEW Matrix
     sceneParser->getCamera()->setupGLMatrix();
 
-    // TODO (PA2): Turn On all lights.
-    // TODO (PA2): Draw elements.
+    int nLights = sceneParser->getNumLights();
+    for (int li = 0; li < nLights; ++li) {
+        Light *light = sceneParser->getLight(li);
+        light->turnOn(li);
+    }
+    sceneParser->getGroup()->drawGL();
 
     // Dump the image to the screen.
     glutSwapBuffers();
