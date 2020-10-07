@@ -14,11 +14,33 @@ public:
 	Triangle() = delete;
 
     // a b c are three vertex positions of the triangle
-	Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c, Material* m) : Object3D(m) {
-        vertices[0] = a; vertices[1] = b; vertices[2] = c;
-        normal = Vector3f::cross(b - a, c - a).normalized();
+	Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c, Material* m)
+        : Object3D(m), a(a), b(b), c(c) {
+        normal = Vector3f::cross(b - a, c - a);
+        size = normal.length();
+        normal.normalize();
         d = Vector3f::dot(normal, a);
-        size = Vector3f::dot(normal, Vector3f::cross(c - b, a - b));
+        
+        float Min = a.x(), Max = a.x();
+        if (b.x() < Min) Min = b.x();
+        else if (b.x() > Max) Max = b.x();
+        if (c.x() < Min) Min = c.x();
+        else if (c.x() > Max) Max = c.x();
+        planeX = (BoundPlane){Min, Max};
+
+        Min = Max = a.y();
+        if (b.y() < Min) Min = b.y();
+        else if (b.y() > Max) Max = b.y();
+        if (c.y() < Min) Min = c.y();
+        else if (c.y() > Max) Max = c.y();
+        planeY = (BoundPlane){Min, Max};
+
+        Min = Max = a.z();
+        if (b.z() < Min) Min = b.z();
+        else if (b.z() > Max) Max = b.z();
+        if (c.z() < Min) Min = c.z();
+        else if (c.z() > Max) Max = c.z();
+        planeZ = (BoundPlane){Min, Max};
 	}
 
 	bool intersect(const Ray& r,  Hit& h, float tmin) override {
@@ -34,7 +56,6 @@ public:
         if (t < tmin || t >= h.getT()) return false;
 
         Vector3f q = r.pointAtParameter(t);
-        Vector3f a = vertices[0], b = vertices[1], c = vertices[2];
 
         // Barycentric coordinates
         float alpha = Vector3f::dot(normal, Vector3f::cross(c - b, q - b));
@@ -42,17 +63,25 @@ public:
 
         float beta = Vector3f::dot(normal, Vector3f::cross(q - a, c - a));
         if (beta >= 0 && alpha + beta <= size) {
-            h.set(t, material, normal);
+            if (Vector3f::dot(v, normal) < 0)
+                h.set(t, material, normal);
+            else 
+                h.set(t, material, -normal);
             return true;
         }
 
         return false;
 	}
+
+    BoundPlane getBoundPlaneX() override {return planeX;}
+    BoundPlane getBoundPlaneY() override {return planeY;}
+    BoundPlane getBoundPlaneZ() override {return planeZ;}
 	
 protected:
 
-    Vector3f normal, vertices[3];
+    Vector3f normal, a, b, c;
     float d, size; // record plane
+    BoundPlane planeX, planeY, planeZ; // bound plane
 };
 
 #endif //TRIANGLE_H

@@ -52,6 +52,18 @@ public:
         return false;
     }
 
+    BoundPlane getBoundPlaneX() override {
+        return (BoundPlane){center.x() - radius, center.x() + radius};
+    }
+
+    BoundPlane getBoundPlaneY() override {
+        return (BoundPlane){center.y() - radius, center.y() + radius};
+    }
+
+    BoundPlane getBoundPlaneZ() override {
+        return (BoundPlane){center.z() - radius, center.z() + radius};
+    }
+
 protected:
     Vector3f center;
     float radius;

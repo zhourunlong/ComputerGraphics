@@ -25,12 +25,25 @@ public:
     std::vector<Vector3f> v; // point index pool
     std::vector<TriangleIndex> t; // point indices for each triangle
     std::vector<Vector3f> n; // normal vectors for each triangle
-    bool intersect(const Ray &r, Hit &h, float tmin) override;
+    bool intersect(const Ray &r, Hit &h, float tmin) {
+        return queryIntersect(rt, r, h, tmin);
+    }
+
+    BoundPlane getBoundPlaneX() override {
+        if (rt != NULL) return rt->planeX;
+    }
+    BoundPlane getBoundPlaneY() override {
+        if (rt != NULL) return rt->planeY;
+    }
+    BoundPlane getBoundPlaneZ() override {
+        if (rt != NULL) return rt->planeZ;
+    }
 
 private:
 
     // Normal can be used for light estimation
     void computeNormal();
+    std::vector <Object3D*> triangles;
 };
 
 #endif

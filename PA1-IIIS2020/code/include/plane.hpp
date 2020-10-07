@@ -10,11 +10,13 @@ public:
     Plane() {
         normal = Vector3f(1, 0, 0);
         d = 0;
+        isPlane = true;
     }
 
     Plane(const Vector3f &normal, float d, Material *m) : Object3D(m) {
         this->normal = normal.normalized();
         this->d = d;
+        isPlane = true;
     }
 
     ~Plane() override = default;
@@ -34,6 +36,10 @@ public:
         }
         return false;
     }
+
+    BoundPlane getBoundPlaneX() override {}
+    BoundPlane getBoundPlaneY() override {}
+    BoundPlane getBoundPlaneZ() override {}
 
 protected:
 

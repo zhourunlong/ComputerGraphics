@@ -76,6 +76,12 @@ vecmath.h
 ray.hpp
 ../include/ray.hpp
 
+../include/image.hpp
+cassert
+-
+vecmath.h
+-
+
 ../include/light.hpp
 Vector3f.h
 -
@@ -113,6 +119,10 @@ hit.hpp
 ../include/hit.hpp
 material.hpp
 ../include/material.hpp
+vector
+-
+algorithm
+-
 
 ../include/plane.hpp
 object3d.hpp
@@ -149,6 +159,8 @@ vecmath.h
 -
 object3d.hpp
 ../include/object3d.hpp
+algorithm
+-
 
 ../include/triangle.hpp
 object3d.hpp
@@ -160,20 +172,30 @@ cmath
 iostream
 -
 
-/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/src/mesh.cpp
-mesh.hpp
-/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/src/mesh.hpp
-fstream
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/src/main.cpp
+cassert
 -
-iostream
--
-algorithm
+cstdio
 -
 cstdlib
 -
-utility
+cstring
 -
-sstream
+cmath
+-
+iostream
+-
+scene_parser.hpp
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/src/scene_parser.hpp
+image.hpp
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/src/image.hpp
+camera.hpp
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/src/camera.hpp
+group.hpp
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/src/group.hpp
+light.hpp
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/src/light.hpp
+string
 -
 
 /home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/src/scene_parser.cpp

@@ -32,6 +32,20 @@ iostream
 
 ../deps/vecmath/include/Vector4f.h
 
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/deps/vecmath/src/Matrix2f.cpp
+Matrix2f.h
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/deps/vecmath/src/Matrix2f.h
+cassert
+-
+cmath
+-
+cstdio
+-
+cstring
+-
+Vector2f.h
+/home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/deps/vecmath/src/Vector2f.h
+
 /home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/deps/vecmath/src/Matrix3f.cpp
 Matrix3f.h
 /home/vectorzhou/ComputerGraphics/PA1-IIIS2020/code/deps/vecmath/src/Matrix3f.h

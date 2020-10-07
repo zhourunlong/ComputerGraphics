@@ -12,9 +12,8 @@ public:
     Camera(const Vector3f &center, const Vector3f &direction, const Vector3f &up, int imgW, int imgH) {
         this->center = center;
         this->direction = direction.normalized();
-        this->up = up.normalized();
-        this->horizontal = Vector3f::cross(this->direction, this->up);
-        //this->up = Vector3f::cross(this->horizontal, this->direction);
+        this->horizontal = Vector3f::cross(this->direction, up);
+        this->up = Vector3f::cross(this->horizontal, this->direction);
         this->width = imgW;
         this->height = imgH;
     }
@@ -38,22 +37,22 @@ protected:
 };
 
 class PerspectiveCamera : public Camera {
-
 public:
     PerspectiveCamera(const Vector3f &center, const Vector3f &direction,
-            const Vector3f &up, int imgW, int imgH, float angle) : Camera(center, direction, up, imgW, imgH) {
-        cx = imgW / 2.0; cy = imgH / 2.0;
-        d = cy / tan(angle / 2);
-        d = sqrt(d * d - cx * cx);
+        const Vector3f &up, int imgW, int imgH, float angle)
+        : Camera(center, direction, up, imgW, imgH), angle(angle) {
     }
 
     Ray generateRay(const Vector2f &point) override {
-        Vector3f dir = (point.x() - cx) * horizontal + (point.y() - cy) * up + d * direction; // fx = fy = d
-        return Ray(center, dir);
+        Vector3f dir = tan(angle / 2) * (point.x() / width * 2 - 1) * horizontal +
+                       tan(angle / 2) * (point.y() / height * 2 - 1) * up +
+                       direction;
+        return Ray(this->center, dir.normalized());
     }
 
 protected:
-    float cx, cy, d; // d is the distance from camera to pic plane
+    float angle;
 };
 
 #endif //CAMERA_H
+

@@ -8,7 +8,6 @@
 #include "hit.hpp"
 #include <iostream>
 
-// TODO: Implement Shade function that computes Phong introduced in class.
 class Material {
 public:
 
@@ -23,13 +22,12 @@ public:
         return diffuseColor;
     }
 
-
     Vector3f Shade(const Ray &ray, const Hit &hit,
                    const Vector3f &dirToLight, const Vector3f &lightColor) {
         Vector3f N = hit.getNormal();
         Vector3f R = 2 * Vector3f::dot(N, dirToLight) * N - dirToLight;
-        Vector3f shaded = lightColor * (diffuseColor * std::max(0.0f, Vector3f::dot(dirToLight, N))
-            + specularColor * pow(std::max(0.0f, Vector3f::dot(-ray.getDirection(), R)), shininess));
+        Vector3f shaded = lightColor * (diffuseColor * clamp(Vector3f::dot(dirToLight, N))
+            + specularColor * pow(clamp(Vector3f::dot(-ray.getDirection(), R)), shininess));
         return shaded;
     }
 
@@ -37,6 +35,12 @@ protected:
     Vector3f diffuseColor;
     Vector3f specularColor;
     float shininess;
+
+    float clamp(float x) {
+        if (x < 0) return 0;
+        if (x > 1) return 1;
+        return x;
+    }
 };
 
 
