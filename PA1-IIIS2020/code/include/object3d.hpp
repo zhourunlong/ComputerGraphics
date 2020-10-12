@@ -13,27 +13,33 @@ struct BoundPlane {
     float coorMin, coorMax;
 
     query queryIntersectX(Ray r) {
-        Vector3f v = r.getDirection();
-        if (v.x() == 0) return std::make_pair(-1e38, 1e38);
-        Vector3f p = r.getOrigin();
+        Vector3f p = r.getOrigin(), v = r.getDirection();
+        if (v.x() == 0) {
+            if (p.x() < coorMin || p.x() > coorMax) return std::make_pair(0, -1);
+            return std::make_pair(-1e38, 1e38);
+        }
         float t0 = (coorMin - p.x()) / v.x(), t1 = (coorMax - p.x()) / v.x();
         if (t0 > t1) return std::make_pair(t1, t0);
         return std::make_pair(t0, t1);
     }
 
     query queryIntersectY(Ray r) {
-        Vector3f v = r.getDirection();
-        if (v.y() == 0) return std::make_pair(-1e38, 1e38);
-        Vector3f p = r.getOrigin();
+        Vector3f p = r.getOrigin(), v = r.getDirection();
+        if (v.y() == 0) {
+            if (p.y() < coorMin || p.y() > coorMax) return std::make_pair(0, -1);
+            return std::make_pair(-1e38, 1e38);
+        }
         float t0 = (coorMin - p.y()) / v.y(), t1 = (coorMax - p.y()) / v.y();
         if (t0 > t1) return std::make_pair(t1, t0);
         return std::make_pair(t0, t1);
     }
 
     query queryIntersectZ(Ray r) {
-        Vector3f v = r.getDirection();
-        if (v.z() == 0) return std::make_pair(-1e38, 1e38);
-        Vector3f p = r.getOrigin();
+        Vector3f p = r.getOrigin(), v = r.getDirection();
+        if (v.z() == 0) {
+            if (p.z() < coorMin || p.z() > coorMax) return std::make_pair(0, -1);
+            return std::make_pair(-1e38, 1e38);
+        }
         float t0 = (coorMin - p.z()) / v.z(), t1 = (coorMax - p.z()) / v.z();
         if (t0 > t1) return std::make_pair(t1, t0);
         return std::make_pair(t0, t1);
