@@ -25,16 +25,30 @@ public:
     std::vector<Vector3f> v;
     std::vector<TriangleIndex> t;
     std::vector<Vector3f> n;
-    bool intersect(const Ray &r, Hit &h, float tmin) override;
+    bool intersect(const Ray &r, Hit &h, float tmin) {
+        return queryIntersect(rt, r, h, tmin);
+    }
+
+    BoundPlane getBoundPlaneX() override {
+        if (rt != NULL) return rt->planeX;
+    }
+    BoundPlane getBoundPlaneY() override {
+        if (rt != NULL) return rt->planeY;
+    }
+    BoundPlane getBoundPlaneZ() override {
+        if (rt != NULL) return rt->planeZ;
+    }
 
     void drawGL() override {
-        // TODO (PA2): Call drawGL for each individual triangle.
+        for (int i = 0; i < triangles.size(); ++i)
+            triangles[i]->drawGL();
     }
 
 private:
 
     // Normal can be used for light estimation
     void computeNormal();
+    std::vector <Object3D*> triangles;
 };
 
 #endif

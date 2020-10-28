@@ -91,8 +91,12 @@ void drawScene() {
     // Setup MODELVIEW Matrix
     sceneParser->getCamera()->setupGLMatrix();
 
-    // TODO (PA2): Turn On all lights.
-    // TODO (PA2): Draw elements.
+    int nLights = sceneParser->getNumLights();
+    for (int li = 0; li < nLights; ++li) {
+        Light *light = sceneParser->getLight(li);
+        light->turnOn(li);
+    }
+    sceneParser->getGroup()->drawGL();
 
     // Dump the image to the screen.
     glutSwapBuffers();
@@ -138,7 +142,7 @@ int main(int argc, char *argv[]) {
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowPosition(60, 60);
     glutInitWindowSize(cam->getWidth(), cam->getHeight());
-    glutCreateWindow("PA3 BezierSurface");
+    glutCreateWindow("PA2 OpenGL");
 
     // Depth testing must be turned on
     glEnable(GL_DEPTH_TEST);
@@ -164,4 +168,3 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
-
