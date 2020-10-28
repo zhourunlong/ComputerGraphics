@@ -80,6 +80,17 @@ public:
         }
         glEnd();
     }
+    BoundPlane getBoundPlaneX() override {
+        return (BoundPlane){-1e38, 1e38};
+    }
+
+    BoundPlane getBoundPlaneY() override {
+        return (BoundPlane){-1e38, 1e38};
+    }
+
+    BoundPlane getBoundPlaneZ() override {
+        return (BoundPlane){-1e38, 1e38};
+    }
 };
 
 #endif //REVSURFACE_HPP
