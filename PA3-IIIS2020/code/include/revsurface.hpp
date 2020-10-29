@@ -25,7 +25,7 @@ public:
     }
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
-        // (PA3 optional TODO): implement this for the ray-tracing routine using G-N iteration.
+        
         return false;
     }
 
