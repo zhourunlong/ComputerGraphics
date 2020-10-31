@@ -26,6 +26,12 @@ public:
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         
+        /*
+        F(r,t,theta)=(p_x+r*v_x-f(t)_x*cos(theta), p_y+r*v_y-f(t)_y, p_z+r*v_z-f(t)_x*sin(theta))
+        J_F=[v_x, -cos(theta)*[f(t)_x]', sin(theta)*f(t)_x,
+             v_y, -[f(t)_y]',            0,
+             v_z, -sin(theta)*[f(t)_x]', -cos(theta)*f(t)_x]
+        */
         return false;
     }
 
