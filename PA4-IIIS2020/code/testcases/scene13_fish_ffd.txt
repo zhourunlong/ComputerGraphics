@@ -1,0 +1,58 @@
+
+PerspectiveCamera {
+    center -10 0 10
+    direction 1 0 -1
+    up 0 1 0
+    angle 30
+    width 512
+    height 512
+}
+
+Lights {
+    numLights 1
+    DirectionalLight {
+        direction -0.5 -0.5 -1
+        color 1.0 1.0 1.0
+    }
+}
+
+Background {
+    color 0.2 0.2 0.8
+}
+
+Materials {
+    numMaterials 1
+    PhongMaterial {
+	  diffuseColor 0.95 0.5 0.3
+	}
+
+}
+
+Group {
+    numObjects 1
+    MaterialIndex 0
+    FFDCage {
+        resolution 3 1 1
+        geometry TriangleMesh {
+             obj_file mesh/fish.obj
+        }
+        controls
+            [ -2.88526 -1.39035 -1.7807 ]
+            [ -2.85816 -1.29932 -0.0611291 ]
+            [ -2.61045 2.42223 -1.76267 ]
+            [ -2.487 2.55134 -0.0653625 ]
+            [ -0.610409 -1.76068 -0.513416 ]
+            [ -0.429724 -1.34642 1.48635 ]
+            [ -0.179981 1.92033 -0.152977 ]
+            [ -0.588156 2.31459 1.45567 ]
+            [ 1.4997 -1.68467 -1.39964 ]
+            [ 1.05788 -1.28385 -0.016408 ]
+            [ 0.818737 2.28455 -1.70838 ]
+            [ 0.745652 2.41081 -0.161664 ]
+            [ 2.64627 -2.14842 0.057054 ]
+            [ 2.31982 -1.97306 1.27038 ]
+            [ 2.94618 1.48376 0.240269 ]
+            [ 2.57235 2.09893 1.64371 ]
+    }
+}
+
