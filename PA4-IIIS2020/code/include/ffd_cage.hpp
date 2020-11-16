@@ -59,9 +59,14 @@ public:
         }
 
         // Compute Local Parametrization.
-        parametrization.reserve(geometry->v.size());
+        parametrization.resize(geometry->v.size());
+        int i = 0;
         for (const auto& gv : geometry->v) {
-            // TODO (PA4): 
+            parametrization[i] = Vector3f(
+                    (gv.x() - bboxMin.x()) / bboxDim.x(),
+                    (gv.y() - bboxMin.y()) / bboxDim.y(),
+                    (gv.z() - bboxMin.z()) / bboxDim.z());
+            ++i;
         }
     }
 
@@ -70,11 +75,23 @@ public:
     }
 
     void update() {
-        // TODO (PA4): Update each vertex position in this->geometry according to positions of control points.
         for (int gi = 0; gi < (int) parametrization.size(); ++gi) {
-            Vector3f& vertex = geometry->v[gi];
-            
+            Vector3f nv = Vector3f(0), para = parametrization[gi];
+
+            double Bx[resX + 1], By[resY + 1], Bz[resZ + 1];
+
+            calcB(resX, para.x(), Bx);
+            calcB(resY, para.y(), By);
+            calcB(resZ, para.z(), Bz);
+
+            for (int x = 0; x < resX + 1; ++x)
+                for (int y = 0; y < resY + 1; ++y)
+                    for (int z = 0; z < resZ + 1; ++z)
+                        nv += Bx[x] * By[y] * Bz[z] * controls[x][y][z];
+
+            geometry->v[gi] = nv;
         }
+        geometry->rebuildTrianglesFromV();
     }
 
     void update(int x, int y, int z, const Vector3f& newPos) {
@@ -86,6 +103,16 @@ public:
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         return geometry->intersect(r, h, tmin);
+    }
+
+    BoundPlane getBoundPlaneX() override {
+        return geometry->getBoundPlaneX();
+    }
+    BoundPlane getBoundPlaneY() override {
+        return geometry->getBoundPlaneY();
+    }
+    BoundPlane getBoundPlaneZ() override {
+        return geometry->getBoundPlaneZ();
     }
 
     void drawGL() override {
@@ -135,6 +162,19 @@ public:
         glEnd();
 
         glPopAttrib();
+    }
+
+private:
+    void calcB(int n, float t, double B[]) {
+        B[0] = 1;
+        for (int i = 1; i <= n; ++i)
+            B[i] = 0;
+
+        for (int j = 1; j <= n; ++j) {
+            for (int i = n; i > 0; --i)
+                B[i] = (1 - t) * B[i] + t * B[i - 1];
+            B[0] *= (1 - t);
+        }
     }
 };
 

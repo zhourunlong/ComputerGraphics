@@ -25,7 +25,13 @@ public:
     }
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
-        // (PA3 optional TODO): implement this for the ray-tracing routine using G-N iteration.
+        
+        /*
+        F(r,t,theta)=(p_x+r*v_x-f(t)_x*cos(theta), p_y+r*v_y-f(t)_y, p_z+r*v_z-f(t)_x*sin(theta))
+        J_F=[v_x, -cos(theta)*[f(t)_x]', sin(theta)*f(t)_x,
+             v_y, -[f(t)_y]',            0,
+             v_z, -sin(theta)*[f(t)_x]', -cos(theta)*f(t)_x]
+        */
         return false;
     }
 
@@ -79,6 +85,17 @@ public:
             glVertex3fv(surface.VV[std::get<2>(surface.VF[i])]);
         }
         glEnd();
+    }
+    BoundPlane getBoundPlaneX() override {
+        return (BoundPlane){-1e38, 1e38};
+    }
+
+    BoundPlane getBoundPlaneY() override {
+        return (BoundPlane){-1e38, 1e38};
+    }
+
+    BoundPlane getBoundPlaneZ() override {
+        return (BoundPlane){-1e38, 1e38};
     }
 };
 

@@ -7,9 +7,8 @@
 #include "ray.hpp"
 #include "hit.hpp"
 #include <iostream>
-#include <gl.h>
+#include <glut.h>
 
-// TODO (PA4): Copy from PA3.
 class Material {
 public:
 
@@ -27,8 +26,10 @@ public:
 
     Vector3f Shade(const Ray &ray, const Hit &hit,
                    const Vector3f &dirToLight, const Vector3f &lightColor) {
-        Vector3f shaded = Vector3f::ZERO;
-        // 
+        Vector3f N = hit.getNormal();
+        Vector3f R = 2 * Vector3f::dot(N, dirToLight) * N - dirToLight;
+        Vector3f shaded = lightColor * (diffuseColor * clamp(Vector3f::dot(dirToLight, N))
+            + specularColor * pow(clamp(Vector3f::dot(-ray.getDirection(), R)), shininess));
         return shaded;
     }
 
@@ -43,6 +44,12 @@ protected:
     Vector3f diffuseColor;
     Vector3f specularColor;
     float shininess;
+
+    float clamp(float x) {
+        if (x < 0) return 0;
+        if (x > 1) return 1;
+        return x;
+    }
 };
 
 

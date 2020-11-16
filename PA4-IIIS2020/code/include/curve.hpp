@@ -8,8 +8,6 @@
 
 #include <algorithm>
 
-// TODO (PA4): Copy from PA3
-
 // The CurvePoint object stores information about a point on a curve
 // after it has been tesselated: the vertex (V) and the tangent (T)
 // It is the responsiblility of functions that create these objects to fill in all the data.
@@ -34,6 +32,8 @@ public:
 
     virtual void discretize(int resolution, std::vector<CurvePoint>& data) = 0;
 
+    virtual CurvePoint evaluate(double t) = 0;
+
     void drawGL() override {
         Object3D::drawGL();
         glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -54,6 +54,17 @@ public:
         glEnd();
         glPopAttrib();
     }
+    BoundPlane getBoundPlaneX() override {
+        return (BoundPlane){0, 0};
+    }
+
+    BoundPlane getBoundPlaneY() override {
+        return (BoundPlane){0, 0};
+    }
+
+    BoundPlane getBoundPlaneZ() override {
+        return (BoundPlane){0, 0};
+    }
 };
 
 class BezierCurve : public Curve {
@@ -65,9 +76,20 @@ public:
         }
     }
 
+    CurvePoint evaluate(double t) override {
+        std::vector <Vector3f> p = controls, d(controls.size(), 0);
+        for (int j = p.size(); j > 1; --j)
+            for (int i = 0; i < j - 1; ++i) {
+                d[i] = (1 - t) * d[i] + t * d[i + 1] + p[i + 1] - p[i];
+                p[i] = (1 - t) * p[i] + t * p[i + 1];
+            }
+        return (CurvePoint){p[0], d[0].normalized()};
+    }
+
     void discretize(int resolution, std::vector<CurvePoint>& data) override {
         data.clear();
-        // TODO (PA3): fill in data vector
+        for (int ti = 0; ti <= resolution; ++ti)
+            data.push_back(evaluate(1.0 * ti / resolution));
     }
 
 protected:
@@ -83,9 +105,33 @@ public:
         }
     }
 
+    CurvePoint evaluate(double t) override {
+        int n = controls.size() - 1, k = 3;
+        double B[n + k + 1][k + 1], tBuf[n + k + 2];
+        for (int ti = 0; ti < n + k + 2; ++ti)
+            tBuf[ti] = 1.0 * ti / (n + k + 1);
+        for (int i = 0; i < n + k + 1; ++i)
+            B[i][0] = (tBuf[i] <= t && t < tBuf[i + 1]);
+        for (int p = 1; p <= k; ++p)
+            for (int i = 0; i < n + k + 1 - p; ++i)
+                B[i][p] = B[i][p - 1] * (t - tBuf[i]) / (tBuf[i + p] - tBuf[i])
+                        + (tBuf[i + p + 1] - t) / (tBuf[i + p + 1] - tBuf[i + 1]) * B[i + 1][p - 1];
+        Vector3f p(0), d(0);
+        for (int i = 0; i <= n; ++i) {
+            p += B[i][k] * controls[i];
+            d += k * (B[i][k - 1] / (tBuf[i + k] - tBuf[i]) - B[i + 1][k - 1] / (tBuf[i + k + 1] - tBuf[i + 1])) * controls[i];
+        }
+        return (CurvePoint){p, d.normalized()};
+    }
+
     void discretize(int resolution, std::vector<CurvePoint>& data) override {
         data.clear();
-        // TODO (PA3): fill in data vector
+        int n = controls.size() - 1, k = 3;
+        int tiMax = (n + 1) * resolution;
+        for (int ti = k * resolution; ti <= tiMax; ++ti) {
+            double t = 1.0 * ti / (n + k + 1) / resolution;
+            data.push_back(evaluate(t));
+        }
     }
 
 protected:
