@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<scene version="0.5.0">
+	<integrator type="path">
+		<integer name="maxDepth" value="5"/>
+		<boolean name="strictNormals" value="true"/>
+	</integrator>
+	<sensor type="perspective">
+		<float name="fov" value="28.7993"/>
+		<transform name="to_world">
+			<lookat origin="50, 52, 295.6" target="50, 51.957388, 294.6" up="0, 0.999093, -0.042573"/>
+		</transform>
+		<sampler type="sobol">
+			<integer name="sampleCount" value="64"/>
+		</sampler>
+		<film type="ldrfilm">
+			<integer name="width" value="1024"/>
+			<integer name="height" value="768"/>
+			<string name="fileFormat" value="png"/>
+			<string name="pixelFormat" value="rgb"/>
+			<float name="gamma" value="2.2"/>
+			<boolean name="banner" value="false"/>
+			<rfilter type="tent"/>
+		</film>
+	</sensor>
+	<shape type="sphere"> <!--Left-->
+		<float name="radius" value="100000"/>
+		<transform name="to_world">
+			<translate value="100001, 40.8, 81.6"/>
+		</transform>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0.75, 0.25, 0.25"/>
+		</bsdf>
+	</shape>
+	<shape type="sphere"> <!--Right-->
+		<float name="radius" value="100000"/>
+		<transform name="to_world">
+			<translate value="-99901, 40.8, 81.6"/>
+		</transform>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0.25, 0.25, 0.75"/>
+		</bsdf>
+	</shape>
+	<shape type="sphere"> <!--Back-->
+		<float name="radius" value="100000"/>
+		<transform name="to_world">
+			<translate value="50, 40.8, 100000"/>
+		</transform>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0.75, 0.75, 0.75"/>
+		</bsdf>
+	</shape>
+	<shape type="sphere"> <!--Front-->
+		<float name="radius" value="100000"/>
+		<transform name="to_world">
+			<translate value="50, 40.8, -99830"/>
+		</transform>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0, 0, 0"/>
+		</bsdf>
+	</shape>
+	<shape type="sphere"> <!--Bottom-->
+		<float name="radius" value="100000"/>
+		<transform name="to_world">
+			<translate value="50, 100000, 81.6"/>
+		</transform>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0.75, 0.75, 0.75"/>
+		</bsdf>
+	</shape>
+	<shape type="sphere"> <!--Top-->
+		<float name="radius" value="100000"/>
+		<transform name="to_world">
+			<translate value="50, −99918.4, 81.6"/>
+		</transform>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0.75, 0.75, 0.75"/>
+		</bsdf>
+	</shape>
+	<shape type="sphere"> <!--Mirror-->
+		<float name="radius" value="16.5"/>
+		<transform name="to_world">
+			<translate value="27, 16.5, 47"/>
+		</transform>
+		<bsdf type="conductor">
+			<string name="meterial" value="Mo"/>
+			<rgb name="specular_reflectance" value="0.999, 0.999, 0.999"/>
+		</bsdf>
+	</shape>
+	<shape type="sphere"> <!--Glass-->
+		<float name="radius" value="16.5"/>
+		<transform name="to_world">
+			<translate value="73, 16.5, 78"/>
+		</transform>
+		<bsdf type="dielectric">
+			<float name="int_ior" value="1.5"/>
+			<float name="ext_ior" value="1.0"/>
+			<rgb name="specular_reflectance" value="0.999, 0.999, 0.999"/>
+			<rgb name="specular_transmittance" value="0.999, 0.999, 0.999"/>
+		</bsdf>
+	</shape>
+	<shape type="sphere"> <!--Light-->
+		<float name="radius" value="600"/>
+		<transform name="to_world">
+			<translate value="50, 681.33, 81.6"/>
+		</transform>
+		<emitter type="area">
+			<rgb name="radiance" value="12, 12, 12"/>
+		</emitter>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0, 0, 0"/>
+		</bsdf>
+	</shape>
+</scene>
