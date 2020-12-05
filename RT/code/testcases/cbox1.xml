@@ -9,8 +9,8 @@
 		<transform name="to_world">
 			<lookat origin="50, 52, 295.6" target="50, 51.957427, 294.600907" up="0, 0.999093, -0.042573"/>
 		</transform>
-		<sampler type="multijitter">
-			<integer name="sample_count" value="10000"/>
+		<sampler type="independent">
+			<integer name="sample_count" value="100"/>
 		</sampler>
 		<film type="hdrfilm">
 			<integer name="width" value="1024"/>
@@ -25,74 +25,60 @@
 	<shape type="sphere"> 
 		<float name="radius" value="100000"/>
 		<transform name="to_world">
-			<translate value="100001, 40.8, 81.6"/>
+			<translate value="-99999, 40.8, 81.6"/>
 		</transform>
-		<bsdf type="twosided">
-			<bsdf type="diffuse">
-				<rgb name="reflectance" value="0.75, 0.25, 0.25"/>
-			</bsdf>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0.75, 0.25, 0.25"/>
 		</bsdf>
 	</shape>
 	<!--Right-->
 	<shape type="sphere"> 
 		<float name="radius" value="100000"/>
 		<transform name="to_world">
-			<translate value="-99901, 40.8, 81.6"/>
+			<translate value="100099, 40.8, 81.6"/>
 		</transform>
-		<bsdf type="twosided">
-			<bsdf type="diffuse">
-				<rgb name="reflectance" value="0.25, 0.25, 0.75"/>
-			</bsdf>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0.25, 0.25, 0.75"/>
 		</bsdf>
 	</shape>
 	<!--Back-->
 	<shape type="sphere">
 		<float name="radius" value="100000"/>
 		<transform name="to_world">
-			<translate value="50, 40.8, 100000"/>
+			<translate value="50, 40.8, -100000"/>
 		</transform>
-		<bsdf type="twosided">
-			<bsdf type="diffuse">
-				<rgb name="reflectance" value="0.75, 0.75, 0.75"/>
-			</bsdf>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0.75, 0.75, 0.75"/>
 		</bsdf>
 	</shape>
 	<!--Front-->
-	<!-->
 	<shape type="sphere"> 
 		<float name="radius" value="100000"/>
 		<transform name="to_world">
-			<translate value="50, 40.8, -99830"/>
+			<translate value="50, 40.8, 100300"/>
 		</transform>
-		<bsdf type="twosided">
-			<bsdf type="diffuse">
-				<rgb name="reflectance" value="0, 0, 0"/>
-			</bsdf>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0, 0, 0"/>
 		</bsdf>
 	</shape>
-	</-->
 	<!--Bottom-->
 	<shape type="sphere"> 
 		<float name="radius" value="100000"/>
 		<transform name="to_world">
-			<translate value="50, 100000, 81.6"/>
+			<translate value="50, -100000, 81.6"/>
 		</transform>
-		<bsdf type="twosided">
-			<bsdf type="diffuse">
-				<rgb name="reflectance" value="0.75, 0.75, 0.75"/>
-			</bsdf>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0.75, 0.75, 0.75"/>
 		</bsdf>
 	</shape>
 	<!--Top-->
 	<shape type="sphere"> 
 		<float name="radius" value="100000"/>
 		<transform name="to_world">
-			<translate value="50, -99918.4, 81.6"/>
+			<translate value="50, 100081.6, 81.6"/>
 		</transform>
-		<bsdf type="twosided">
-			<bsdf type="diffuse">
-				<rgb name="reflectance" value="0.75, 0.75, 0.75"/>
-			</bsdf>
+		<bsdf type="diffuse">
+			<rgb name="reflectance" value="0.75, 0.75, 0.75"/>
 		</bsdf>
 	</shape>
 	<!--Mirror-->
