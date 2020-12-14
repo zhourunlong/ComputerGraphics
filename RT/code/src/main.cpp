@@ -15,26 +15,29 @@
 
 using namespace std;
 
-const int maxDep = 5;
+/*
+int maxDep = 5;
 
-Vector3f rayTracing(const Ray &r, int dep, bool &isIntersect) {
+Vector3f rayTracing(const Ray &r, int dep, bool &isIntersect, unsigned short *Xi) {
     Hit hit;
     isIntersect = baseGroup->intersect(r, hit, 0);
     if (!isIntersect)
         return Vector3f(0);
-    if (dep > maxDep) {
-        Vector3f p = camRay.pointAtParameter(hit.getT());
-        Vector3f finalColor = Vector3f::ZERO;
-        for (int li = 0; li < nLights; ++li) {
-            Light *light = sceneParser.getLight(li);
-            Vector3f L, lightColor;
-            light->getIllumination(p, L, lightColor);
-            finalColor += hit.getMaterial()->Shade(camRay, hit, L, lightColor);
-        }
-        return finalColor;
+    Material *m = hit.getMaterial();
+    Vector3f x = r.pointAtParameter(hit.getT()),
+             n = hit.getNormal(),
+             f = m->getReflectanceColor();
+    double p = std::fmax(std::fmax(f.x(), f.y()), f.z());
+    if (++dep > maxDep) {
+        if (erand48(Xi) < p)
+            f *= 1 / p;
+        else
+            return m->getEmission();
     }
-    
+    String type = m->getBsdf();
+
 }
+*/
 
 int main(int argc, char *argv[]) {
     int timeStamp = clock();
@@ -44,7 +47,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (argc != 3) {
-        cout << "Usage: ./bin/PA1 <input scene file> <output bmp file>" << endl;
+        cout << "Usage: ./bin/RT <input scene file> <output bmp file>" << endl;
         return 1;
     }
 
@@ -56,7 +59,6 @@ int main(int argc, char *argv[]) {
     int w = camera->getWidth(), h = camera->getHeight(),
         nLights = sceneParser.getNumLights();
     Image renderedImg(w, h);
-
 
     for (int x = 0; x < w; ++x) {
         for (int y = 0; y < h; ++y) {

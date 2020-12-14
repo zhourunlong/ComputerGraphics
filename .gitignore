@@ -5,3 +5,6 @@ output/
 images/
 saved_models/
 
+*.out
+*.bmp
+testcases/
