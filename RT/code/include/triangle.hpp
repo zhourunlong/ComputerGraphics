@@ -14,8 +14,17 @@ public:
 	Triangle() = delete;
 
     // a b c are three vertex positions of the triangle
+    Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c)
+        : a(a), b(b), c(c) {
+        calc();
+	}
+
 	Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c, Material* m)
         : Object3D(m), a(a), b(b), c(c) {
+        calc();
+	}
+
+    void calc() {
         normal = Vector3f::cross(b - a, c - a);
         size = normal.length();
         normal.normalize();
@@ -41,7 +50,7 @@ public:
         if (c.z() < Min) Min = c.z();
         else if (c.z() > Max) Max = c.z();
         planeZ = (BoundPlane){Min, Max};
-	}
+    }
 
 	bool intersect(const Ray& r,  Hit& h, float tmin) override {
         Vector3f p = r.getOrigin(), v = r.getDirection();
@@ -76,6 +85,16 @@ public:
     BoundPlane getBoundPlaneX() override {return planeX;}
     BoundPlane getBoundPlaneY() override {return planeY;}
     BoundPlane getBoundPlaneZ() override {return planeZ;}
+
+    void print() override {
+        std::cout << "===== Triangle =====\n";
+        std::cout << a << "\n" << b << "\n" << c << "\n";
+        std::cout << "material: " << ref << "\n";
+        material->print();
+        if (emmision != Vector3f::ZERO)
+            std::cout << "emmision: " << emmision << "\n";
+        std::cout << "--------------------\n";
+    }
 	
 protected:
 

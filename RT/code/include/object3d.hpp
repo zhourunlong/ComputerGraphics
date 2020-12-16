@@ -4,10 +4,12 @@
 #include "ray.hpp"
 #include "hit.hpp"
 #include "material.hpp"
-#include <vector>
-#include <algorithm>
+#include "parser.hpp"
+#include <bits/stdc++.h>
 
 typedef std::pair <float, float> query;
+
+extern std::map <std::string, Material*> materialMap;
 
 struct BoundPlane {
     float coorMin, coorMax;
@@ -57,11 +59,27 @@ class Object3D {
 public:
     Object3D() : material(nullptr) {}
 
-    virtual ~Object3D() = default;
+    ~Object3D() = default;
 
     explicit Object3D(Material *material) {
         this->material = material;
     }
+
+    virtual std::string getMatRef() {return ref;}
+
+    void setMatRef(const std::string &_ref) {ref = _ref;}
+
+    virtual Material* getMaterial() {return material;}
+
+    virtual void setMaterial(Material* _material) {material = _material;}
+
+    Vector3f getEmmision() {return emmision;}
+
+    void setEmmision(const Vector3f &_emmision) {emmision = _emmision;}
+
+    bool getNeedTransform() {return needTransform;}
+
+    void setNeedTransform(const bool &_needTransform) {needTransform = _needTransform;}
 
     // Intersect Ray with this object. If hit, store information in hit structure.
     virtual bool intersect(const Ray &r, Hit &h, float tmin) = 0;
@@ -70,12 +88,17 @@ public:
     virtual BoundPlane getBoundPlaneY() = 0;
     virtual BoundPlane getBoundPlaneZ() = 0;
 
-    bool testPlane() {return isPlane;}
+    bool getIsPlane() {return isPlane;}
+
+    virtual void print() = 0;
 
 protected:
 
     bool isPlane = false;
-    Material *material;
+    std::string ref = "";
+    Material* material;
+    Vector3f emmision = Vector3f::ZERO;
+    bool needTransform = false;
 
     struct TreeNode {
         TreeNode *lc, *rc;

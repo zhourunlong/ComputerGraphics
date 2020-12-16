@@ -16,9 +16,11 @@
 class Mesh : public Object3D {
 
 public:
-    Mesh(const char *filename, Material *material) : Object3D(material) {
+    Mesh() {
         triangles.clear();
-        //deleteTree(rt);
+    }
+    
+    void setFile(const char* filename) {
         // Optional: Use tiny obj loader to replace this simple one.
         std::ifstream f;
         f.open(filename);
@@ -112,6 +114,15 @@ public:
         if (rt != NULL) return rt->planeZ;
     }
 
+    void print() override {
+        std::cout << "===== Mesh =====\n";
+        std::cout << "material: " << ref << "\n";
+        material->print();
+        if (emmision != Vector3f::ZERO)
+            std::cout << "emmision: " << emmision << "\n";
+        std::cout << "----------------\n";
+    }
+
 private:
 
     // Normal can be used for light estimation
@@ -122,7 +133,7 @@ private:
             Vector3f a = v[triIndex[1]] - v[triIndex[0]];
             Vector3f b = v[triIndex[2]] - v[triIndex[0]];
             b = Vector3f::cross(a, b);
-            n[triId] = b / b.length();
+            n[triId] = b.normalized();
         }
     }
     std::vector <Object3D*> triangles;

@@ -9,10 +9,10 @@ ADD_SUBDIRECTORY(deps/vecmath)
 
 SET(RT_SOURCES
         src/main.cpp
-        src/pugixml.cpp
         )
 
 SET(RT_INCLUDES
+        include/parser.hpp
         include/camera.hpp
         include/group.hpp
         include/hit.hpp
@@ -23,7 +23,6 @@ SET(RT_INCLUDES
         include/object3d.hpp
         include/plane.hpp
         include/ray.hpp
-        include/scene_parser.hpp
         include/sphere.hpp
         include/transform.hpp
         include/triangle.hpp
@@ -33,6 +32,7 @@ SET(RT_INCLUDES
 
 SET(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+set(CMAKE_CXX_FLAGS "-O2")
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${RT_SOURCES} ${RT_INCLUDES})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} vecmath)

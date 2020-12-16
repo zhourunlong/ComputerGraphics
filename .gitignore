@@ -7,4 +7,6 @@ saved_models/
 
 *.out
 *.bmp
-testcases/
+*.pfm
+
+.vscode/

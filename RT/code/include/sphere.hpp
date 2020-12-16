@@ -18,7 +18,9 @@ public:
         this->radius = radius;
     }
 
-    ~Sphere() override = default;
+    void setRadius(const float &_radius) {radius = _radius;}
+
+    void setCenter(const Vector3f &_center) {center = _center;}
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         Vector3f p = r.getOrigin(), v = r.getDirection();
@@ -62,6 +64,17 @@ public:
 
     BoundPlane getBoundPlaneZ() override {
         return (BoundPlane){center.z() - radius, center.z() + radius};
+    }
+
+    void print() override {
+        std::cout << "===== Sphere =====\n";
+        std::cout << "center: " << center << "\n";
+        std::cout << "radius: " << radius << "\n";
+        std::cout << "material: " << ref << "\n";
+        material->print();
+        if (emmision != Vector3f::ZERO)
+            std::cout << "emmision: " << emmision << "\n";
+        std::cout << "------------------\n";
     }
 
 protected:

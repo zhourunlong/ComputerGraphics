@@ -17,18 +17,11 @@ public:
         //deleteTree(rt);
     }
 
-    explicit Group (int num_objects) {
+    Group (int num_objects) {
         v.clear();
         v.resize(num_objects);
         plane.clear();
         //deleteTree(rt);
-    }
-
-    ~Group() override {
-        //deleteTree(rt);
-        for (int i = 0; i < v.size(); ++i) delete v[i];
-        v.clear();
-        plane.clear();
     }
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
@@ -42,20 +35,28 @@ public:
     void addObject(int index, Object3D *obj) {
         assert(index >= 0 && index < v.size() && v[index] == 0);
         v[index] = obj;
-        if (index == v.size() - 1) {
-            std::vector <Object3D*> withoutPlane;
-            for (int i = 0; i < v.size(); ++i)
-                if (v[i]->testPlane())
-                    plane.push_back(v[i]);
-                else
-                    withoutPlane.push_back(v[i]);
-            if (withoutPlane.size()) buildTree(rt, withoutPlane, 0);
-            else isPlane = true;
-        }
+        if (index == v.size() - 1)
+            finish();
     }
 
-    int getGroupSize() {
-        return v.size();
+    void addObject(Object3D *obj) {v.push_back(obj);}
+
+    void finish() {
+        std::vector <Object3D*> withoutPlane;
+        for (int i = 0; i < v.size(); ++i)
+            if (v[i]->getIsPlane())
+                plane.push_back(v[i]);
+            else
+                withoutPlane.push_back(v[i]);
+        if (withoutPlane.size()) buildTree(rt, withoutPlane, 0);
+        else isPlane = true;
+    }
+
+    int getGroupSize() {return v.size();}
+
+    Object3D* getObj(int idx) {
+        assert(0 <= idx && idx < v.size());
+        return v[idx];
     }
 
     BoundPlane getBoundPlaneX() override {
@@ -66,6 +67,17 @@ public:
     }
     BoundPlane getBoundPlaneZ() override {
         if (rt != NULL) return rt->planeZ;
+    }
+
+    void print() override {
+        std::cout << "===========================\n";
+        std::cout << "=          Group          =\n";
+        std::cout << "===========================\n";
+        for (int i = 0; i < v.size(); ++i)
+            v[i]-> print();
+        std::cout << "---------------------------\n";
+        std::cout << "-       End of Group      -\n";
+        std::cout << "---------------------------\n";
     }
 
 private:

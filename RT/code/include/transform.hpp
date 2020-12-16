@@ -47,9 +47,16 @@ public:
         }
         transform = m.inverse();
     }
+    
+    void appendTransform(const Matrix4f &m) {transform = transform * m;}
 
-    ~Transform() {
-    }
+    void setObject(Object3D* _o) {o = _o;}
+
+    std::string getMatRef() override {return o->getMatRef();}
+
+    Material* getMaterial() override {return o->getMaterial();}
+
+    void setMaterial(Material* _material) override {o->setMaterial(_material);}
 
     virtual bool intersect(const Ray &r, Hit &h, float tmin) {
         Vector3f trSource = transformPoint(transform, r.getOrigin());
@@ -66,9 +73,17 @@ public:
     BoundPlane getBoundPlaneY() override {return planeY;}
     BoundPlane getBoundPlaneZ() override {return planeZ;}
 
+    void print() override {
+        std::cout << "===== Transform =====\n";
+        std::cout << "matrix:\n";
+        transform.print();
+        o->print();
+        std::cout << "---------------------\n";
+    }
+
 protected:
-    Object3D *o; //un-transformed object
-    Matrix4f transform;
+    Object3D *o = NULL; //un-transformed object
+    Matrix4f transform = Matrix4f::identity();
     BoundPlane planeX, planeY, planeZ;
 };
 

@@ -1,17 +1,9 @@
-#include <cassert>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <cmath>
-#include <iostream>
+#include <bits/stdc++.h>
 
-#include "scene_parser.hpp"
+#include "parser.hpp"
 #include "image.hpp"
 #include "camera.hpp"
 #include "group.hpp"
-#include "light.hpp"
-
-#include <string>
 
 using namespace std;
 
@@ -51,13 +43,11 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    SceneParser sceneParser(argv[1]);
-    Camera *camera = sceneParser.getCamera();
-    Group* baseGroup = sceneParser.getGroup();
-    Vector3f bgColor = sceneParser.getBackgroundColor();
+    Parser parser(argv[1]);
+    Camera *camera = parser.getCamera();
+    Group* baseGroup = parser.getGroup();
 
-    int w = camera->getWidth(), h = camera->getHeight(),
-        nLights = sceneParser.getNumLights();
+    int w = camera->getWidth(), h = camera->getHeight();
     Image renderedImg(w, h);
 
     for (int x = 0; x < w; ++x) {
@@ -69,19 +59,18 @@ int main(int argc, char *argv[]) {
                 Vector3f p = camRay.pointAtParameter(hit.getT());
                 Vector3f finalColor = Vector3f::ZERO;
                 for (int li = 0; li < nLights; ++li) {
-                    Light *light = sceneParser.getLight(li);
+                    Light *light = parser.getLight(li);
                     Vector3f L, lightColor;
                     light->getIllumination(p, L, lightColor);
                     finalColor += hit.getMaterial()->Shade(camRay, hit, L, lightColor);
                 }
                 renderedImg.SetPixel(x, y, finalColor);
-            } else renderedImg.SetPixel(x, y, bgColor);
+            } else renderedImg.SetPixel(x, y, Vector3f::ZERO);
         }
     }
     
     renderedImg.SaveImage(argv[2]);
-    
-    cout << "Hello! Computer Graphics!" << endl;
+
     cout << "time: " << (clock() - timeStamp) / 1e6 << " sec\n";
     return 0;
 }
