@@ -41,17 +41,6 @@ public:
 
     void addObject(Object3D *obj) {v.push_back(obj);}
 
-    void finish() {
-        std::vector <Object3D*> withoutPlane;
-        for (int i = 0; i < v.size(); ++i)
-            if (v[i]->getIsPlane())
-                plane.push_back(v[i]);
-            else
-                withoutPlane.push_back(v[i]);
-        if (withoutPlane.size()) buildTree(rt, withoutPlane, 0);
-        else isPlane = true;
-    }
-
     int getGroupSize() {return v.size();}
 
     Object3D* getObj(int idx) {
@@ -78,6 +67,19 @@ public:
         std::cout << "---------------------------\n";
         std::cout << "-       End of Group      -\n";
         std::cout << "---------------------------\n";
+    }
+
+    void finish() override {
+        std::vector <Object3D*> withoutPlane;
+        for (int i = 0; i < v.size(); ++i) {
+            v[i]->finish();
+            if (v[i]->getIsPlane())
+                plane.push_back(v[i]);
+            else
+                withoutPlane.push_back(v[i]);
+        }
+        if (withoutPlane.size()) buildTree(rt, withoutPlane, 0);
+        else isPlane = true;
     }
 
 private:

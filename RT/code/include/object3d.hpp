@@ -95,6 +95,8 @@ public:
 
     virtual void print() = 0;
 
+    virtual void finish() {}
+
 protected:
 
     bool isPlane = false;

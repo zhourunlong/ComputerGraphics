@@ -87,6 +87,13 @@ public:
         buildTree(rt, triangles, 0);
     }
 
+    Material* getMaterial() override {return triangles[0]->getMaterial();}
+
+    void setMaterial(Material* _material) override {
+        for (int i = 0; i < triangles.size(); ++i)
+            triangles[i]->setMaterial(_material);
+    }
+
     struct TriangleIndex {
         TriangleIndex() {
             x[0] = 0; x[1] = 0; x[2] = 0;

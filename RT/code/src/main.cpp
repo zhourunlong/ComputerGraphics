@@ -32,11 +32,11 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi) {
     if (type == Material::DIFF) {
         double r1 = 2 * M_PI * erand48(Xi), r2 = erand48(Xi), r2s = sqrt(r2);
         Vector3d w = n;
-        Vector3d u = Vector3d::cross(fabs(w.x()) > .1 ? Vector3d(0, 1, 0) : Vector3d(1, 0, 0), w).normalized();
+        Vector3d u = Vector3d::cross(fabs(w.x()) > 0.1 ? Vector3d(0, 1, 0) : Vector3d(1, 0, 0), w).normalized();
         Vector3d v = Vector3d::cross(w, u);
         Vector3d d = (u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2)).normalized();
         return o->getEmmision() + f * rayTracing(Ray(x, d), dep, Xi);
-    };
+    }
     Vector3d rD = r.getDirection();
     Ray reflRay = Ray(x, rD - 2 * Vector3d::dot(rD, n) * n);
     if (type == Material::COND)
@@ -69,6 +69,7 @@ int main(int argc, char *argv[]) {
     double timeStamp = omp_get_wtime();
 
     Parser parser(argv[1]);
+    //Parser parser("../testcases/cbox2.xml");
     Camera *camera = parser.getCamera();
     baseGroup = parser.getGroup();
 
@@ -91,8 +92,7 @@ int main(int argc, char *argv[]) {
                     for (int s = 0; s < samps; ++s) {
                         double r1 = 2 * erand48(Xi), dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
                         double r2 = 2 * erand48(Xi), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
-                        //Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + dx, y + (0.25 * sy + dy)));
-                        Ray camRay = camera->generateRay(Vector2d(x, y));
+                        Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + dx, y + 0.25 * sy + dy));
                         r = r + rayTracing(camRay, 0, Xi) / samps;
                     }
                     finalColor = finalColor + Vector3d(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
@@ -102,6 +102,7 @@ int main(int argc, char *argv[]) {
     }
     
     renderedImg.SaveImage(argv[2]);
+    //renderedImg.SaveImage("2.bmp");
 
     std::cout << "time: " << omp_get_wtime() - timeStamp << " sec\n";
     return 0;

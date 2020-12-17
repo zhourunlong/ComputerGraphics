@@ -257,15 +257,15 @@ void Parser::parseTransform(const pugi::xml_node &node, Transform* &tran) {
         std::string s = node.first_attribute().value();
         int bg = 0, ed;
         if (countSpaces(s) > 10) {
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 4; j++) {
+            for (int i = 0; i < 4; ++i)
+                for (int j = 0; j < 4; ++j) {
                     double v = stringToDouble(s, bg, ed);
                     bg = ed;
                     mat(i, j) = v;
                 }
         } else {
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 3; ++i)
+                for (int j = 0; j < 3; ++j) {
                     double v = stringToDouble(s, bg, ed);
                     bg = ed;
                     mat(i, j) = v;
@@ -396,7 +396,7 @@ void Parser::parseShape(const pugi::xml_node &node) {
         parseSphere(node, m);
         return;
     } else if (type == "rectangle") {
-        Triangle *m1 = new Triangle(Vector3d(1, 1, 0), Vector3d(1, -1, 0), Vector3d(-1, -1, 0)),
+        Triangle *m1 = new Triangle(Vector3d(1, 1, 0), Vector3d(-1, -1, 0), Vector3d(1, -1, 0)),
                  *m2 = new Triangle(Vector3d(1, 1, 0), Vector3d(-1, 1, 0), Vector3d(-1, -1, 0));
         parseTriangle(node, m1, true);
         parseTriangle(node, m2, true);

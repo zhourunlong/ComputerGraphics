@@ -333,7 +333,7 @@ Matrix4d::operator const double* ()const
 
 void Matrix4d::print()
 {
-	printf( "[ %.4d %.4d %.4d %.4d ]\n[ %.4d %.4d %.4d %.4d ]\n[ %.4d %.4d %.4d %.4d ]\n[ %.4d %.4d %.4d %.4d ]\n",
+	printf( "[ %.10lf %.10lf %.10lf %.10lf ]\n[ %.10lf %.10lf %.10lf %.10lf ]\n[ %.10lf %.10lf %.10lf %.10lf ]\n[ %.10lf %.10lf %.10lf %.10lf ]\n",
 		m_elements[ 0 ], m_elements[ 4 ], m_elements[ 8 ], m_elements[ 12 ],
 		m_elements[ 1 ], m_elements[ 5 ], m_elements[ 9 ], m_elements[ 13 ],
 		m_elements[ 2 ], m_elements[ 6 ], m_elements[ 10], m_elements[ 14 ],

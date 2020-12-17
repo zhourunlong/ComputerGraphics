@@ -18,37 +18,8 @@ static Vector3d transformDirection(const Matrix4d &mat, const Vector3d &dir) {
 class Transform : public Object3D {
 public:
     Transform() {}
-
-    Transform(const Matrix4d &m, Object3D *obj) : o(obj) {
-        Vector3d p[8];
-        BoundPlane oX = o->getBoundPlaneX(),
-                   oY = o->getBoundPlaneY(),
-                   oZ = o->getBoundPlaneZ();
-        p[0] = Vector3d(oX.coorMin, oY.coorMin, oZ.coorMin);
-        p[1] = Vector3d(oX.coorMin, oY.coorMin, oZ.coorMax);
-        p[2] = Vector3d(oX.coorMin, oY.coorMax, oZ.coorMin);
-        p[3] = Vector3d(oX.coorMin, oY.coorMax, oZ.coorMax);
-        p[4] = Vector3d(oX.coorMax, oY.coorMin, oZ.coorMin);
-        p[5] = Vector3d(oX.coorMax, oY.coorMin, oZ.coorMax);
-        p[6] = Vector3d(oX.coorMax, oY.coorMax, oZ.coorMin);
-        p[7] = Vector3d(oX.coorMax, oY.coorMax, oZ.coorMax);
-        for (int i = 0; i < 8; ++i)
-            p[i] = transformPoint(m, p[i]);
-        planeX = (BoundPlane){p[0].x(), p[0].x()};
-        planeY = (BoundPlane){p[0].y(), p[0].y()};
-        planeZ = (BoundPlane){p[0].z(), p[0].z()};
-        for (int i = 1; i < 8; ++i) {
-            planeX.coorMin = std::min(planeX.coorMin, p[i].x());
-            planeX.coorMax = std::max(planeX.coorMax, p[i].x());
-            planeY.coorMin = std::min(planeY.coorMin, p[i].y());
-            planeY.coorMax = std::max(planeY.coorMax, p[i].y());
-            planeZ.coorMin = std::min(planeZ.coorMin, p[i].z());
-            planeZ.coorMax = std::max(planeZ.coorMax, p[i].z());
-        }
-        transform = m.inverse();
-    }
     
-    void appendTransform(const Matrix4d &m) {transform = transform * m;}
+    void appendTransform(const Matrix4d &m) {transform = m * transform;}
 
     void setObject(Object3D* _o) {o = _o;}
 
@@ -59,12 +30,12 @@ public:
     void setMaterial(Material* _material) override {o->setMaterial(_material);}
 
     virtual bool intersect(const Ray &r, Hit &h, double tmin) {
-        Vector3d trSource = transformPoint(transform, r.getOrigin());
-        Vector3d trDirection = transformDirection(transform, r.getDirection());
+        Vector3d trSource = transformPoint(transform.inverse(), r.getOrigin());
+        Vector3d trDirection = transformDirection(transform.inverse(), r.getDirection());
         Ray tr(trSource, trDirection);
         bool inter = o->intersect(tr, h, tmin);
         if (inter) {
-            h.set(h.getT(), h.getObject(), transformDirection(transform.transposed(), h.getNormal()).normalized(), h.getInto());
+            h.set(h.getT(), h.getObject(), transformDirection(transform, h.getNormal()).normalized(), h.getInto());
         }
         return inter;
     }
@@ -79,6 +50,35 @@ public:
         transform.print();
         o->print();
         std::cout << "---------------------\n";
+    }
+
+    void finish() override {
+        o->finish();
+        Vector3d p[8];
+        BoundPlane oX = o->getBoundPlaneX(),
+                   oY = o->getBoundPlaneY(),
+                   oZ = o->getBoundPlaneZ();
+        p[0] = Vector3d(oX.coorMin, oY.coorMin, oZ.coorMin);
+        p[1] = Vector3d(oX.coorMin, oY.coorMin, oZ.coorMax);
+        p[2] = Vector3d(oX.coorMin, oY.coorMax, oZ.coorMin);
+        p[3] = Vector3d(oX.coorMin, oY.coorMax, oZ.coorMax);
+        p[4] = Vector3d(oX.coorMax, oY.coorMin, oZ.coorMin);
+        p[5] = Vector3d(oX.coorMax, oY.coorMin, oZ.coorMax);
+        p[6] = Vector3d(oX.coorMax, oY.coorMax, oZ.coorMin);
+        p[7] = Vector3d(oX.coorMax, oY.coorMax, oZ.coorMax);
+        for (int i = 0; i < 8; ++i)
+            p[i] = transformPoint(transform, p[i]);
+        planeX = (BoundPlane){p[0].x(), p[0].x()};
+        planeY = (BoundPlane){p[0].y(), p[0].y()};
+        planeZ = (BoundPlane){p[0].z(), p[0].z()};
+        for (int i = 1; i < 8; ++i) {
+            planeX.coorMin = std::min(planeX.coorMin, p[i].x());
+            planeX.coorMax = std::max(planeX.coorMax, p[i].x());
+            planeY.coorMin = std::min(planeY.coorMin, p[i].y());
+            planeY.coorMax = std::max(planeY.coorMax, p[i].y());
+            planeZ.coorMin = std::min(planeZ.coorMin, p[i].z());
+            planeZ.coorMax = std::max(planeZ.coorMax, p[i].z());
+        }
     }
 
 protected:
