@@ -24,7 +24,7 @@ public:
         //deleteTree(rt);
     }
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override {
+    bool intersect(const Ray &r, Hit &h, double tmin) override {
         bool ans = false;
         for (int i = 0; i < plane.size(); ++i)
             ans |= plane[i]->intersect(r, h, tmin);

@@ -13,13 +13,13 @@
 #include "transform.hpp"
 #include <vecmath.h>
 
-float degreeToRadian(const float &x) {return (M_PI * x) / 180.0;}
+double degreeToRadian(const double &x) {return (M_PI * x) / 180.0;}
 
-float stringToFloat(const std::string &s, const int &st, int &ed) {
+double stringToDouble(const std::string &s, const int &st, int &ed) {
     int len = s.length(), rst;
     for (rst = st; rst < len && (s[rst] == ' ' || s[rst] == ','); ++rst);
     for (ed = rst; ed < len && s[ed] != ' ' && s[ed] != ','; ++ed);
-    return strtof(s.substr(rst, ed - rst).c_str(), 0);
+    return strtod(s.substr(rst, ed - rst).c_str(), 0);
 }
 
 int countSpaces(const std::string &s) {
@@ -32,13 +32,13 @@ int countSpaces(const std::string &s) {
     return cnt;
 }
 
-Vector3f stringToV3f(const std::string &s) {
-    float a, b, c;
+Vector3d stringToV3d(const std::string &s) {
+    double a, b, c;
     int p, q;
-    a = stringToFloat(s, 0, p);
-    b = stringToFloat(s, p, q);
-    c = stringToFloat(s, q, p);
-    return Vector3f(a, b, c);
+    a = stringToDouble(s, 0, p);
+    b = stringToDouble(s, p, q);
+    c = stringToDouble(s, q, p);
+    return Vector3d(a, b, c);
 }
 
 bool endsWith(const std::string &s, const std::string &t) {
@@ -55,20 +55,20 @@ std::string deformat(const std::string &s) {
     return t;
 }
 
-std::pair<std::string, Vector3f> parseV3f(const pugi::xml_attribute &att) {
+std::pair<std::string, Vector3d> parseV3d(const pugi::xml_attribute &att) {
     std::string val1 = att.value();
     assert(att.name() == "name");
     pugi::xml_attribute attr = att.next_attribute();
     assert(attr.name() == "value");
-    return make_pair(deformat(val1), stringToV3f(attr.value()));
+    return make_pair(deformat(val1), stringToV3d(attr.value()));
 }
 
-std::pair<std::string, float> parseFloat(const pugi::xml_attribute &att) {
+std::pair<std::string, double> parseDouble(const pugi::xml_attribute &att) {
     std::string val1 = att.value();
     assert(att.name() == "name");
     pugi::xml_attribute attr = att.next_attribute();
     assert(attr.name() == "value");
-    return make_pair(deformat(val1), attr.as_float());
+    return make_pair(deformat(val1), attr.as_double());
 }
 
 std::pair<std::string, std::string> parseString(const pugi::xml_attribute &att) {
@@ -153,8 +153,8 @@ private:
 
 void Parser::parseSensor(const pugi::xml_node &node) {
     std::string nname = node.name();
-    if (nname == "float") {
-        std::pair<std::string, float> result = parseFloat(node.first_attribute());
+    if (nname == "double" || nname == "float") {
+        std::pair<std::string, double> result = parseDouble(node.first_attribute());
         if (result.first == "fov")
             camera->setAngle(degreeToRadian(result.second));
         return;
@@ -162,7 +162,7 @@ void Parser::parseSensor(const pugi::xml_node &node) {
     if (nname == "lookat") {
         for (pugi::xml_attribute attr = node.first_attribute(); attr; attr = attr.next_attribute()) {
             std::string aname = attr.name();
-            Vector3f result = stringToV3f(attr.value());
+            Vector3d result = stringToV3d(attr.value());
             if (aname == "origin") camera->setCenter(result);
             else if (aname == "target") camera->setTarget(result);
             else if (aname == "up") camera->setUp(result);
@@ -191,15 +191,15 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m) {
     }
     std::string nname = node.name();
     if (nname == "rgb") {
-        std::pair<std::string, Vector3f> result = parseV3f(node.first_attribute());
+        std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
         if (endsWith(result.first, "reflectance"))
             m->setRefl(result.second);
         else if (endsWith(result.first, "transmittance"))
             m->setTran(result.second);
         return;
     }
-    if (nname == "float") {
-        std::pair<std::string, float> result = parseFloat(node.first_attribute());
+    if (nname == "double" || nname == "float") {
+        std::pair<std::string, double> result = parseDouble(node.first_attribute());
         if (result.first == "intior")
             m->setIntIor(result.second);
         else if (result.first == "extior")
@@ -238,35 +238,35 @@ void Parser::parseTransform(const pugi::xml_node &node, Transform* &tran) {
     if (nname == "scale") {
         std::string tmp = node.first_attribute().next_attribute().value();
         if (tmp.find(',') != -1) {
-            std::pair<std::string, Vector3f> result = parseV3f(node.first_attribute());
-            Vector3f s = result.second;
-            tran->appendTransform(Matrix4f::scaling(s[0], s[1], s[2]));
+            std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
+            Vector3d s = result.second;
+            tran->appendTransform(Matrix4d::scaling(s[0], s[1], s[2]));
         } else {
-            std::pair<std::string, float> result = parseFloat(node.first_attribute());
-            tran->appendTransform(Matrix4f::uniformScaling(result.second));
+            std::pair<std::string, double> result = parseDouble(node.first_attribute());
+            tran->appendTransform(Matrix4d::uniformScaling(result.second));
         }
     } else if (nname == "translate") {
-        std::pair<std::string, Vector3f> result = parseV3f(node.first_attribute());
-        tran->appendTransform(Matrix4f::translation(result.second));
+        std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
+        tran->appendTransform(Matrix4d::translation(result.second));
     } else if (nname == "rotate") {
         pugi::xml_attribute attr = node.first_attribute();
-        Vector3f axis = stringToV3f(attr.value());
-        tran->appendTransform(Matrix4f::rotation(axis, degreeToRadian(attr.next_attribute().as_float())));
+        Vector3d axis = stringToV3d(attr.value());
+        tran->appendTransform(Matrix4d::rotation(axis, degreeToRadian(attr.next_attribute().as_double())));
     } else if (nname == "matrix") {
-        Matrix4f mat = Matrix4f::identity();
+        Matrix4d mat = Matrix4d::identity();
         std::string s = node.first_attribute().value();
         int bg = 0, ed;
         if (countSpaces(s) > 10) {
             for (int i = 0; i < 4; i++)
                 for (int j = 0; j < 4; j++) {
-                    float v = stringToFloat(s, bg, ed);
+                    double v = stringToDouble(s, bg, ed);
                     bg = ed;
                     mat(i, j) = v;
                 }
         } else {
             for (int i = 0; i < 3; i++)
                 for (int j = 0; j < 3; j++) {
-                    float v = stringToFloat(s, bg, ed);
+                    double v = stringToDouble(s, bg, ed);
                     bg = ed;
                     mat(i, j) = v;
                 }
@@ -284,14 +284,14 @@ void Parser::parseSphere(const pugi::xml_node &node, Sphere* &sph) {
         sph = new Sphere();
     }
     std::string nname = node.name();
-    if (nname == "float") {
-        std::pair<std::string, float> result = parseFloat(node.first_attribute());
+    if (nname == "double" || nname == "float") {
+        std::pair<std::string, double> result = parseDouble(node.first_attribute());
         if (result.first == "radius")
             sph->setRadius(result.second);
         return;
     }
     if (nname == "translate") {
-        sph->setCenter(stringToV3f(node.first_attribute().value()));
+        sph->setCenter(stringToV3d(node.first_attribute().value()));
         return;
     }
     if (nname == "ref") {
@@ -305,7 +305,7 @@ void Parser::parseSphere(const pugi::xml_node &node, Sphere* &sph) {
         return;
     }
     if (nname == "rgb") {
-        std::pair<std::string, Vector3f> result = parseV3f(node.first_attribute());
+        std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
         if (result.first == "radiance")
             sph->setEmmision(result.second);
     }
@@ -336,7 +336,7 @@ void Parser::parseTriangle(const pugi::xml_node &node, Triangle* &tri, const boo
         return;
     }
     if (nname == "rgb") {
-        std::pair<std::string, Vector3f> result = parseV3f(node.first_attribute());
+        std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
         if (result.first == "radiance")
             tri->setEmmision(result.second);
     }
@@ -378,7 +378,7 @@ void Parser::parseMesh(const pugi::xml_node &node, Mesh* &mesh) {
         return;
     }
     if (nname == "rgb") {
-        std::pair<std::string, Vector3f> result = parseV3f(node.first_attribute());
+        std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
         if (result.first == "radiance")
             mesh->setEmmision(result.second);
     }
@@ -396,8 +396,8 @@ void Parser::parseShape(const pugi::xml_node &node) {
         parseSphere(node, m);
         return;
     } else if (type == "rectangle") {
-        Triangle *m1 = new Triangle(Vector3f(1, 1, 0), Vector3f(1, -1, 0), Vector3f(-1, -1, 0)),
-                 *m2 = new Triangle(Vector3f(1, 1, 0), Vector3f(-1, 1, 0), Vector3f(-1, -1, 0));
+        Triangle *m1 = new Triangle(Vector3d(1, 1, 0), Vector3d(1, -1, 0), Vector3d(-1, -1, 0)),
+                 *m2 = new Triangle(Vector3d(1, 1, 0), Vector3d(-1, 1, 0), Vector3d(-1, -1, 0));
         parseTriangle(node, m1, true);
         parseTriangle(node, m2, true);
         return;

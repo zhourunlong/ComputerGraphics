@@ -10,42 +10,42 @@
 class Material;
 class Hit;
 
-typedef std::pair <float, float> query;
+typedef std::pair <double, double> query;
 
 extern std::map <std::string, Material*> materialMap;
 
 struct BoundPlane {
-    float coorMin, coorMax;
+    double coorMin, coorMax;
 
     query queryIntersectX(Ray r) {
-        Vector3f p = r.getOrigin(), v = r.getDirection();
+        Vector3d p = r.getOrigin(), v = r.getDirection();
         if (v.x() == 0) {
             if (p.x() < coorMin || p.x() > coorMax) return std::make_pair(0, -1);
             return std::make_pair(-1e38, 1e38);
         }
-        float t0 = (coorMin - p.x()) / v.x(), t1 = (coorMax - p.x()) / v.x();
+        double t0 = (coorMin - p.x()) / v.x(), t1 = (coorMax - p.x()) / v.x();
         if (t0 > t1) return std::make_pair(t1, t0);
         return std::make_pair(t0, t1);
     }
 
     query queryIntersectY(Ray r) {
-        Vector3f p = r.getOrigin(), v = r.getDirection();
+        Vector3d p = r.getOrigin(), v = r.getDirection();
         if (v.y() == 0) {
             if (p.y() < coorMin || p.y() > coorMax) return std::make_pair(0, -1);
             return std::make_pair(-1e38, 1e38);
         }
-        float t0 = (coorMin - p.y()) / v.y(), t1 = (coorMax - p.y()) / v.y();
+        double t0 = (coorMin - p.y()) / v.y(), t1 = (coorMax - p.y()) / v.y();
         if (t0 > t1) return std::make_pair(t1, t0);
         return std::make_pair(t0, t1);
     }
 
     query queryIntersectZ(Ray r) {
-        Vector3f p = r.getOrigin(), v = r.getDirection();
+        Vector3d p = r.getOrigin(), v = r.getDirection();
         if (v.z() == 0) {
             if (p.z() < coorMin || p.z() > coorMax) return std::make_pair(0, -1);
             return std::make_pair(-1e38, 1e38);
         }
-        float t0 = (coorMin - p.z()) / v.z(), t1 = (coorMax - p.z()) / v.z();
+        double t0 = (coorMin - p.z()) / v.z(), t1 = (coorMax - p.z()) / v.z();
         if (t0 > t1) return std::make_pair(t1, t0);
         return std::make_pair(t0, t1);
     }
@@ -76,16 +76,16 @@ public:
 
     virtual void setMaterial(Material* _material) {material = _material;}
 
-    Vector3f getEmmision() {return emmision;}
+    Vector3d getEmmision() {return emmision;}
 
-    void setEmmision(const Vector3f &_emmision) {emmision = _emmision;}
+    void setEmmision(const Vector3d &_emmision) {emmision = _emmision;}
 
     bool getNeedTransform() {return needTransform;}
 
     void setNeedTransform(const bool &_needTransform) {needTransform = _needTransform;}
 
     // Intersect Ray with this object. If hit, store information in hit structure.
-    virtual bool intersect(const Ray &r, Hit &h, float tmin) = 0;
+    virtual bool intersect(const Ray &r, Hit &h, double tmin) = 0;
 
     virtual BoundPlane getBoundPlaneX() = 0;
     virtual BoundPlane getBoundPlaneY() = 0;
@@ -100,7 +100,7 @@ protected:
     bool isPlane = false;
     std::string ref = "";
     Material* material;
-    Vector3f emmision = Vector3f::ZERO;
+    Vector3d emmision = Vector3d::ZERO;
     bool needTransform = false;
 
     struct TreeNode {
@@ -120,7 +120,7 @@ protected:
             return;
         }
 
-        std::vector <std::pair <float, int> > coorBuf;
+        std::vector <std::pair <double, int> > coorBuf;
         if (dep == 0) {
             for (int i = 0; i < v.size(); ++i)
                 coorBuf.push_back(std::make_pair(v[i]->getBoundPlaneX().coorMin, i));
@@ -149,7 +149,7 @@ protected:
         rt-> obj = NULL;
     }
 
-    bool queryIntersect(TreeNode *rt, const Ray &r, Hit &h, float tmin) {
+    bool queryIntersect(TreeNode *rt, const Ray &r, Hit &h, double tmin) {
         if (rt == NULL) return false;
         if (rt->obj != NULL) return rt->obj->intersect(r, h, tmin);
         query qX = rt->planeX.queryIntersectX(r),

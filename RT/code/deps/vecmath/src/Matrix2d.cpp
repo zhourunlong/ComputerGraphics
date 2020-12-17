@@ -1,13 +1,13 @@
-#include "Matrix2f.h"
+#include "Matrix2d.h"
 
 #include <cassert>
 #include <cmath>
 #include <cstdio>
 #include <cstring>
 
-#include "Vector2f.h"
+#include "Vector2d.h"
 
-Matrix2f::Matrix2f( float fill )
+Matrix2d::Matrix2d( double fill )
 {
 	for( int i = 0; i < 4; ++i )
 	{
@@ -15,8 +15,8 @@ Matrix2f::Matrix2f( float fill )
 	}
 }
 
-Matrix2f::Matrix2f( float m00, float m01,
-				   float m10, float m11 )
+Matrix2d::Matrix2d( double m00, double m01,
+				   double m10, double m11 )
 {
 	m_elements[ 0 ] = m00;
 	m_elements[ 1 ] = m10;
@@ -25,7 +25,7 @@ Matrix2f::Matrix2f( float m00, float m01,
 	m_elements[ 3 ] = m11;
 }
 
-Matrix2f::Matrix2f( const Vector2f& v0, const Vector2f& v1, bool setColumns )
+Matrix2d::Matrix2d( const Vector2d& v0, const Vector2d& v1, bool setColumns )
 {
 	if( setColumns )
 	{
@@ -39,57 +39,57 @@ Matrix2f::Matrix2f( const Vector2f& v0, const Vector2f& v1, bool setColumns )
 	}
 }
 
-Matrix2f::Matrix2f( const Matrix2f& rm )
+Matrix2d::Matrix2d( const Matrix2d& rm )
 {
-	memcpy( m_elements, rm.m_elements, 2 * sizeof( float ) );
+	memcpy( m_elements, rm.m_elements, 2 * sizeof( double ) );
 }
 
-Matrix2f& Matrix2f::operator = ( const Matrix2f& rm )
+Matrix2d& Matrix2d::operator = ( const Matrix2d& rm )
 {
 	if( this != &rm )
 	{
-		memcpy( m_elements, rm.m_elements, 2 * sizeof( float ) );
+		memcpy( m_elements, rm.m_elements, 2 * sizeof( double ) );
 	}
 	return *this;
 }
 
-const float& Matrix2f::operator () ( int i, int j ) const
+const double& Matrix2d::operator () ( int i, int j ) const
 {
 	return m_elements[ j * 2 + i ];
 }
 
-float& Matrix2f::operator () ( int i, int j )
+double& Matrix2d::operator () ( int i, int j )
 {
 	return m_elements[ j * 2 + i ];
 }
 
-Vector2f Matrix2f::getRow( int i ) const
+Vector2d Matrix2d::getRow( int i ) const
 {
-	return Vector2f
+	return Vector2d
 	(
 		m_elements[ i ],
 		m_elements[ i + 2 ]
 	);
 }
 
-void Matrix2f::setRow( int i, const Vector2f& v )
+void Matrix2d::setRow( int i, const Vector2d& v )
 {
 	m_elements[ i ] = v.x();
 	m_elements[ i + 2 ] = v.y();
 }
 
-Vector2f Matrix2f::getCol( int j ) const
+Vector2d Matrix2d::getCol( int j ) const
 {
 	int colStart = 2 * j;
 
-	return Vector2f
+	return Vector2d
 	(
 		m_elements[ colStart ],
 		m_elements[ colStart + 1 ]
 	);
 }
 
-void Matrix2f::setCol( int j, const Vector2f& v )
+void Matrix2d::setCol( int j, const Vector2d& v )
 {
 	int colStart = 2 * j;
 
@@ -97,18 +97,18 @@ void Matrix2f::setCol( int j, const Vector2f& v )
 	m_elements[ colStart + 1 ] = v.y();
 }
 
-float Matrix2f::determinant()
+double Matrix2d::determinant()
 {
-	return Matrix2f::determinant2x2
+	return Matrix2d::determinant2x2
 	(
 		m_elements[ 0 ], m_elements[ 2 ],
 		m_elements[ 1 ], m_elements[ 3 ]
 	);
 }
 
-Matrix2f Matrix2f::inverse( bool* pbIsSingular, float epsilon )
+Matrix2d Matrix2d::inverse( bool* pbIsSingular, double epsilon )
 {
-	float determinant = m_elements[ 0 ] * m_elements[ 3 ] - m_elements[ 2 ] * m_elements[ 1 ];
+	double determinant = m_elements[ 0 ] * m_elements[ 3 ] - m_elements[ 2 ] * m_elements[ 1 ];
 
 	bool isSingular = ( fabs( determinant ) < epsilon );
 	if( isSingular )
@@ -117,7 +117,7 @@ Matrix2f Matrix2f::inverse( bool* pbIsSingular, float epsilon )
 		{
 			*pbIsSingular = true;
 		}
-		return Matrix2f();
+		return Matrix2d();
 	}
 	else
 	{
@@ -126,9 +126,9 @@ Matrix2f Matrix2f::inverse( bool* pbIsSingular, float epsilon )
 			*pbIsSingular = false;
 		}
 
-		float reciprocalDeterminant = 1.0f / determinant;
+		double reciprocalDeterminant = 1.0f / determinant;
 
-		return Matrix2f
+		return Matrix2d
 		(
 			m_elements[ 3 ] * reciprocalDeterminant, -m_elements[ 2 ] * reciprocalDeterminant,
 			-m_elements[ 1 ] * reciprocalDeterminant, m_elements[ 0 ] * reciprocalDeterminant
@@ -136,18 +136,18 @@ Matrix2f Matrix2f::inverse( bool* pbIsSingular, float epsilon )
 	}
 }
 
-void Matrix2f::transpose()
+void Matrix2d::transpose()
 {
-	float m01 = ( *this )( 0, 1 );
-	float m10 = ( *this )( 1, 0 );
+	double m01 = ( *this )( 0, 1 );
+	double m10 = ( *this )( 1, 0 );
 
 	( *this )( 0, 1 ) = m10;
 	( *this )( 1, 0 ) = m01;
 }
 
-Matrix2f Matrix2f::transposed() const
+Matrix2d Matrix2d::transposed() const
 {
-	return Matrix2f
+	return Matrix2d
 	(
 		( *this )( 0, 0 ), ( *this )( 1, 0 ),
 		( *this )( 0, 1 ), ( *this )( 1, 1 )
@@ -155,29 +155,29 @@ Matrix2f Matrix2f::transposed() const
 
 }
 
-Matrix2f::operator float* ()
+Matrix2d::operator double* ()
 {
 	return m_elements;
 }
 
-void Matrix2f::print()
+void Matrix2d::print()
 {
-	printf( "[ %.4f %.4f ]\n[ %.4f %.4f ]\n",
+	printf( "[ %.4d %.4d ]\n[ %.4d %.4d ]\n",
 		m_elements[ 0 ], m_elements[ 2 ],
 		m_elements[ 1 ], m_elements[ 3 ] );
 }
 
 // static
-float Matrix2f::determinant2x2( float m00, float m01,
-							   float m10, float m11 )
+double Matrix2d::determinant2x2( double m00, double m01,
+							   double m10, double m11 )
 {
 	return( m00 * m11 - m01 * m10 );
 }
 
 // static
-Matrix2f Matrix2f::ones()
+Matrix2d Matrix2d::ones()
 {
-	Matrix2f m;
+	Matrix2d m;
 	for( int i = 0; i < 4; ++i )
 	{
 		m.m_elements[ i ] = 1;
@@ -187,9 +187,9 @@ Matrix2f Matrix2f::ones()
 }
 
 // static
-Matrix2f Matrix2f::identity()
+Matrix2d Matrix2d::identity()
 {
-	Matrix2f m;
+	Matrix2d m;
 
 	m( 0, 0 ) = 1;
 	m( 1, 1 ) = 1;
@@ -198,12 +198,12 @@ Matrix2f Matrix2f::identity()
 }
 
 // static
-Matrix2f Matrix2f::rotation( float degrees )
+Matrix2d Matrix2d::rotation( double degrees )
 {
-	float c = cos( degrees );
-	float s = sin( degrees );
+	double c = cos( degrees );
+	double s = sin( degrees );
 
-	return Matrix2f
+	return Matrix2d
 	(
 		c, -s,
 		s, c
@@ -214,9 +214,9 @@ Matrix2f Matrix2f::rotation( float degrees )
 // Operators
 //////////////////////////////////////////////////////////////////////////
 
-Matrix2f operator * ( float f, const Matrix2f& m )
+Matrix2d operator * ( double f, const Matrix2d& m )
 {
-	Matrix2f output;
+	Matrix2d output;
 
 	for( int i = 0; i < 2; ++i )
 	{
@@ -229,14 +229,14 @@ Matrix2f operator * ( float f, const Matrix2f& m )
 	return output;
 }
 
-Matrix2f operator * ( const Matrix2f& m, float f )
+Matrix2d operator * ( const Matrix2d& m, double f )
 {
 	return f * m;
 }
 
-Vector2f operator * ( const Matrix2f& m, const Vector2f& v )
+Vector2d operator * ( const Matrix2d& m, const Vector2d& v )
 {
-	Vector2f output( 0, 0 );
+	Vector2d output( 0, 0 );
 
 	for( int i = 0; i < 2; ++i )
 	{
@@ -249,9 +249,9 @@ Vector2f operator * ( const Matrix2f& m, const Vector2f& v )
 	return output;
 }
 
-Matrix2f operator * ( const Matrix2f& x, const Matrix2f& y )
+Matrix2d operator * ( const Matrix2d& x, const Matrix2d& y )
 {
-	Matrix2f product; // zeroes
+	Matrix2d product; // zeroes
 
 	for( int i = 0; i < 2; ++i )
 	{

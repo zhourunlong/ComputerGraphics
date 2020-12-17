@@ -10,8 +10,7 @@
 #include <sstream>
 #include "object3d.hpp"
 #include "triangle.hpp"
-#include "Vector2f.h"
-#include "Vector3f.h"
+#include <vecmath.h>
 
 class Mesh : public Object3D {
 
@@ -49,7 +48,7 @@ public:
             std::stringstream ss(line);
             ss >> tok;
             if (tok == vTok) {
-                Vector3f vec;
+                Vector3d vec;
                 ss >> vec[0] >> vec[1] >> vec[2];
                 v.push_back(vec);
             } else if (tok == fTok) {
@@ -72,7 +71,7 @@ public:
                     t.push_back(trig);
                 }
             } else if (tok == texTok) {
-                Vector2f texcoord;
+                Vector2d texcoord;
                 ss >> texcoord[0];
                 ss >> texcoord[1];
             }
@@ -97,10 +96,10 @@ public:
         int x[3]{};
     };
 
-    std::vector<Vector3f> v; // point index pool
+    std::vector<Vector3d> v; // point index pool
     std::vector<TriangleIndex> t; // point indices for each triangle
-    std::vector<Vector3f> n; // normal vectors for each triangle
-    bool intersect(const Ray &r, Hit &h, float tmin) {
+    std::vector<Vector3d> n; // normal vectors for each triangle
+    bool intersect(const Ray &r, Hit &h, double tmin) {
         return queryIntersect(rt, r, h, tmin);
     }
 
@@ -119,7 +118,7 @@ public:
         std::cout << t.size() << " triangles\n";
         std::cout << "material: " << ref << "\n";
         material->print();
-        if (emmision != Vector3f::ZERO)
+        if (emmision != Vector3d::ZERO)
             std::cout << "emmision: " << emmision << "\n";
         std::cout << "----------------\n";
     }
@@ -131,9 +130,9 @@ private:
         n.resize(t.size());
         for (int triId = 0; triId < (int) t.size(); ++triId) {
             TriangleIndex& triIndex = t[triId];
-            Vector3f a = v[triIndex[1]] - v[triIndex[0]];
-            Vector3f b = v[triIndex[2]] - v[triIndex[0]];
-            b = Vector3f::cross(a, b);
+            Vector3d a = v[triIndex[1]] - v[triIndex[0]];
+            Vector3d b = v[triIndex[2]] - v[triIndex[0]];
+            b = Vector3d::cross(a, b);
             n[triId] = b.normalized();
         }
     }

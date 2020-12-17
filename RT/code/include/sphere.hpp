@@ -9,31 +9,31 @@ class Sphere : public Object3D {
 public:
     Sphere() {
         // unit ball at the center
-        center = Vector3f(0, 0, 0);
+        center = Vector3d(0, 0, 0);
         radius = 1;
     }
 
-    Sphere(const Vector3f &center, float radius, Material *material) : Object3D(material) {
+    Sphere(const Vector3d &center, double radius, Material *material) : Object3D(material) {
         this->center = center;
         this->radius = radius;
     }
 
-    void setRadius(const float &_radius) {radius = _radius;}
+    void setRadius(const double &_radius) {radius = _radius;}
 
-    void setCenter(const Vector3f &_center) {center = _center;}
+    void setCenter(const Vector3d &_center) {center = _center;}
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override {
-        Vector3f p = r.getOrigin(), v = r.getDirection();
-        Vector3f pc = center - p;
+    bool intersect(const Ray &r, Hit &h, double tmin) override {
+        Vector3d p = r.getOrigin(), v = r.getDirection();
+        Vector3d pc = center - p;
 
         // disjointed
-        float d = Vector3f::cross(pc, v).length();
+        double d = Vector3d::cross(pc, v).length();
         if (d >= radius) return false;
 
-        float PC = pc.length();
-        float t = sqrt(PC * PC - d * d), s = sqrt(radius * radius - d * d);
+        double PC = pc.length();
+        double t = sqrt(PC * PC - d * d), s = sqrt(radius * radius - d * d);
         bool into;
-        Vector3f n;
+        Vector3d n;
         // inside sphere
         if (PC <= radius) {
             t += s;
@@ -42,7 +42,7 @@ public:
         } else {
         // outside
             // wrong direction
-            if (Vector3f::dot(v, pc) < 0) return false;
+            if (Vector3d::dot(v, pc) < 0) return false;
 
             // correct direction
             t -= s;
@@ -75,14 +75,14 @@ public:
         std::cout << "radius: " << radius << "\n";
         std::cout << "material: " << ref << "\n";
         material->print();
-        if (emmision != Vector3f::ZERO)
+        if (emmision != Vector3d::ZERO)
             std::cout << "emmision: " << emmision << "\n";
         std::cout << "------------------\n";
     }
 
 protected:
-    Vector3f center;
-    float radius;
+    Vector3d center;
+    double radius;
 };
 
 

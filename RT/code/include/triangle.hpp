@@ -14,23 +14,23 @@ public:
 	Triangle() = delete;
 
     // a b c are three vertex positions of the triangle
-    Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c)
+    Triangle(const Vector3d& a, const Vector3d& b, const Vector3d& c)
         : a(a), b(b), c(c) {
         calc();
 	}
 
-	Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c, Material* m)
+	Triangle(const Vector3d& a, const Vector3d& b, const Vector3d& c, Material* m)
         : Object3D(m), a(a), b(b), c(c) {
         calc();
 	}
 
     void calc() {
-        normal = Vector3f::cross(b - a, c - a);
+        normal = Vector3d::cross(b - a, c - a);
         size = normal.length();
         normal.normalize();
-        d = Vector3f::dot(normal, a);
+        d = Vector3d::dot(normal, a);
         
-        float Min = a.x(), Max = a.x();
+        double Min = a.x(), Max = a.x();
         if (b.x() < Min) Min = b.x();
         else if (b.x() > Max) Max = b.x();
         if (c.x() < Min) Min = c.x();
@@ -52,27 +52,27 @@ public:
         planeZ = (BoundPlane){Min, Max};
     }
 
-	bool intersect(const Ray& r,  Hit& h, float tmin) override {
-        Vector3f p = r.getOrigin(), v = r.getDirection();
+	bool intersect(const Ray& r,  Hit& h, double tmin) override {
+        Vector3d p = r.getOrigin(), v = r.getDirection();
 
         // parallel 
-        float nv = Vector3f::dot(normal, v);
+        double nv = Vector3d::dot(normal, v);
         if (nv == 0) return false;
 
-        float t = (d - Vector3f::dot(normal, p)) / nv;
+        double t = (d - Vector3d::dot(normal, p)) / nv;
 
         // discard point out of range
         if (t < tmin || t >= h.getT()) return false;
 
-        Vector3f q = r.pointAtParameter(t);
+        Vector3d q = r.pointAtParameter(t);
 
         // Barycentric coordinates
-        float alpha = Vector3f::dot(normal, Vector3f::cross(c - b, q - b));
+        double alpha = Vector3d::dot(normal, Vector3d::cross(c - b, q - b));
         if (alpha < 0 || alpha > size) return false;
 
-        float beta = Vector3f::dot(normal, Vector3f::cross(q - a, c - a));
+        double beta = Vector3d::dot(normal, Vector3d::cross(q - a, c - a));
         if (beta >= 0 && alpha + beta <= size) {
-            if (Vector3f::dot(v, normal) < 0)
+            if (Vector3d::dot(v, normal) < 0)
                 h.set(t, this, normal, true);
             else 
                 h.set(t, this, -normal, false);
@@ -91,15 +91,15 @@ public:
         std::cout << a << "\n" << b << "\n" << c << "\n";
         std::cout << "material: " << ref << "\n";
         material->print();
-        if (emmision != Vector3f::ZERO)
+        if (emmision != Vector3d::ZERO)
             std::cout << "emmision: " << emmision << "\n";
         std::cout << "--------------------\n";
     }
 	
 protected:
 
-    Vector3f normal, a, b, c;
-    float d, size; // record plane
+    Vector3d normal, a, b, c;
+    double d, size; // record plane
     BoundPlane planeX, planeY, planeZ; // bound plane
 };
 

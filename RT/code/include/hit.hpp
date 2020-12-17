@@ -16,7 +16,7 @@ public:
         t = 1e38;
     }
 
-    Hit(float _t, Object3D* _o, const Vector3f &n, const bool &_into) {
+    Hit(double _t, Object3D* _o, const Vector3d &n, const bool &_into) {
         t = _t;
         o = _o;
         normal = n.normalized();
@@ -33,7 +33,7 @@ public:
     // destructor
     ~Hit() = default;
 
-    float getT() const {
+    double getT() const {
         return t;
     }
 
@@ -41,13 +41,13 @@ public:
         return o;
     }
 
-    Vector3f getNormal() const {
+    Vector3d getNormal() const {
         return normal;
     }
 
     bool getInto() const {return into;}
 
-    void set(float _t, Object3D* _o, const Vector3f &n, const bool &_into) {
+    void set(double _t, Object3D* _o, const Vector3d &n, const bool &_into) {
         t = _t;
         o = _o;
         normal = n.normalized();
@@ -55,9 +55,9 @@ public:
     }
 
 private:
-    float t;
+    double t;
     Object3D* o;
-    Vector3f normal;
+    Vector3d normal;
     bool into = true;
 };
 

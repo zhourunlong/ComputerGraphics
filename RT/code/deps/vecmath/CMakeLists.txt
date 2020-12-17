@@ -6,23 +6,23 @@ IF(NOT CMAKE_BUILD_TYPE)
 ENDIF()
 
 SET(VECMATH_INCLUDES
-        include/Matrix2f.h
-        include/Matrix3f.h
-        include/Matrix4f.h
-        include/Quat4f.h
+        include/Matrix2d.h
+        include/Matrix3d.h
+        include/Matrix4d.h
+        include/Quat4d.h
         include/vecmath.h
-        include/Vector2f.h
-        include/Vector3f.h
-        include/Vector4f.h)
+        include/Vector2d.h
+        include/Vector3d.h
+        include/Vector4d.h)
 
 SET(VECMATH_SOURCES
-        src/Matrix2f.cpp
-        src/Matrix3f.cpp
-        src/Matrix4f.cpp
-        src/Quat4f.cpp
-        src/Vector2f.cpp
-        src/Vector3f.cpp
-        src/Vector4f.cpp)
+        src/Matrix2d.cpp
+        src/Matrix3d.cpp
+        src/Matrix4d.cpp
+        src/Quat4d.cpp
+        src/Vector2d.cpp
+        src/Vector3d.cpp
+        src/Vector4d.cpp)
 
 SET(CMAKE_CXX_STANDARD 11)
 

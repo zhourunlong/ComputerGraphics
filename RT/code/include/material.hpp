@@ -21,7 +21,7 @@ public:
         id = "";
         twoSided = false;
         type = DIFF;
-        refl = tran = Vector3f::ZERO;
+        refl = tran = Vector3d::ZERO;
         intIor = extIor = 1;
         surfMaterial = "";
     }
@@ -40,21 +40,21 @@ public:
     
     void setType(const SurfaceType &_type) {type = _type;}
 
-    Vector3f getRefl() {return refl;}
+    Vector3d getRefl() {return refl;}
 
-    void setRefl(const Vector3f &_refl) {refl = _refl;}
+    void setRefl(const Vector3d &_refl) {refl = _refl;}
 
-    Vector3f getTran() {return tran;}
+    Vector3d getTran() {return tran;}
 
-    void setTran(const Vector3f &_tran) {tran = _tran;}
+    void setTran(const Vector3d &_tran) {tran = _tran;}
 
-    float getIntIor() {return intIor;}
+    double getIntIor() {return intIor;}
 
-    void setIntIor(const float &_intIor) {intIor = _intIor;}
+    void setIntIor(const double &_intIor) {intIor = _intIor;}
 
-    float getExtIor() {return extIor;}
+    double getExtIor() {return extIor;}
 
-    void setExtIor(const float &_extIor) {extIor = _extIor;}
+    void setExtIor(const double &_extIor) {extIor = _extIor;}
 
     std::string getSurfMaterial() {return surfMaterial;}
 
@@ -79,9 +79,9 @@ public:
                 std::cout << "ext ior = " << extIor << "\n";
                 break;
         }
-        if (refl != Vector3f::ZERO)
+        if (refl != Vector3d::ZERO)
             std::cout << "Reflectance = " << refl << "\n";
-        if (tran != Vector3f::ZERO)
+        if (tran != Vector3d::ZERO)
             std::cout << "Transmittance = " << tran << "\n";
         std::cout << "--------------------\n";
     }
@@ -90,8 +90,8 @@ protected:
     std::string id;
     bool twoSided;
     SurfaceType type;
-    Vector3f refl, tran; // reflectance, transmittance
-    float intIor, extIor;
+    Vector3d refl, tran; // reflectance, transmittance
+    double intIor, extIor;
     std::string surfMaterial;
 };
 

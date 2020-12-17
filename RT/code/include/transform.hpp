@@ -6,32 +6,32 @@
 #include <algorithm>
 
 // transforms a 3D point using a matrix, returning a 3D point
-static Vector3f transformPoint(const Matrix4f &mat, const Vector3f &point) {
-    return (mat * Vector4f(point, 1)).xyz();
+static Vector3d transformPoint(const Matrix4d &mat, const Vector3d &point) {
+    return (mat * Vector4d(point, 1)).xyz();
 }
 
 // transform a 3D directino using a matrix, returning a direction
-static Vector3f transformDirection(const Matrix4f &mat, const Vector3f &dir) {
-    return (mat * Vector4f(dir, 0)).xyz();
+static Vector3d transformDirection(const Matrix4d &mat, const Vector3d &dir) {
+    return (mat * Vector4d(dir, 0)).xyz();
 }
 
 class Transform : public Object3D {
 public:
     Transform() {}
 
-    Transform(const Matrix4f &m, Object3D *obj) : o(obj) {
-        Vector3f p[8];
+    Transform(const Matrix4d &m, Object3D *obj) : o(obj) {
+        Vector3d p[8];
         BoundPlane oX = o->getBoundPlaneX(),
                    oY = o->getBoundPlaneY(),
                    oZ = o->getBoundPlaneZ();
-        p[0] = Vector3f(oX.coorMin, oY.coorMin, oZ.coorMin);
-        p[1] = Vector3f(oX.coorMin, oY.coorMin, oZ.coorMax);
-        p[2] = Vector3f(oX.coorMin, oY.coorMax, oZ.coorMin);
-        p[3] = Vector3f(oX.coorMin, oY.coorMax, oZ.coorMax);
-        p[4] = Vector3f(oX.coorMax, oY.coorMin, oZ.coorMin);
-        p[5] = Vector3f(oX.coorMax, oY.coorMin, oZ.coorMax);
-        p[6] = Vector3f(oX.coorMax, oY.coorMax, oZ.coorMin);
-        p[7] = Vector3f(oX.coorMax, oY.coorMax, oZ.coorMax);
+        p[0] = Vector3d(oX.coorMin, oY.coorMin, oZ.coorMin);
+        p[1] = Vector3d(oX.coorMin, oY.coorMin, oZ.coorMax);
+        p[2] = Vector3d(oX.coorMin, oY.coorMax, oZ.coorMin);
+        p[3] = Vector3d(oX.coorMin, oY.coorMax, oZ.coorMax);
+        p[4] = Vector3d(oX.coorMax, oY.coorMin, oZ.coorMin);
+        p[5] = Vector3d(oX.coorMax, oY.coorMin, oZ.coorMax);
+        p[6] = Vector3d(oX.coorMax, oY.coorMax, oZ.coorMin);
+        p[7] = Vector3d(oX.coorMax, oY.coorMax, oZ.coorMax);
         for (int i = 0; i < 8; ++i)
             p[i] = transformPoint(m, p[i]);
         planeX = (BoundPlane){p[0].x(), p[0].x()};
@@ -48,7 +48,7 @@ public:
         transform = m.inverse();
     }
     
-    void appendTransform(const Matrix4f &m) {transform = transform * m;}
+    void appendTransform(const Matrix4d &m) {transform = transform * m;}
 
     void setObject(Object3D* _o) {o = _o;}
 
@@ -58,9 +58,9 @@ public:
 
     void setMaterial(Material* _material) override {o->setMaterial(_material);}
 
-    virtual bool intersect(const Ray &r, Hit &h, float tmin) {
-        Vector3f trSource = transformPoint(transform, r.getOrigin());
-        Vector3f trDirection = transformDirection(transform, r.getDirection());
+    virtual bool intersect(const Ray &r, Hit &h, double tmin) {
+        Vector3d trSource = transformPoint(transform, r.getOrigin());
+        Vector3d trDirection = transformDirection(transform, r.getDirection());
         Ray tr(trSource, trDirection);
         bool inter = o->intersect(tr, h, tmin);
         if (inter) {
@@ -83,7 +83,7 @@ public:
 
 protected:
     Object3D *o = NULL; //un-transformed object
-    Matrix4f transform = Matrix4f::identity();
+    Matrix4d transform = Matrix4d::identity();
     BoundPlane planeX, planeY, planeZ;
 };
 

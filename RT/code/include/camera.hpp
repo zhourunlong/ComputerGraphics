@@ -3,22 +3,21 @@
 
 #include "ray.hpp"
 #include <vecmath.h>
-#include <float.h>
-#include <cmath>
+#include <bits/stdc++.h>
 
 class Camera {
 public:
     Camera() {}
 
-    void setAngle(const float &_angle) {angle = _angle;}
+    void setAngle(const double &_angle) {angle = _angle;}
 
-    Vector3f getCenter() {return center;}
+    Vector3d getCenter() {return center;}
 
-    void setCenter(const Vector3f &_center) {center = _center;}
+    void setCenter(const Vector3d &_center) {center = _center;}
 
-    void setTarget(const Vector3f &_target) {target = _target;}
+    void setTarget(const Vector3d &_target) {target = _target;}
 
-    void setUp(const Vector3f &_up) {up = _up.normalized();}
+    void setUp(const Vector3d &_up) {up = _up.normalized();}
 
     void setWidth(const int &_width) {width = _width;}
 
@@ -26,11 +25,11 @@ public:
 
     void finish() {
         direction = (target - center).normalized();
-        horizontal = Vector3f::cross(direction, up);
+        horizontal = Vector3d::cross(direction, up);
     }
 
-    Ray generateRay(const Vector2f &point) {
-        Vector3f dir = tan(angle / 2) * (point.x() / width * 2 - 1) * horizontal +
+    Ray generateRay(const Vector2d &point) {
+        Vector3d dir = tan(angle / 2) * (point.x() / height * 2 - 1.0 * width / height) * horizontal +
                        tan(angle / 2) * (point.y() / height * 2 - 1) * up +
                        direction;
         return Ray(this->center, dir.normalized());
@@ -52,9 +51,9 @@ public:
     }
 
 protected:
-    Vector3f center, direction, target, up, horizontal;
+    Vector3d center, direction, target, up, horizontal;
     int width, height;
-    float angle;
+    double angle;
 };
 
 #endif //CAMERA_H

@@ -10,7 +10,7 @@
 			<lookat origin="50, 52, 295.6" target="50, 51.957427, 294.600907" up="0, 0.999093, -0.042573"/>
 		</transform>
 		<sampler type="independent">
-			<integer name="sample_count" value="100"/>
+			<integer name="sample_count" value="10000"/>
 		</sampler>
 		<film type="hdrfilm">
 			<integer name="width" value="1024"/>
@@ -110,7 +110,7 @@
 	<shape type="sphere"> 
 		<float name="radius" value="600"/>
 		<transform name="to_world">
-			<translate value="50, 681, 81.6"/>
+			<translate value="50, 681.33, 81.6"/>
 		</transform>
 		<emitter type="area">
 			<rgb name="radiance" value="12, 12, 12"/>

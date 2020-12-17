@@ -12,16 +12,16 @@
 int samps, maxDep;
 Group* baseGroup;
 
-float clamp(float x) {return x < 0 ? 0 : (x > 1 ? 1 : x);}
+double clamp(double x) {return x < 0 ? 0 : (x > 1 ? 1 : x);}
 
-Vector3f rayTracing(const Ray &r, int dep, unsigned short *Xi) {
+Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi) {
     Hit hit;
     bool isIntersect = baseGroup->intersect(r, hit, 0);
     if (!isIntersect)
-        return Vector3f(0);
+        return Vector3d(0);
     Object3D *o = hit.getObject();
     Material *m = o->getMaterial();
-    Vector3f x = r.pointAtParameter(hit.getT()),
+    Vector3d x = r.pointAtParameter(hit.getT()),
              n = hit.getNormal(),
              f = m->getRefl();
     double p = std::fmax(std::fmax(f.x(), f.y()), f.z());
@@ -31,29 +31,29 @@ Vector3f rayTracing(const Ray &r, int dep, unsigned short *Xi) {
     Material::SurfaceType type = m->getType();
     if (type == Material::DIFF) {
         double r1 = 2 * M_PI * erand48(Xi), r2 = erand48(Xi), r2s = sqrt(r2);
-        Vector3f w = n;
-        Vector3f u = Vector3f::cross(fabs(w.x()) > .1 ? Vector3f(0, 1, 0) : Vector3f(1, 0, 0), w).normalized();
-        Vector3f v = Vector3f::cross(w, u);
-        Vector3f d = (u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2)).normalized();
+        Vector3d w = n;
+        Vector3d u = Vector3d::cross(fabs(w.x()) > .1 ? Vector3d(0, 1, 0) : Vector3d(1, 0, 0), w).normalized();
+        Vector3d v = Vector3d::cross(w, u);
+        Vector3d d = (u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2)).normalized();
         return o->getEmmision() + f * rayTracing(Ray(x, d), dep, Xi);
     };
-    Vector3f rD = r.getDirection();
-    Ray reflRay = Ray(x, rD - 2 * Vector3f::dot(rD, n) * n);
+    Vector3d rD = r.getDirection();
+    Ray reflRay = Ray(x, rD - 2 * Vector3d::dot(rD, n) * n);
     if (type == Material::COND)
         return o->getEmmision() + f * rayTracing(reflRay, dep, Xi);
     if (type == Material::DIEL) {
         bool into = hit.getInto();
-        float intIor = m->getIntIor(), extIor = m->getExtIor();
+        double intIor = m->getIntIor(), extIor = m->getExtIor();
         if (!into) std::swap(intIor, extIor);
-        float nnt = extIor / intIor, ddn = Vector3f::dot(rD, n),
+        double nnt = extIor / intIor, ddn = Vector3d::dot(rD, n),
               cos2t = 1 - nnt * nnt * (1 - ddn * ddn);
         if (cos2t < 0)
             return o->getEmmision() + f * rayTracing(reflRay, dep, Xi);
-        Vector3f refrDir = (rD * nnt - n * (ddn * nnt + sqrt(cos2t))).normalized();
-        float a = intIor - extIor, b= intIor + extIor;
-        float R0 = a * a / (b * b), c = 1 + (into ? ddn : Vector3f::dot(n, refrDir));
-        float Re = R0 + (1 - R0) * c * c * c * c * c, Tr = 1 - Re;
-        float P = 0.25 + 0.5 * Re, RP = Re / P, TP = Tr / (1 - P);
+        Vector3d refrDir = (rD * nnt - n * (ddn * nnt + sqrt(cos2t))).normalized();
+        double a = intIor - extIor, b= intIor + extIor;
+        double R0 = a * a / (b * b), c = 1 + (into ? ddn : Vector3d::dot(n, refrDir));
+        double Re = R0 + (1 - R0) * c * c * c * c * c, Tr = 1 - Re;
+        double P = 0.25 + 0.5 * Re, RP = Re / P, TP = Tr / (1 - P);
         if (dep > 0.4 * maxDep)
             if (erand48(Xi) < P)
                 return o->getEmmision() + f * rayTracing(reflRay, dep, Xi) * RP;
@@ -84,17 +84,18 @@ int main(int argc, char *argv[]) {
         unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
         #pragma omp parallel for
         for (int x = 0; x < w; ++x) {
-            Vector3f finalColor(0);
+            Vector3d finalColor(0);
             for (int sy = -1; sy < 2; sy += 2)
                 for (int sx = -1; sx < 2; sx += 2) {
-                    Vector3f r(0);
+                    Vector3d r(0);
                     for (int s = 0; s < samps; ++s) {
                         double r1 = 2 * erand48(Xi), dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
                         double r2 = 2 * erand48(Xi), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
-                        Ray camRay = camera->generateRay(Vector2f(x + 0.25 * sx + dx, y + 0.25 * sy + dy));
+                        //Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + dx, y + (0.25 * sy + dy)));
+                        Ray camRay = camera->generateRay(Vector2d(x, y));
                         r = r + rayTracing(camRay, 0, Xi) / samps;
                     }
-                    finalColor = finalColor + Vector3f(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
+                    finalColor = finalColor + Vector3d(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
                 }
             renderedImg.SetPixel(x, y, finalColor);
         }
