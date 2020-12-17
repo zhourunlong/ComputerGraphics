@@ -98,8 +98,10 @@ public:
             printf("Error loading scene file!\n");
             exit(-1);
         }
+        //dfs(doc, 0);
         parse(doc);
         setMatToAll();
+        group->finish();
     }
 
     ~Parser() = default;
@@ -112,7 +114,7 @@ public:
 
     int getSampleCount() const {return samps;}
 
-    void dfs(const char* fname);
+    void dfs(const pugi::xml_node &node, int dep);
 
 private:
 
@@ -154,7 +156,7 @@ void Parser::parseSensor(const pugi::xml_node &node) {
     if (nname == "float") {
         std::pair<std::string, float> result = parseFloat(node.first_attribute());
         if (result.first == "fov")
-            camera->setAngle(result.second);
+            camera->setAngle(degreeToRadian(result.second));
         return;
     }
     if (nname == "lookat") {
@@ -351,6 +353,12 @@ void Parser::parseMesh(const pugi::xml_node &node, Mesh* &mesh) {
         mesh = new Mesh();
     }
     std::string nname = node.name();
+    if (nname == "string") {
+        std::pair<std::string, std::string> result = parseString(node.first_attribute());
+        if (result.first == "filename")
+            mesh->setFile(result.second.c_str());
+        return;
+    }
     if (nname == "transform") {
         mesh->setNeedTransform(true);
         Transform* tran = new Transform();

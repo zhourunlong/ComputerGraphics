@@ -3,6 +3,7 @@
 
 #include <vecmath.h>
 #include "ray.hpp"
+#include "object3d.hpp"
 
 class Material;
 
@@ -11,20 +12,22 @@ public:
 
     // constructors
     Hit() {
-        material = nullptr;
+        o = NULL;
         t = 1e38;
     }
 
-    Hit(float _t, Material *m, const Vector3f &n) {
+    Hit(float _t, Object3D* _o, const Vector3f &n, const bool &_into) {
         t = _t;
-        material = m;
+        o = _o;
         normal = n.normalized();
+        into = _into;
     }
 
     Hit(const Hit &h) {
         t = h.t;
-        material = h.material;
+        o = h.o;
         normal = h.normal;
+        into = h.into;
     }
 
     // destructor
@@ -34,29 +37,32 @@ public:
         return t;
     }
 
-    Material *getMaterial() const {
-        return material;
+    Object3D* getObject() const {
+        return o;
     }
 
-    const Vector3f &getNormal() const {
+    Vector3f getNormal() const {
         return normal;
     }
 
-    void set(float _t, Material *m, const Vector3f &n) {
+    bool getInto() const {return into;}
+
+    void set(float _t, Object3D* _o, const Vector3f &n, const bool &_into) {
         t = _t;
-        material = m;
+        o = _o;
         normal = n.normalized();
+        into = _into;
     }
 
 private:
     float t;
-    Material *material;
+    Object3D* o;
     Vector3f normal;
-
+    bool into = true;
 };
 
 inline std::ostream &operator<<(std::ostream &os, const Hit &h) {
-    os << "Hit <" << h.getT() << ", " << h.getNormal() << ">";
+    os << "Hit <" << h.getT() << ", " << h.getNormal() << ", " << h.getInto() << ">";
     return os;
 }
 

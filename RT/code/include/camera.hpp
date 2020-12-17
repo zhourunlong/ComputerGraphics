@@ -8,18 +8,11 @@
 
 class Camera {
 public:
-    Camera(const Vector3f &center = Vector3f::ZERO, const Vector3f &direction = Vector3f(0, 0, 1),
-        const Vector3f &up = Vector3f(0, 1, 0), const int imgW = 1920, const int imgH = 1080, const float angle = 30) {
-        this->center = center;
-        this->direction = direction.normalized();
-        this->horizontal = Vector3f::cross(this->direction, up);
-        this->up = Vector3f::cross(this->horizontal, this->direction);
-        this->width = imgW;
-        this->height = imgH;
-        this->angle = angle;
-    }
+    Camera() {}
 
     void setAngle(const float &_angle) {angle = _angle;}
+
+    Vector3f getCenter() {return center;}
 
     void setCenter(const Vector3f &_center) {center = _center;}
 
@@ -44,6 +37,7 @@ public:
     }
 
     int getWidth() {return width;}
+
     int getHeight() {return height;}
 
     void print() {

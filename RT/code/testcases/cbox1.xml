@@ -2,15 +2,15 @@
 
 <scene version="0.5.0">
 	<integrator type="path">
-		<integer name="maxDepth" value="64"/>
+		<integer name="maxDepth" value="5"/>
 	</integrator>
 	<sensor type="perspective">
-		<float name="fov" value="30"/>
+		<float name="fov" value="28.7993"/>
 		<transform name="to_world">
 			<lookat origin="50, 52, 295.6" target="50, 51.957427, 294.600907" up="0, 0.999093, -0.042573"/>
 		</transform>
 		<sampler type="independent">
-			<integer name="sample_count" value="100000"/>
+			<integer name="sample_count" value="100"/>
 		</sampler>
 		<film type="hdrfilm">
 			<integer name="width" value="1024"/>

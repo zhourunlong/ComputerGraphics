@@ -32,11 +32,13 @@ public:
 
         float PC = pc.length();
         float t = sqrt(PC * PC - d * d), s = sqrt(radius * radius - d * d);
+        bool into;
         Vector3f n;
         // inside sphere
         if (PC <= radius) {
             t += s;
             n = center - r.pointAtParameter(t);
+            into = false;
         } else {
         // outside
             // wrong direction
@@ -45,10 +47,11 @@ public:
             // correct direction
             t -= s;
             n = r.pointAtParameter(t) - center;
+            into = true;
         }
 
         if (t >= tmin && t < h.getT()) {
-            h.set(t, material, n);
+            h.set(t, this, n, into);
             return true;
         }
         return false;

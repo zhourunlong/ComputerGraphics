@@ -7,6 +7,9 @@
 #include "parser.hpp"
 #include <bits/stdc++.h>
 
+class Material;
+class Hit;
+
 typedef std::pair <float, float> query;
 
 extern std::map <std::string, Material*> materialMap;

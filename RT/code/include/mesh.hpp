@@ -116,6 +116,7 @@ public:
 
     void print() override {
         std::cout << "===== Mesh =====\n";
+        std::cout << t.size() << " triangles\n";
         std::cout << "material: " << ref << "\n";
         material->print();
         if (emmision != Vector3f::ZERO)

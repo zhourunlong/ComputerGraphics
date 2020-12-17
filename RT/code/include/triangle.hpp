@@ -73,9 +73,9 @@ public:
         float beta = Vector3f::dot(normal, Vector3f::cross(q - a, c - a));
         if (beta >= 0 && alpha + beta <= size) {
             if (Vector3f::dot(v, normal) < 0)
-                h.set(t, material, normal);
+                h.set(t, this, normal, true);
             else 
-                h.set(t, material, -normal);
+                h.set(t, this, -normal, false);
             return true;
         }
 

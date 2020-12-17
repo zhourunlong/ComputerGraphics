@@ -17,11 +17,9 @@ SET(RT_INCLUDES
         include/group.hpp
         include/hit.hpp
         include/image.hpp
-        include/light.hpp
         include/material.hpp
         include/mesh.hpp
         include/object3d.hpp
-        include/plane.hpp
         include/ray.hpp
         include/sphere.hpp
         include/transform.hpp
@@ -32,7 +30,7 @@ SET(RT_INCLUDES
 
 SET(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
-set(CMAKE_CXX_FLAGS "-O2")
+set(CMAKE_CXX_FLAGS "-O2 -fopenmp")
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${RT_SOURCES} ${RT_INCLUDES})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} vecmath)
