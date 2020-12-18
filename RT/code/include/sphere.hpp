@@ -36,7 +36,8 @@ public:
         Vector3d n;
         // inside sphere
         if (PC <= radius) {
-            t += s;
+            if (Vector3d::dot(v, pc) < 0) t = s - t;
+            else t += s;
             n = center - r.pointAtParameter(t);
             into = false;
         } else {

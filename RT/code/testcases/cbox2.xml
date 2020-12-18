@@ -2,7 +2,7 @@
 
 <scene version="0.5.0" >
 	<integrator type="path" >
-		<integer name="maxDepth" value="5" />
+		<integer name="maxDepth" value="10" />
 	</integrator>
 	<sensor type="perspective" >
 		<float name="fov" value="19.5" />
@@ -11,7 +11,7 @@
 			<lookat origin="0, 1, 6.8" target="0, 1, 5.8" up="0, 1, 0"/>
 		</transform>
 		<sampler type="multijitter" >
-			<integer name="sampleCount" value="10" />
+			<integer name="sampleCount" value="100" />
 		</sampler>
 		<film type="hdrfilm" >
 			<integer name="width" value="1024" />
@@ -114,7 +114,7 @@
 		</transform>
 		<ref id="Light" />
 		<emitter type="area" >
-			<rgb name="radiance" value="17, 12, 4"/>
+			<rgb name="radiance" value="12, 12, 12"/>
 		</emitter>
 	</shape>
 </scene>

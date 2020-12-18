@@ -15,8 +15,8 @@ Group* baseGroup;
 double clamp(double x) {return x < 0 ? 0 : (x > 1 ? 1 : x);}
 
 Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi) {
-    Hit hit;
-    bool isIntersect = baseGroup->intersect(r, hit, 0);
+    Hit hit = Hit();
+    bool isIntersect = baseGroup->intersect(r, hit, 1e-9);
     if (!isIntersect)
         return Vector3d(0);
     Object3D *o = hit.getObject();
@@ -79,11 +79,12 @@ int main(int argc, char *argv[]) {
     samps = parser.getSampleCount() / 4;
     maxDep = parser.getMaxDep();
 
+    
     for (int y = 0; y < h; ++y) {
         double load = 1.0 * y / (h - 1), t = omp_get_wtime() - timeStamp;
         fprintf(stderr,"\r %5.2lf%%\t\tUsed time: %5.2lf sec\t\tRemaining time: %5.2lf sec", 100 * load, t, t / load * (1 - load));
         unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
-        #pragma omp parallel for
+        #pragma omp parallel for collapse(1) schedule (guided)
         for (int x = 0; x < w; ++x) {
             Vector3d finalColor(0);
             for (int sy = -1; sy < 2; sy += 2)
@@ -92,7 +93,7 @@ int main(int argc, char *argv[]) {
                     for (int s = 0; s < samps; ++s) {
                         double r1 = 2 * erand48(Xi), dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
                         double r2 = 2 * erand48(Xi), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
-                        Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + dx, y + 0.25 * sy + dy));
+                        Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + 0.5 * dx + 0.5, y + 0.25 * sy + 0.5 * dy + 0.5));
                         r = r + rayTracing(camRay, 0, Xi) / samps;
                     }
                     finalColor = finalColor + Vector3d(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
@@ -100,11 +101,14 @@ int main(int argc, char *argv[]) {
             renderedImg.SetPixel(x, y, finalColor);
         }
     }
-    
+    /*
+    int x = 382, y = 264;
+    unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
+    Ray camRay = camera->generateRay(Vector2d(x, y));
+    rayTracing(camRay, 0, Xi);
+    */
     renderedImg.SaveImage(argv[2]);
     //renderedImg.SaveImage("2.bmp");
-
-    std::cout << "time: " << omp_get_wtime() - timeStamp << " sec\n";
     return 0;
 }
 
