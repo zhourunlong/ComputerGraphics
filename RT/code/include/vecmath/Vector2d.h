@@ -1,5 +1,4 @@
-#ifndef VECTOR_2d_H
-#define VECTOR_2d_H
+#pragma once
 
 #include <cmath>
 
@@ -87,5 +86,3 @@ Vector2d operator / ( const Vector2d& v, double f );
 
 bool operator == ( const Vector2d& v0, const Vector2d& v1 );
 bool operator != ( const Vector2d& v0, const Vector2d& v1 );
-
-#endif // VECTOR_2d_H

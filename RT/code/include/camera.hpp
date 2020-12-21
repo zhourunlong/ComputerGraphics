@@ -2,7 +2,7 @@
 #define CAMERA_H
 
 #include "ray.hpp"
-#include <vecmath.h>
+#include "vecmath/vecmath.h"
 #include <bits/stdc++.h>
 
 class Camera {

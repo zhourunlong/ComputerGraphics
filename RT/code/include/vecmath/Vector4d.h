@@ -1,5 +1,4 @@
-#ifndef VECTOR_4d_H
-#define VECTOR_4d_H
+#pragma once
 
 class Vector2d;
 class Vector3d;
@@ -98,5 +97,3 @@ Vector4d operator / ( const Vector4d& v, double f );
 
 bool operator == ( const Vector4d& v0, const Vector4d& v1 );
 bool operator != ( const Vector4d& v0, const Vector4d& v1 );
-
-#endif // VECTOR_4d_H

@@ -17,7 +17,7 @@ extern std::map <std::string, Material*> materialMap;
 struct BoundPlane {
     double coorMin, coorMax;
 
-    query queryIntersectX(Ray r) {
+    inline query queryIntersectX(Ray r) {
         Vector3d p = r.getOrigin(), v = r.getDirection();
         if (v.x() == 0) {
             if (p.x() < coorMin || p.x() > coorMax) return std::make_pair(0, -1);
@@ -28,7 +28,7 @@ struct BoundPlane {
         return std::make_pair(t0, t1);
     }
 
-    query queryIntersectY(Ray r) {
+    inline query queryIntersectY(Ray r) {
         Vector3d p = r.getOrigin(), v = r.getDirection();
         if (v.y() == 0) {
             if (p.y() < coorMin || p.y() > coorMax) return std::make_pair(0, -1);
@@ -39,7 +39,7 @@ struct BoundPlane {
         return std::make_pair(t0, t1);
     }
 
-    query queryIntersectZ(Ray r) {
+    inline query queryIntersectZ(Ray r) {
         Vector3d p = r.getOrigin(), v = r.getDirection();
         if (v.z() == 0) {
             if (p.z() < coorMin || p.z() > coorMax) return std::make_pair(0, -1);
@@ -50,7 +50,7 @@ struct BoundPlane {
         return std::make_pair(t0, t1);
     }
 
-    void merge(const BoundPlane &b) {
+    inline void merge(const BoundPlane &b) {
         coorMin = std::min(coorMin, b.coorMin);
         coorMax = std::max(coorMax, b.coorMax);
     }
@@ -68,34 +68,34 @@ public:
         this->material = material;
     }
 
-    virtual std::string getMatRef() {return ref;}
+    inline virtual std::string getMatRef() {return ref;}
 
-    void setMatRef(const std::string &_ref) {ref = _ref;}
+    inline void setMatRef(const std::string &_ref) {ref = _ref;}
 
-    virtual Material* getMaterial() {return material;}
+    inline virtual Material* getMaterial() {return material;}
 
-    virtual void setMaterial(Material* _material) {material = _material;}
+    inline virtual void setMaterial(Material* _material) {material = _material;}
 
-    Vector3d getEmmision() {return emmision;}
+    inline Vector3d getEmmision() {return emmision;}
 
-    void setEmmision(const Vector3d &_emmision) {emmision = _emmision;}
+    inline void setEmmision(const Vector3d &_emmision) {emmision = _emmision;}
 
-    bool getNeedTransform() {return needTransform;}
+    inline bool getNeedTransform() {return needTransform;}
 
-    void setNeedTransform(const bool &_needTransform) {needTransform = _needTransform;}
+    inline void setNeedTransform(const bool &_needTransform) {needTransform = _needTransform;}
 
     // Intersect Ray with this object. If hit, store information in hit structure.
-    virtual bool intersect(const Ray &r, Hit &h, double tmin) = 0;
+    inline virtual bool intersect(const Ray &r, Hit &h, double tmin) = 0;
 
-    virtual BoundPlane getBoundPlaneX() = 0;
-    virtual BoundPlane getBoundPlaneY() = 0;
-    virtual BoundPlane getBoundPlaneZ() = 0;
+    inline virtual BoundPlane getBoundPlaneX() = 0;
+    inline virtual BoundPlane getBoundPlaneY() = 0;
+    inline virtual BoundPlane getBoundPlaneZ() = 0;
 
-    bool getIsPlane() {return isPlane;}
+    inline bool getIsPlane() {return isPlane;}
 
-    virtual void print() = 0;
+    inline virtual void print() = 0;
 
-    virtual void finish() {}
+    inline virtual void finish() {}
 
 protected:
 

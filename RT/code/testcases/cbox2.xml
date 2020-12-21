@@ -2,22 +2,23 @@
 
 <scene version="0.5.0" >
 	<integrator type="path" >
-		<integer name="maxDepth" value="10" />
+		<integer name="maxDepth" value="65" />
+		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
 		<float name="fov" value="19.5" />
 		<transform name="toWorld" >
-			<!--<matrix value="-1 0 0 0 0 1 0 1 0 0 -1 6.8 0 0 0 1"/>-->
 			<lookat origin="0, 1, 6.8" target="0, 1, 5.8" up="0, 1, 0"/>
 		</transform>
-		<sampler type="multijitter" >
-			<integer name="sampleCount" value="100" />
+		<sampler type="sobol" >
+			<integer name="sampleCount" value="1000" />
 		</sampler>
-		<film type="hdrfilm" >
+		<film type="ldrfilm" >
 			<integer name="width" value="1024" />
 			<integer name="height" value="1024" />
-			<string name="fileFormat" value="pfm" />
+			<string name="fileFormat" value="png" />
 			<string name="pixelFormat" value="rgb" />
+			<float name="gamma" value="2.2" />
 			<boolean name="banner" value="false" />
 			<rfilter type="tent" />
 		</film>
@@ -48,16 +49,14 @@
 		</bsdf>
 	</bsdf>
 	<bsdf type="twosided" id="ShortBox" >
-		<bsdf type="conductor">
-			<string name="material" value="Mo"/>
-			<rgb name="specular_reflectance" value="0.999, 0.999, 0.999"/>
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
 		</bsdf>
 	</bsdf>
-	<bsdf type="dielectric" id = "TallBox">
-		<float name="int_ior" value="1.5"/>
-		<float name="ext_ior" value="1.0"/>
-		<rgb name="specular_reflectance" value="0.999, 0.999, 0.999"/>
-		<rgb name="specular_transmittance" value="0.999, 0.999, 0.999"/>
+	<bsdf type="twosided" id="TallBox" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+		</bsdf>
 	</bsdf>
 	<bsdf type="twosided" id="Light" >
 		<bsdf type="diffuse" >
@@ -114,7 +113,7 @@
 		</transform>
 		<ref id="Light" />
 		<emitter type="area" >
-			<rgb name="radiance" value="12, 12, 12"/>
+			<rgb name="radiance" value="17, 12, 4"/>
 		</emitter>
 	</shape>
 </scene>

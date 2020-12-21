@@ -2,7 +2,7 @@
 #define TRIANGLE_H
 
 #include "object3d.hpp"
-#include <vecmath.h>
+#include "vecmath/vecmath.h"
 #include <cmath>
 #include <iostream>
 using namespace std;
@@ -14,17 +14,17 @@ public:
 	Triangle() = delete;
 
     // a b c are three vertex positions of the triangle
-    Triangle(const Vector3d& a, const Vector3d& b, const Vector3d& c)
+    inline Triangle(const Vector3d& a, const Vector3d& b, const Vector3d& c)
         : a(a), b(b), c(c) {
         calc();
 	}
 
-	Triangle(const Vector3d& a, const Vector3d& b, const Vector3d& c, Material* m)
+	inline Triangle(const Vector3d& a, const Vector3d& b, const Vector3d& c, Material* m)
         : Object3D(m), a(a), b(b), c(c) {
         calc();
 	}
 
-    void calc() {
+    inline void calc() {
         normal = Vector3d::cross(b - a, c - a);
         size = normal.length();
         normal.normalize();
@@ -52,7 +52,7 @@ public:
         planeZ = (BoundPlane){Min, Max};
     }
 
-	bool intersect(const Ray& r,  Hit& h, double tmin) override {
+	inline bool intersect(const Ray& r,  Hit& h, double tmin) override {
         Vector3d p = r.getOrigin(), v = r.getDirection();
 
         // parallel 
@@ -82,11 +82,11 @@ public:
         return false;
 	}
 
-    BoundPlane getBoundPlaneX() override {return planeX;}
-    BoundPlane getBoundPlaneY() override {return planeY;}
-    BoundPlane getBoundPlaneZ() override {return planeZ;}
+    inline BoundPlane getBoundPlaneX() override {return planeX;}
+    inline BoundPlane getBoundPlaneY() override {return planeY;}
+    inline BoundPlane getBoundPlaneZ() override {return planeZ;}
 
-    void print() override {
+    inline void print() override {
         std::cout << "===== Triangle =====\n";
         std::cout << a << "\n" << b << "\n" << c << "\n";
         std::cout << "material: " << ref << "\n";

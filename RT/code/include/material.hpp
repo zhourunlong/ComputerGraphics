@@ -2,7 +2,7 @@
 #define MATERIAL_H
 
 #include <cassert>
-#include <vecmath.h>
+#include "vecmath/vecmath.h"
 
 #include "ray.hpp"
 #include "hit.hpp"
@@ -17,7 +17,7 @@ public:
         DIEL  // dielectric
     };
 
-    Material() {
+    inline Material() {
         id = "";
         twoSided = false;
         type = DIFF;
@@ -28,39 +28,39 @@ public:
 
     virtual ~Material() = default;
 
-    std::string getId() {return id;}
+    inline std::string getId() {return id;}
 
-    void setId(const std::string &_id) {id = _id;}
+    inline void setId(const std::string &_id) {id = _id;}
 
-    bool getTwoSided() {return twoSided;}
+    inline bool getTwoSided() {return twoSided;}
 
-    void setTwoSided(const bool &_twoSided) {twoSided = _twoSided;}
+    inline void setTwoSided(const bool &_twoSided) {twoSided = _twoSided;}
 
-    SurfaceType getType() {return type;}
+    inline SurfaceType getType() {return type;}
     
-    void setType(const SurfaceType &_type) {type = _type;}
+    inline void setType(const SurfaceType &_type) {type = _type;}
 
-    Vector3d getRefl() {return refl;}
+    inline Vector3d getRefl() {return refl;}
 
-    void setRefl(const Vector3d &_refl) {refl = _refl;}
+    inline void setRefl(const Vector3d &_refl) {refl = _refl;}
 
-    Vector3d getTran() {return tran;}
+    inline Vector3d getTran() {return tran;}
 
-    void setTran(const Vector3d &_tran) {tran = _tran;}
+    inline void setTran(const Vector3d &_tran) {tran = _tran;}
 
-    double getIntIor() {return intIor;}
+    inline double getIntIor() {return intIor;}
 
-    void setIntIor(const double &_intIor) {intIor = _intIor;}
+    inline void setIntIor(const double &_intIor) {intIor = _intIor;}
 
-    double getExtIor() {return extIor;}
+    inline double getExtIor() {return extIor;}
 
-    void setExtIor(const double &_extIor) {extIor = _extIor;}
+    inline void setExtIor(const double &_extIor) {extIor = _extIor;}
 
-    std::string getSurfMaterial() {return surfMaterial;}
+    inline std::string getSurfMaterial() {return surfMaterial;}
 
-    void setSurfMaterial(const std::string &_surfMaterial) {surfMaterial = _surfMaterial;}
+    inline void setSurfMaterial(const std::string &_surfMaterial) {surfMaterial = _surfMaterial;}
 
-    void print() {
+    inline void print() {
         std::cout << "===== Material =====\n";
         std::cout << "id: " << id << "\n";
         if (twoSided)

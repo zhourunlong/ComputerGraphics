@@ -3,7 +3,7 @@
 
 #include <cassert>
 #include <iostream>
-#include <Vector3d.h>
+#include "vecmath/vecmath.h"
 
 
 // Ray class mostly copied from Peter Shirley and Keith Morley
@@ -11,25 +11,23 @@ class Ray {
 public:
 
     Ray() = delete;
-    Ray(const Vector3d &orig, const Vector3d &dir) {
+    inline Ray(const Vector3d &orig, const Vector3d &dir) {
         origin = orig;
         direction = dir;
     }
 
-    Ray(const Ray &r) {
+    inline Ray(const Ray &r) {
         origin = r.origin;
         direction = r.direction;
     }
 
-    const Vector3d &getOrigin() const {
-        return origin;
-    }
+    inline const Vector3d &getOrigin() const {return origin;}
 
-    const Vector3d &getDirection() const {
-        return direction;
-    }
+    inline void setOrigin(const Vector3d &_origin) {origin = _origin;}
 
-    Vector3d pointAtParameter(double t) const {
+    inline const Vector3d &getDirection() const {return direction;}
+
+    inline Vector3d pointAtParameter(double t) const {
         return origin + direction * t;
     }
 

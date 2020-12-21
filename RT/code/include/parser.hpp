@@ -2,7 +2,7 @@
 #define PARSER_H
 
 #include <bits/stdc++.h>
-#include "pugixml.hpp"
+#include "pugi/pugixml.hpp"
 #include "material.hpp"
 #include "camera.hpp"
 #include "object3d.hpp"
@@ -11,7 +11,7 @@
 #include "sphere.hpp"
 #include "triangle.hpp"
 #include "transform.hpp"
-#include <vecmath.h>
+#include "vecmath/vecmath.h"
 
 double degreeToRadian(const double &x) {return (M_PI * x) / 180.0;}
 

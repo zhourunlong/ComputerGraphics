@@ -9,4 +9,12 @@
 #include "Vector3d.h"
 #include "Vector4d.h"
 
+#include "Matrix2d.cpp"
+#include "Matrix3d.cpp"
+#include "Matrix4d.cpp"
+#include "Quat4d.cpp"
+#include "Vector2d.cpp"
+#include "Vector3d.cpp"
+#include "Vector4d.cpp"
+
 #endif // VECMATH_H

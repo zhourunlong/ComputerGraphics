@@ -2,7 +2,7 @@
 #define IMAGE_H
 
 #include <cassert>
-#include <vecmath.h>
+#include "vecmath/vecmath.h"
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>

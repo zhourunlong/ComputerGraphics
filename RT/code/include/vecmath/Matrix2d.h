@@ -1,5 +1,4 @@
-#ifndef MATRIX2d_H
-#define MATRIX2d_H
+#pragma once
 
 #include <cstdio>
 
@@ -65,5 +64,3 @@ Vector2d operator * ( const Matrix2d& m, const Vector2d& v );
 
 // Matrix-Matrix multiplication
 Matrix2d operator * ( const Matrix2d& x, const Matrix2d& y );
-
-#endif // MATRIX2d_H

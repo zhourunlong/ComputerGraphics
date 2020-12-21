@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Matrix3d.h"
 
 #include <cassert>
@@ -9,7 +11,7 @@
 #include "Quat4d.h"
 #include "Vector3d.h"
 
-Matrix3d::Matrix3d( double fill )
+inline Matrix3d::Matrix3d( double fill )
 {
 	for( int i = 0; i < 9; ++i )
 	{
@@ -17,7 +19,7 @@ Matrix3d::Matrix3d( double fill )
 	}
 }
 
-Matrix3d::Matrix3d( double m00, double m01, double m02,
+inline Matrix3d::Matrix3d( double m00, double m01, double m02,
 				   double m10, double m11, double m12,
 				   double m20, double m21, double m22 )
 {
@@ -34,7 +36,7 @@ Matrix3d::Matrix3d( double m00, double m01, double m02,
 	m_elements[ 8 ] = m22;
 }
 
-Matrix3d::Matrix3d( const Vector3d& v0, const Vector3d& v1, const Vector3d& v2, bool setColumns )
+inline Matrix3d::Matrix3d( const Vector3d& v0, const Vector3d& v1, const Vector3d& v2, bool setColumns )
 {
 	if( setColumns )
 	{
@@ -50,12 +52,12 @@ Matrix3d::Matrix3d( const Vector3d& v0, const Vector3d& v1, const Vector3d& v2, 
 	}
 }
 
-Matrix3d::Matrix3d( const Matrix3d& rm )
+inline Matrix3d::Matrix3d( const Matrix3d& rm )
 {
 	memcpy( m_elements, rm.m_elements, 9 * sizeof( double ) );
 }
 
-Matrix3d& Matrix3d::operator = ( const Matrix3d& rm )
+inline Matrix3d& Matrix3d::operator = ( const Matrix3d& rm )
 {
 	if( this != &rm )
 	{
@@ -64,17 +66,17 @@ Matrix3d& Matrix3d::operator = ( const Matrix3d& rm )
 	return *this;
 }
 
-const double& Matrix3d::operator () ( int i, int j ) const
+inline const double& Matrix3d::operator () ( int i, int j ) const
 {
 	return m_elements[ j * 3 + i ];
 }
 
-double& Matrix3d::operator () ( int i, int j )
+inline double& Matrix3d::operator () ( int i, int j )
 {
 	return m_elements[ j * 3 + i ];
 }
 
-Vector3d Matrix3d::getRow( int i ) const
+inline Vector3d Matrix3d::getRow( int i ) const
 {
 	return Vector3d
 	(
@@ -84,14 +86,14 @@ Vector3d Matrix3d::getRow( int i ) const
 	);
 }
 
-void Matrix3d::setRow( int i, const Vector3d& v )
+inline void Matrix3d::setRow( int i, const Vector3d& v )
 {
 	m_elements[ i ] = v.x();
 	m_elements[ i + 3 ] = v.y();
 	m_elements[ i + 6 ] = v.z();
 }
 
-Vector3d Matrix3d::getCol( int j ) const
+inline Vector3d Matrix3d::getCol( int j ) const
 {
 	int colStart = 3 * j;
 
@@ -103,7 +105,7 @@ Vector3d Matrix3d::getCol( int j ) const
 	);
 }
 
-void Matrix3d::setCol( int j, const Vector3d& v )
+inline void Matrix3d::setCol( int j, const Vector3d& v )
 {
 	int colStart = 3 * j;
 
@@ -112,7 +114,7 @@ void Matrix3d::setCol( int j, const Vector3d& v )
 	m_elements[ colStart + 2 ] = v.z();
 }
 
-Matrix2d Matrix3d::getSubmatrix2x2( int i0, int j0 ) const
+inline Matrix2d Matrix3d::getSubmatrix2x2( int i0, int j0 ) const
 {
 	Matrix2d out;
 
@@ -127,7 +129,7 @@ Matrix2d Matrix3d::getSubmatrix2x2( int i0, int j0 ) const
 	return out;
 }
 
-void Matrix3d::setSubmatrix2x2( int i0, int j0, const Matrix2d& m )
+inline void Matrix3d::setSubmatrix2x2( int i0, int j0, const Matrix2d& m )
 {
 	for( int i = 0; i < 2; ++i )
 	{
@@ -138,7 +140,7 @@ void Matrix3d::setSubmatrix2x2( int i0, int j0, const Matrix2d& m )
 	}
 }
 
-double Matrix3d::determinant() const
+inline double Matrix3d::determinant() const
 {
 	return Matrix3d::determinant3x3
 	(
@@ -148,7 +150,7 @@ double Matrix3d::determinant() const
 	);
 }
 
-Matrix3d Matrix3d::inverse( bool* pbIsSingular, double epsilon ) const
+inline Matrix3d Matrix3d::inverse( bool* pbIsSingular, double epsilon ) const
 {
 	double m00 = m_elements[ 0 ];
 	double m10 = m_elements[ 1 ];
@@ -203,7 +205,7 @@ Matrix3d Matrix3d::inverse( bool* pbIsSingular, double epsilon ) const
 	}
 }
 
-void Matrix3d::transpose()
+inline void Matrix3d::transpose()
 {
 	double temp;
 
@@ -218,7 +220,7 @@ void Matrix3d::transpose()
 	}
 }
 
-Matrix3d Matrix3d::transposed() const
+inline Matrix3d Matrix3d::transposed() const
 {
 	Matrix3d out;
 	for( int i = 0; i < 3; ++i )
@@ -237,16 +239,16 @@ Matrix3d::operator double* ()
 	return m_elements;
 }
 
-void Matrix3d::print()
+inline void Matrix3d::print()
 {
-	printf( "[ %.4d %.4d %.4d ]\n[ %.4d %.4d %.4d ]\n[ %.4d %.4d %.4d ]\n",
+	printf( "[ %.4lf %.4lf %.4lf ]\n[ %.4lf %.4lf %.4lf ]\n[ %.4lf %.4lf %.4lf ]\n",
 		m_elements[ 0 ], m_elements[ 3 ], m_elements[ 6 ],
 		m_elements[ 1 ], m_elements[ 4 ], m_elements[ 7 ],
 		m_elements[ 2 ], m_elements[ 5 ], m_elements[ 8 ] );
 }
 
 // static
-double Matrix3d::determinant3x3( double m00, double m01, double m02,
+inline double Matrix3d::determinant3x3( double m00, double m01, double m02,
 							   double m10, double m11, double m12,
 							   double m20, double m21, double m22 )
 {
@@ -259,7 +261,7 @@ double Matrix3d::determinant3x3( double m00, double m01, double m02,
 }
 
 // static
-Matrix3d Matrix3d::ones()
+inline Matrix3d Matrix3d::ones()
 {
 	Matrix3d m;
 	for( int i = 0; i < 9; ++i )
@@ -271,7 +273,7 @@ Matrix3d Matrix3d::ones()
 }
 
 // static
-Matrix3d Matrix3d::identity()
+inline Matrix3d Matrix3d::identity()
 {
 	Matrix3d m;
 
@@ -284,7 +286,7 @@ Matrix3d Matrix3d::identity()
 
 
 // static
-Matrix3d Matrix3d::rotateX( double radians )
+inline Matrix3d Matrix3d::rotateX( double radians )
 {
 	double c = cos( radians );
 	double s = sin( radians );
@@ -298,7 +300,7 @@ Matrix3d Matrix3d::rotateX( double radians )
 }
 
 // static
-Matrix3d Matrix3d::rotateY( double radians )
+inline Matrix3d Matrix3d::rotateY( double radians )
 {
 	double c = cos( radians );
 	double s = sin( radians );
@@ -312,7 +314,7 @@ Matrix3d Matrix3d::rotateY( double radians )
 }
 
 // static
-Matrix3d Matrix3d::rotateZ( double radians )
+inline Matrix3d Matrix3d::rotateZ( double radians )
 {
 	double c = cos( radians );
 	double s = sin( radians );
@@ -326,7 +328,7 @@ Matrix3d Matrix3d::rotateZ( double radians )
 }
 
 // static
-Matrix3d Matrix3d::scaling( double sx, double sy, double sz )
+inline Matrix3d Matrix3d::scaling( double sx, double sy, double sz )
 {
 	return Matrix3d
 	(
@@ -337,7 +339,7 @@ Matrix3d Matrix3d::scaling( double sx, double sy, double sz )
 }
 
 // static
-Matrix3d Matrix3d::uniformScaling( double s )
+inline Matrix3d Matrix3d::uniformScaling( double s )
 {
 	return Matrix3d
 	(
@@ -348,7 +350,7 @@ Matrix3d Matrix3d::uniformScaling( double s )
 }
 
 // static
-Matrix3d Matrix3d::rotation( const Vector3d& rDirection, double radians )
+inline Matrix3d Matrix3d::rotation( const Vector3d& rDirection, double radians )
 {
 	Vector3d normalizedDirection = rDirection.normalized();
 	
@@ -368,7 +370,7 @@ Matrix3d Matrix3d::rotation( const Vector3d& rDirection, double radians )
 }
 
 // static
-Matrix3d Matrix3d::rotation( const Quat4d& rq )
+inline Matrix3d Matrix3d::rotation( const Quat4d& rq )
 {
 	Quat4d q = rq.normalized();
 
@@ -397,7 +399,7 @@ Matrix3d Matrix3d::rotation( const Quat4d& rq )
 // Operators
 //////////////////////////////////////////////////////////////////////////
 
-Vector3d operator * ( const Matrix3d& m, const Vector3d& v )
+inline Vector3d operator * ( const Matrix3d& m, const Vector3d& v )
 {
 	Vector3d output( 0, 0, 0 );
 
@@ -412,7 +414,7 @@ Vector3d operator * ( const Matrix3d& m, const Vector3d& v )
 	return output;
 }
 
-Matrix3d operator * ( const Matrix3d& x, const Matrix3d& y )
+inline Matrix3d operator * ( const Matrix3d& x, const Matrix3d& y )
 {
 	Matrix3d product; // zeroes
 

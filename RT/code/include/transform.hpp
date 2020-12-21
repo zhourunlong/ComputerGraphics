@@ -1,17 +1,17 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include <vecmath.h>
+#include "vecmath/vecmath.h"
 #include "object3d.hpp"
 #include <algorithm>
 
 // transforms a 3D point using a matrix, returning a 3D point
-static Vector3d transformPoint(const Matrix4d &mat, const Vector3d &point) {
+inline static Vector3d transformPoint(const Matrix4d &mat, const Vector3d &point) {
     return (mat * Vector4d(point, 1)).xyz();
 }
 
 // transform a 3D directino using a matrix, returning a direction
-static Vector3d transformDirection(const Matrix4d &mat, const Vector3d &dir) {
+inline static Vector3d transformDirection(const Matrix4d &mat, const Vector3d &dir) {
     return (mat * Vector4d(dir, 0)).xyz();
 }
 
@@ -19,17 +19,17 @@ class Transform : public Object3D {
 public:
     Transform() {}
     
-    void appendTransform(const Matrix4d &m) {transform = m * transform;}
+    inline void appendTransform(const Matrix4d &m) {transform = m * transform;}
 
-    void setObject(Object3D* _o) {o = _o;}
+    inline void setObject(Object3D* _o) {o = _o;}
 
-    std::string getMatRef() override {return o->getMatRef();}
+    inline std::string getMatRef() override {return o->getMatRef();}
 
-    Material* getMaterial() override {return o->getMaterial();}
+    inline Material* getMaterial() override {return o->getMaterial();}
 
-    void setMaterial(Material* _material) override {o->setMaterial(_material);}
+    inline void setMaterial(Material* _material) override {o->setMaterial(_material);}
 
-    virtual bool intersect(const Ray &r, Hit &h, double tmin) {
+    inline virtual bool intersect(const Ray &r, Hit &h, double tmin) {
         Vector3d trSource = transformPoint(transform.inverse(), r.getOrigin());
         Vector3d trDirection = transformDirection(transform.inverse(), r.getDirection());
         Ray tr(trSource, trDirection);
@@ -40,11 +40,11 @@ public:
         return inter;
     }
 
-    BoundPlane getBoundPlaneX() override {return planeX;}
-    BoundPlane getBoundPlaneY() override {return planeY;}
-    BoundPlane getBoundPlaneZ() override {return planeZ;}
+    inline BoundPlane getBoundPlaneX() override {return planeX;}
+    inline BoundPlane getBoundPlaneY() override {return planeY;}
+    inline BoundPlane getBoundPlaneZ() override {return planeZ;}
 
-    void print() override {
+    inline void print() override {
         std::cout << "===== Transform =====\n";
         std::cout << "matrix:\n";
         transform.print();
@@ -52,7 +52,7 @@ public:
         std::cout << "---------------------\n";
     }
 
-    void finish() override {
+    inline void finish() override {
         o->finish();
         Vector3d p[8];
         BoundPlane oX = o->getBoundPlaneX(),

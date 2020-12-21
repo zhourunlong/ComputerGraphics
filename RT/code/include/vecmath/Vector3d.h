@@ -1,5 +1,4 @@
-#ifndef VECTOR_3d_H
-#define VECTOR_3d_H
+#pragma once
 
 #include <iostream>
 
@@ -106,5 +105,3 @@ inline std::ostream &operator<<(std::ostream &os, const Vector3d &v) {
     os << "(" << v.x() << ", " << v.y() << ", " << v.z() << ")";
     return os;
 }
-
-#endif // VECTOR_3d_H

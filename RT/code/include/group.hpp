@@ -12,19 +12,19 @@ class Group : public Object3D {
 
 public:
 
-    Group() {
+    inline Group() {
         v.clear(); plane.clear();
         //deleteTree(rt);
     }
 
-    Group (int num_objects) {
+    inline Group (int num_objects) {
         v.clear();
         v.resize(num_objects);
         plane.clear();
         //deleteTree(rt);
     }
 
-    bool intersect(const Ray &r, Hit &h, double tmin) override {
+    inline bool intersect(const Ray &r, Hit &h, double tmin) override {
         bool ans = false;
         for (int i = 0; i < plane.size(); ++i)
             ans |= plane[i]->intersect(r, h, tmin);
@@ -32,33 +32,33 @@ public:
         return ans;
     }
 
-    void addObject(int index, Object3D *obj) {
+    inline void addObject(int index, Object3D *obj) {
         assert(index >= 0 && index < v.size() && v[index] == 0);
         v[index] = obj;
         if (index == v.size() - 1)
             finish();
     }
 
-    void addObject(Object3D *obj) {v.push_back(obj);}
+    inline void addObject(Object3D *obj) {v.push_back(obj);}
 
-    int getGroupSize() {return v.size();}
+    inline int getGroupSize() {return v.size();}
 
-    Object3D* getObj(int idx) {
+    inline Object3D* getObj(int idx) {
         assert(0 <= idx && idx < v.size());
         return v[idx];
     }
 
-    BoundPlane getBoundPlaneX() override {
+    inline BoundPlane getBoundPlaneX() override {
         if (rt != NULL) return rt->planeX;
     }
-    BoundPlane getBoundPlaneY() override {
+    inline BoundPlane getBoundPlaneY() override {
         if (rt != NULL) return rt->planeY;
     }
-    BoundPlane getBoundPlaneZ() override {
+    inline BoundPlane getBoundPlaneZ() override {
         if (rt != NULL) return rt->planeZ;
     }
 
-    void print() override {
+    inline void print() override {
         std::cout << "===========================\n";
         std::cout << "=          Group          =\n";
         std::cout << "===========================\n";
@@ -69,7 +69,7 @@ public:
         std::cout << "---------------------------\n";
     }
 
-    void finish() override {
+    inline void finish() override {
         std::vector <Object3D*> withoutPlane;
         for (int i = 0; i < v.size(); ++i) {
             v[i]->finish();

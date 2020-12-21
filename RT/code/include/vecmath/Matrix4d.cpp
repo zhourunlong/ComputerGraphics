@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Matrix4d.h"
 
 #include <cassert>
@@ -11,7 +13,7 @@
 #include "Vector3d.h"
 #include "Vector4d.h"
 
-Matrix4d::Matrix4d( double fill )
+inline Matrix4d::Matrix4d( double fill )
 {
 	for( int i = 0; i < 16; ++i )
 	{
@@ -19,7 +21,7 @@ Matrix4d::Matrix4d( double fill )
 	}
 }
 
-Matrix4d::Matrix4d( double m00, double m01, double m02, double m03,
+inline Matrix4d::Matrix4d( double m00, double m01, double m02, double m03,
 				   double m10, double m11, double m12, double m13,
 				   double m20, double m21, double m22, double m23,
 				   double m30, double m31, double m32, double m33 )
@@ -45,7 +47,7 @@ Matrix4d::Matrix4d( double m00, double m01, double m02, double m03,
 	m_elements[ 15 ] = m33;
 }
 
-Matrix4d& Matrix4d::operator/=(double d)
+inline Matrix4d& Matrix4d::operator/=(double d)
 {
 	for(int ii=0;ii<16;ii++){
 		m_elements[ii]/=d;
@@ -53,7 +55,7 @@ Matrix4d& Matrix4d::operator/=(double d)
 	return *this;
 }
 
-Matrix4d::Matrix4d( const Vector4d& v0, const Vector4d& v1, const Vector4d& v2, const Vector4d& v3, bool setColumns )
+inline Matrix4d::Matrix4d( const Vector4d& v0, const Vector4d& v1, const Vector4d& v2, const Vector4d& v3, bool setColumns )
 {
 	if( setColumns )
 	{
@@ -71,12 +73,12 @@ Matrix4d::Matrix4d( const Vector4d& v0, const Vector4d& v1, const Vector4d& v2, 
 	}
 }
 
-Matrix4d::Matrix4d( const Matrix4d& rm )
+inline Matrix4d::Matrix4d( const Matrix4d& rm )
 {
 	memcpy( m_elements, rm.m_elements, 16 * sizeof( double ) );
 }
 
-Matrix4d& Matrix4d::operator = ( const Matrix4d& rm )
+inline Matrix4d& Matrix4d::operator = ( const Matrix4d& rm )
 {
 	if( this != &rm )
 	{
@@ -85,17 +87,17 @@ Matrix4d& Matrix4d::operator = ( const Matrix4d& rm )
 	return *this;
 }
 
-const double& Matrix4d::operator () ( int i, int j ) const
+inline const double& Matrix4d::operator () ( int i, int j ) const
 {
 	return m_elements[ j * 4 + i ];
 }
 
-double& Matrix4d::operator () ( int i, int j )
+inline double& Matrix4d::operator () ( int i, int j )
 {
 	return m_elements[ j * 4 + i ];
 }
 
-Vector4d Matrix4d::getRow( int i ) const
+inline Vector4d Matrix4d::getRow( int i ) const
 {
 	return Vector4d
 	(
@@ -106,7 +108,7 @@ Vector4d Matrix4d::getRow( int i ) const
 	);
 }
 
-void Matrix4d::setRow( int i, const Vector4d& v )
+inline void Matrix4d::setRow( int i, const Vector4d& v )
 {
 	m_elements[ i ] = v.x();
 	m_elements[ i + 4 ] = v.y();
@@ -114,7 +116,7 @@ void Matrix4d::setRow( int i, const Vector4d& v )
 	m_elements[ i + 12 ] = v.w();
 }
 
-Vector4d Matrix4d::getCol( int j ) const
+inline Vector4d Matrix4d::getCol( int j ) const
 {
 	int colStart = 4 * j;
 
@@ -127,7 +129,7 @@ Vector4d Matrix4d::getCol( int j ) const
 	);
 }
 
-void Matrix4d::setCol( int j, const Vector4d& v )
+inline void Matrix4d::setCol( int j, const Vector4d& v )
 {
 	int colStart = 4 * j;
 
@@ -137,7 +139,7 @@ void Matrix4d::setCol( int j, const Vector4d& v )
 	m_elements[ colStart + 3 ] = v.w();
 }
 
-Matrix2d Matrix4d::getSubmatrix2x2( int i0, int j0 ) const
+inline Matrix2d Matrix4d::getSubmatrix2x2( int i0, int j0 ) const
 {
 	Matrix2d out;
 
@@ -152,7 +154,7 @@ Matrix2d Matrix4d::getSubmatrix2x2( int i0, int j0 ) const
 	return out;
 }
 
-Matrix3d Matrix4d::getSubmatrix3x3( int i0, int j0 ) const
+inline Matrix3d Matrix4d::getSubmatrix3x3( int i0, int j0 ) const
 {
 	Matrix3d out;
 
@@ -167,7 +169,7 @@ Matrix3d Matrix4d::getSubmatrix3x3( int i0, int j0 ) const
 	return out;
 }
 
-void Matrix4d::setSubmatrix2x2( int i0, int j0, const Matrix2d& m )
+inline void Matrix4d::setSubmatrix2x2( int i0, int j0, const Matrix2d& m )
 {
 	for( int i = 0; i < 2; ++i )
 	{
@@ -178,7 +180,7 @@ void Matrix4d::setSubmatrix2x2( int i0, int j0, const Matrix2d& m )
 	}
 }
 
-void Matrix4d::setSubmatrix3x3( int i0, int j0, const Matrix3d& m )
+inline void Matrix4d::setSubmatrix3x3( int i0, int j0, const Matrix3d& m )
 {
 	for( int i = 0; i < 3; ++i )
 	{
@@ -189,7 +191,7 @@ void Matrix4d::setSubmatrix3x3( int i0, int j0, const Matrix3d& m )
 	}
 }
 
-double Matrix4d::determinant() const
+inline double Matrix4d::determinant() const
 {
 	double m00 = m_elements[ 0 ];
 	double m10 = m_elements[ 1 ];
@@ -219,7 +221,7 @@ double Matrix4d::determinant() const
 	return( m00 * cofactor00 + m01 * cofactor01 + m02 * cofactor02 + m03 * cofactor03 );
 }
 
-Matrix4d Matrix4d::inverse( bool* pbIsSingular, double epsilon ) const
+inline Matrix4d Matrix4d::inverse( bool* pbIsSingular, double epsilon ) const
 {
 	double m00 = m_elements[ 0 ];
 	double m10 = m_elements[ 1 ];
@@ -291,7 +293,7 @@ Matrix4d Matrix4d::inverse( bool* pbIsSingular, double epsilon ) const
 	}
 }
 
-void Matrix4d::transpose()
+inline void Matrix4d::transpose()
 {
 	double temp;
 
@@ -306,7 +308,7 @@ void Matrix4d::transpose()
 	}
 }
 
-Matrix4d Matrix4d::transposed() const
+inline Matrix4d Matrix4d::transposed() const
 {
 	Matrix4d out;
 	for( int i = 0; i < 4; ++i )
@@ -320,18 +322,18 @@ Matrix4d Matrix4d::transposed() const
 	return out;
 }
 
-Matrix4d::operator double* ()
+inline Matrix4d::operator double* ()
 {
 	return m_elements;
 }
 
-Matrix4d::operator const double* ()const
+inline Matrix4d::operator const double* ()const
 {
 	return m_elements;
 }
 
 
-void Matrix4d::print()
+inline void Matrix4d::print()
 {
 	printf( "[ %.10lf %.10lf %.10lf %.10lf ]\n[ %.10lf %.10lf %.10lf %.10lf ]\n[ %.10lf %.10lf %.10lf %.10lf ]\n[ %.10lf %.10lf %.10lf %.10lf ]\n",
 		m_elements[ 0 ], m_elements[ 4 ], m_elements[ 8 ], m_elements[ 12 ],
@@ -341,7 +343,7 @@ void Matrix4d::print()
 }
 
 // static
-Matrix4d Matrix4d::ones()
+inline Matrix4d Matrix4d::ones()
 {
 	Matrix4d m;
 	for( int i = 0; i < 16; ++i )
@@ -353,7 +355,7 @@ Matrix4d Matrix4d::ones()
 }
 
 // static
-Matrix4d Matrix4d::identity()
+inline Matrix4d Matrix4d::identity()
 {
 	Matrix4d m;
 	
@@ -366,7 +368,7 @@ Matrix4d Matrix4d::identity()
 }
 
 // static
-Matrix4d Matrix4d::translation( double x, double y, double z )
+inline Matrix4d Matrix4d::translation( double x, double y, double z )
 {
 	return Matrix4d
 	(
@@ -378,7 +380,7 @@ Matrix4d Matrix4d::translation( double x, double y, double z )
 }
 
 // static
-Matrix4d Matrix4d::translation( const Vector3d& rTranslation )
+inline Matrix4d Matrix4d::translation( const Vector3d& rTranslation )
 {
 	return Matrix4d
 	(
@@ -390,7 +392,7 @@ Matrix4d Matrix4d::translation( const Vector3d& rTranslation )
 }
 
 // static
-Matrix4d Matrix4d::rotateX( double radians )
+inline Matrix4d Matrix4d::rotateX( double radians )
 {
 	double c = cos( radians );
 	double s = sin( radians );
@@ -405,7 +407,7 @@ Matrix4d Matrix4d::rotateX( double radians )
 }
 
 // static
-Matrix4d Matrix4d::rotateY( double radians )
+inline Matrix4d Matrix4d::rotateY( double radians )
 {
 	double c = cos( radians );
 	double s = sin( radians );
@@ -420,7 +422,7 @@ Matrix4d Matrix4d::rotateY( double radians )
 }
 
 // static
-Matrix4d Matrix4d::rotateZ( double radians )
+inline Matrix4d Matrix4d::rotateZ( double radians )
 {
 	double c = cos( radians );
 	double s = sin( radians );
@@ -435,7 +437,7 @@ Matrix4d Matrix4d::rotateZ( double radians )
 }
 
 // static
-Matrix4d Matrix4d::rotation( const Vector3d& rDirection, double radians )
+inline Matrix4d Matrix4d::rotation( const Vector3d& rDirection, double radians )
 {
 	Vector3d normalizedDirection = rDirection.normalized();
 	
@@ -456,7 +458,7 @@ Matrix4d Matrix4d::rotation( const Vector3d& rDirection, double radians )
 }
 
 // static
-Matrix4d Matrix4d::rotation( const Quat4d& q )
+inline Matrix4d Matrix4d::rotation( const Quat4d& q )
 {
 	Quat4d qq = q.normalized();
 
@@ -483,7 +485,7 @@ Matrix4d Matrix4d::rotation( const Quat4d& q )
 }
 
 // static
-Matrix4d Matrix4d::scaling( double sx, double sy, double sz )
+inline Matrix4d Matrix4d::scaling( double sx, double sy, double sz )
 {
 	return Matrix4d
 	(
@@ -495,7 +497,7 @@ Matrix4d Matrix4d::scaling( double sx, double sy, double sz )
 }
 
 // static
-Matrix4d Matrix4d::uniformScaling( double s )
+inline Matrix4d Matrix4d::uniformScaling( double s )
 {
 	return Matrix4d
 	(
@@ -507,13 +509,13 @@ Matrix4d Matrix4d::uniformScaling( double s )
 }
 
 // static
-Matrix4d Matrix4d::randomRotation( double u0, double u1, double u2 )
+inline Matrix4d Matrix4d::randomRotation( double u0, double u1, double u2 )
 {
 	return Matrix4d::rotation( Quat4d::randomRotation( u0, u1, u2 ) );
 }
 
 // static
-Matrix4d Matrix4d::lookAt( const Vector3d& eye, const Vector3d& center, const Vector3d& up )
+inline Matrix4d Matrix4d::lookAt( const Vector3d& eye, const Vector3d& center, const Vector3d& up )
 {
 	// z is negative forward
 	Vector3d z = ( eye - center ).normalized();
@@ -533,7 +535,7 @@ Matrix4d Matrix4d::lookAt( const Vector3d& eye, const Vector3d& center, const Ve
 }
 
 // static
-Matrix4d Matrix4d::orthographicProjection( double width, double height, double zNear, double zFar, bool directX )
+inline Matrix4d Matrix4d::orthographicProjection( double width, double height, double zNear, double zFar, bool directX )
 {
 	Matrix4d m;
 
@@ -559,7 +561,7 @@ Matrix4d Matrix4d::orthographicProjection( double width, double height, double z
 }
 
 // static
-Matrix4d Matrix4d::orthographicProjection( double left, double right, double bottom, double top, double zNear, double zFar, bool directX )
+inline Matrix4d Matrix4d::orthographicProjection( double left, double right, double bottom, double top, double zNear, double zFar, bool directX )
 {
 	Matrix4d m;
 
@@ -585,7 +587,7 @@ Matrix4d Matrix4d::orthographicProjection( double left, double right, double bot
 }
 
 // static
-Matrix4d Matrix4d::perspectiveProjection( double fLeft, double fRight,
+inline Matrix4d Matrix4d::perspectiveProjection( double fLeft, double fRight,
 										 double fBottom, double fTop,
 										 double fZNear, double fZFar,
 										 bool directX )
@@ -613,7 +615,7 @@ Matrix4d Matrix4d::perspectiveProjection( double fLeft, double fRight,
 }
 
 // static
-Matrix4d Matrix4d::perspectiveProjection( double fovYRadians, double aspect, double zNear, double zFar, bool directX )
+inline Matrix4d Matrix4d::perspectiveProjection( double fovYRadians, double aspect, double zNear, double zFar, bool directX )
 {
 	Matrix4d m; // zero matrix
 
@@ -639,7 +641,7 @@ Matrix4d Matrix4d::perspectiveProjection( double fovYRadians, double aspect, dou
 }
 
 // static
-Matrix4d Matrix4d::infinitePerspectiveProjection( double fLeft, double fRight,
+inline Matrix4d Matrix4d::infinitePerspectiveProjection( double fLeft, double fRight,
 												 double fBottom, double fTop,
 												 double fZNear, bool directX )
 {
@@ -671,7 +673,7 @@ Matrix4d Matrix4d::infinitePerspectiveProjection( double fLeft, double fRight,
 // Operators
 //////////////////////////////////////////////////////////////////////////
 
-Vector4d operator * ( const Matrix4d& m, const Vector4d& v )
+inline Vector4d operator * ( const Matrix4d& m, const Vector4d& v )
 {
 	Vector4d output( 0, 0, 0, 0 );
 
@@ -686,7 +688,7 @@ Vector4d operator * ( const Matrix4d& m, const Vector4d& v )
 	return output;
 }
 
-Matrix4d operator * ( const Matrix4d& x, const Matrix4d& y )
+inline Matrix4d operator * ( const Matrix4d& x, const Matrix4d& y )
 {
 	Matrix4d product; // zeroes
 

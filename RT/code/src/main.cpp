@@ -5,14 +5,14 @@
 #include "camera.hpp"
 #include "group.hpp"
 #include "material.hpp"
-#include <vecmath.h>
+#include "vecmath/vecmath.h"
 
 #include <omp.h>
 
 int samps, maxDep;
 Group* baseGroup;
 
-double clamp(double x) {return x < 0 ? 0 : (x > 1 ? 1 : x);}
+inline double clamp(double x) {return x < 0 ? 0 : (x > 1 ? 1 : x);}
 
 Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi) {
     Hit hit = Hit();
@@ -46,11 +46,12 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi) {
         double intIor = m->getIntIor(), extIor = m->getExtIor();
         if (!into) std::swap(intIor, extIor);
         double nnt = extIor / intIor, ddn = Vector3d::dot(rD, n),
-              cos2t = 1 - nnt * nnt * (1 - ddn * ddn);
+               cos2t = 1 - nnt * nnt * (1 - ddn * ddn);
         if (cos2t < 0)
             return o->getEmmision() + f * rayTracing(reflRay, dep, Xi);
-        Vector3d refrDir = (rD * nnt - n * (ddn * nnt + sqrt(cos2t))).normalized();
-        double a = intIor - extIor, b= intIor + extIor;
+        Vector3d refrDir = (rD * nnt - n * (ddn * nnt + sqrt(cos2t))).normalized(),
+                 g = m->getTran();
+        double a = intIor - extIor, b = intIor + extIor;
         double R0 = a * a / (b * b), c = 1 + (into ? ddn : Vector3d::dot(n, refrDir));
         double Re = R0 + (1 - R0) * c * c * c * c * c, Tr = 1 - Re;
         double P = 0.25 + 0.5 * Re, RP = Re / P, TP = Tr / (1 - P);
@@ -58,10 +59,10 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi) {
             if (erand48(Xi) < P)
                 return o->getEmmision() + f * rayTracing(reflRay, dep, Xi) * RP;
             else
-                return o->getEmmision() + f * rayTracing(Ray(x, refrDir), dep, Xi) * TP;
+                return o->getEmmision() + g * rayTracing(Ray(x, refrDir), dep, Xi) * TP;
         else
-            return o->getEmmision() + f * (rayTracing(reflRay, dep, Xi) * Re
-                                         + rayTracing(Ray(x, refrDir), dep, Xi) * Tr);
+            return o->getEmmision() + f * rayTracing(reflRay, dep, Xi) * Re
+                                    + g * rayTracing(Ray(x, refrDir), dep, Xi) * Tr;
     }
 }
 
@@ -69,7 +70,6 @@ int main(int argc, char *argv[]) {
     double timeStamp = omp_get_wtime();
 
     Parser parser(argv[1]);
-    //Parser parser("../testcases/cbox2.xml");
     Camera *camera = parser.getCamera();
     baseGroup = parser.getGroup();
 
@@ -78,7 +78,6 @@ int main(int argc, char *argv[]) {
     
     samps = parser.getSampleCount() / 4;
     maxDep = parser.getMaxDep();
-
     
     for (int y = 0; y < h; ++y) {
         double load = 1.0 * y / (h - 1), t = omp_get_wtime() - timeStamp;
@@ -101,14 +100,8 @@ int main(int argc, char *argv[]) {
             renderedImg.SetPixel(x, y, finalColor);
         }
     }
-    /*
-    int x = 382, y = 264;
-    unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
-    Ray camRay = camera->generateRay(Vector2d(x, y));
-    rayTracing(camRay, 0, Xi);
-    */
+
     renderedImg.SaveImage(argv[2]);
-    //renderedImg.SaveImage("2.bmp");
     return 0;
 }
 

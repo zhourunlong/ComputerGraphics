@@ -10,16 +10,16 @@
 #include <sstream>
 #include "object3d.hpp"
 #include "triangle.hpp"
-#include <vecmath.h>
+#include "vecmath/vecmath.h"
 
 class Mesh : public Object3D {
 
 public:
-    Mesh() {
+    inline Mesh() {
         triangles.clear();
     }
     
-    void setFile(const char* filename) {
+    inline void setFile(const char* filename) {
         // Optional: Use tiny obj loader to replace this simple one.
         std::ifstream f;
         f.open(filename);
@@ -87,9 +87,9 @@ public:
         buildTree(rt, triangles, 0);
     }
 
-    Material* getMaterial() override {return triangles[0]->getMaterial();}
+    inline Material* getMaterial() override {return triangles[0]->getMaterial();}
 
-    void setMaterial(Material* _material) override {
+    inline void setMaterial(Material* _material) override {
         for (int i = 0; i < triangles.size(); ++i)
             triangles[i]->setMaterial(_material);
     }
@@ -106,21 +106,21 @@ public:
     std::vector<Vector3d> v; // point index pool
     std::vector<TriangleIndex> t; // point indices for each triangle
     std::vector<Vector3d> n; // normal vectors for each triangle
-    bool intersect(const Ray &r, Hit &h, double tmin) {
+    inline bool intersect(const Ray &r, Hit &h, double tmin) {
         return queryIntersect(rt, r, h, tmin);
     }
 
-    BoundPlane getBoundPlaneX() override {
+    inline BoundPlane getBoundPlaneX() override {
         if (rt != NULL) return rt->planeX;
     }
-    BoundPlane getBoundPlaneY() override {
+    inline BoundPlane getBoundPlaneY() override {
         if (rt != NULL) return rt->planeY;
     }
-    BoundPlane getBoundPlaneZ() override {
+    inline BoundPlane getBoundPlaneZ() override {
         if (rt != NULL) return rt->planeZ;
     }
 
-    void print() override {
+    inline void print() override {
         std::cout << "===== Mesh =====\n";
         std::cout << t.size() << " triangles\n";
         std::cout << "material: " << ref << "\n";
@@ -133,7 +133,7 @@ public:
 private:
 
     // Normal can be used for light estimation
-    void computeNormal() {
+    inline void computeNormal() {
         n.resize(t.size());
         for (int triId = 0; triId < (int) t.size(); ++triId) {
             TriangleIndex& triIndex = t[triId];

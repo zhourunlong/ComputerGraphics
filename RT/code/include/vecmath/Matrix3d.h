@@ -1,5 +1,4 @@
-#ifndef MATRIX3d_H
-#define MATRIX3d_H
+#pragma once
 
 #include <cstdio>
 
@@ -82,5 +81,3 @@ Vector3d operator * ( const Matrix3d& m, const Vector3d& v );
 
 // Matrix-Matrix multiplication
 Matrix3d operator * ( const Matrix3d& x, const Matrix3d& y );
-
-#endif // MATRIX3d_H
