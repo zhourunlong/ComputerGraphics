@@ -2,7 +2,7 @@
 
 <scene version="0.5.0" >
 	<integrator type="path" >
-		<integer name="maxDepth" value="65" />
+		<integer name="maxDepth" value="16" />
 		<boolean name="strictNormals" value="true" />
 	</integrator>
 	<sensor type="perspective" >
@@ -11,7 +11,7 @@
 			<lookat origin="0, 1, 6.8" target="0, 1, 5.8" up="0, 1, 0"/>
 		</transform>
 		<sampler type="sobol" >
-			<integer name="sampleCount" value="1000" />
+			<integer name="sampleCount" value="50000" />
 		</sampler>
 		<film type="ldrfilm" >
 			<integer name="width" value="1024" />
@@ -94,14 +94,14 @@
 		<ref id="LeftWall" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="../mesh/cube.obj"/>
+		<string name="filename" value="mesh/cube.obj"/>
 		<transform name="toWorld" >
 			<matrix value="0.0851643 0.289542 1.31134e-008 0.328631 3.72265e-009 1.26563e-008 -0.3 0.3 -0.284951 0.0865363 5.73206e-016 0.374592 0 0 0 1"/>
 		</transform>
 		<ref id="ShortBox" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="../mesh/cube.obj"/>
+		<string name="filename" value="mesh/cube.obj"/>
 		<transform name="toWorld" >
 			<matrix value="0.286776 0.098229 -2.29282e-015 -0.335439 -4.36233e-009 1.23382e-008 -0.6 0.6 -0.0997984 0.282266 2.62268e-008 -0.291415 0 0 0 1"/>
 		</transform>

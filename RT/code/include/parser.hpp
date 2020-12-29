@@ -169,6 +169,8 @@ void Parser::parseSensor(const pugi::xml_node &node) {
         }
         return;
     }
+    //if (nname == "") {
+    //}
     if (nname == "integer") {
         std::pair<std::string, int> result = parseInt(node.first_attribute());
         if (result.first == "width")

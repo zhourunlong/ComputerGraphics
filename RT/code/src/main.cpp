@@ -14,6 +14,19 @@ Group* baseGroup;
 
 inline double clamp(double x) {return x < 0 ? 0 : (x > 1 ? 1 : x);}
 
+inline int calcBlock(int n) {
+    double r = 0;
+    int b = 0;
+    for (int a = 20; a < 40; ++a) {
+        if (n % a == 0) return a;
+        if (1.0 * (n % a) / a > r) {
+            r = 1.0 * (n % a) / a;
+            b = a;
+        }
+    }
+    return b;
+}
+
 Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi) {
     Hit hit = Hit();
     bool isIntersect = baseGroup->intersect(r, hit, 1e-9);
@@ -55,7 +68,7 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi) {
         double R0 = a * a / (b * b), c = 1 + (into ? ddn : Vector3d::dot(n, refrDir));
         double Re = R0 + (1 - R0) * c * c * c * c * c, Tr = 1 - Re;
         double P = 0.25 + 0.5 * Re, RP = Re / P, TP = Tr / (1 - P);
-        if (dep > 0.4 * maxDep)
+        if (dep > std::min(5.0, 0.4 * maxDep))
             if (erand48(Xi) < P)
                 return o->getEmmision() + f * rayTracing(reflRay, dep, Xi) * RP;
             else
@@ -68,6 +81,15 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi) {
 
 int main(int argc, char *argv[]) {
     double timeStamp = omp_get_wtime();
+    int nthreads, rank;
+    
+    #pragma omp parallel
+    {
+        nthreads = omp_get_num_threads();
+        rank = omp_get_thread_num();
+        if (rank == 0)
+            fprintf(stderr, "working on %d threads\n", nthreads);
+    }
 
     Parser parser(argv[1]);
     Camera *camera = parser.getCamera();
@@ -75,29 +97,48 @@ int main(int argc, char *argv[]) {
 
     int w = camera->getWidth(), h = camera->getHeight();
     Image renderedImg(w, h);
+
+    int a = calcBlock(w), b = calcBlock(h), numBlk = 0;
+    int kX[(w / a + 2) * (h / b + 2)], kY[(w / a + 2) * (h / b + 2)];
+    for (int y = 0; y < h; y += b)
+        for (int x = 0; x < w; x += a) {
+            kX[numBlk] = x;
+            kY[numBlk] = y;
+            ++numBlk;
+        }
     
+    fprintf(stderr, "%d x %d picture partitioned into %d %d x %d blocks\n", w, h, numBlk, a, b);
+
     samps = parser.getSampleCount() / 4;
     maxDep = parser.getMaxDep();
-    
-    for (int y = 0; y < h; ++y) {
-        double load = 1.0 * y / (h - 1), t = omp_get_wtime() - timeStamp;
-        fprintf(stderr,"\r %5.2lf%%\t\tUsed time: %5.2lf sec\t\tRemaining time: %5.2lf sec", 100 * load, t, t / load * (1 - load));
-        unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
-        #pragma omp parallel for collapse(1) schedule (guided)
-        for (int x = 0; x < w; ++x) {
-            Vector3d finalColor(0);
-            for (int sy = -1; sy < 2; sy += 2)
-                for (int sx = -1; sx < 2; sx += 2) {
-                    Vector3d r(0);
-                    for (int s = 0; s < samps; ++s) {
-                        double r1 = 2 * erand48(Xi), dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
-                        double r2 = 2 * erand48(Xi), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
-                        Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + 0.5 * dx + 0.5, y + 0.25 * sy + 0.5 * dy + 0.5));
-                        r = r + rayTracing(camRay, 0, Xi) / samps;
+    int finBlk = 0;
+
+    #pragma omp parallel for collapse(1) schedule(guided) shared(finBlk)
+    for (int idx = 0; idx < numBlk; ++idx) {
+        double load = 1.0 * finBlk / (numBlk - 1), t = omp_get_wtime() - timeStamp;
+        fprintf(stderr, "\r %5.2lf%%\t\tUsed time: %5.2lf sec\t\tRemaining time: %5.2lf sec", 100 * load, t, t / load * (1 - load));
+        int ey = std::min(h, kY[idx] + b), ex = std::min(w, kX[idx] + a);
+        for (int y = kY[idx]; y < ey; ++y) {
+            unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
+            for (int x = kX[idx]; x < ex; ++x) {
+                Vector3d finalColor(0);
+                for (int sy = -1; sy < 2; sy += 2)
+                    for (int sx = -1; sx < 2; sx += 2) {
+                        Vector3d r(0);
+                        for (int s = 0; s < samps; ++s) {
+                            double r1 = 2 * erand48(Xi), dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
+                            double r2 = 2 * erand48(Xi), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
+                            Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + 0.5 * dx + 0.5, y + 0.25 * sy + 0.5 * dy + 0.5));
+                            r = r + rayTracing(camRay, 0, Xi) / samps;
+                        }
+                        finalColor = finalColor + Vector3d(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
                     }
-                    finalColor = finalColor + Vector3d(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
-                }
-            renderedImg.SetPixel(x, y, finalColor);
+                renderedImg.SetPixel(x, y, finalColor);
+            }
+        }
+        #pragma omp critical
+        {
+            ++finBlk;
         }
     }
 

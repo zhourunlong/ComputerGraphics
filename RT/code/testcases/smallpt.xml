@@ -2,7 +2,7 @@
 
 <scene version="0.5.0">
 	<integrator type="path">
-		<integer name="maxDepth" value="5"/>
+		<integer name="maxDepth" value="16"/>
 	</integrator>
 	<sensor type="perspective">
 		<float name="fov" value="28.7993"/>
@@ -10,7 +10,7 @@
 			<lookat origin="50, 52, 295.6" target="50, 51.957427, 294.600907" up="0, 0.999093, -0.042573"/>
 		</transform>
 		<sampler type="independent">
-			<integer name="sample_count" value="100"/>
+			<integer name="sample_count" value="50000"/>
 		</sampler>
 		<film type="hdrfilm">
 			<integer name="width" value="1024"/>
@@ -47,8 +47,9 @@
 		<transform name="to_world">
 			<translate value="50, 40.8, -100000"/>
 		</transform>
-        <bsdf type="diffuse">
-			<rgb name="reflectance" value="0.75, 0.75, 0.75"/>
+        <bsdf type="conductor">
+			<string name="material" value="Mo"/>
+			<rgb name="specular_reflectance" value="0.999, 0.999, 0.999"/>
 		</bsdf>
 	</shape>
 	<!--Front-->
