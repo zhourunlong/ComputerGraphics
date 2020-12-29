@@ -159,18 +159,20 @@ void Parser::parseSensor(const pugi::xml_node &node) {
             camera->setAngle(degreeToRadian(result.second));
         return;
     }
-    if (nname == "lookat") {
-        for (pugi::xml_attribute attr = node.first_attribute(); attr; attr = attr.next_attribute()) {
-            std::string aname = attr.name();
-            Vector3d result = stringToV3d(attr.value());
-            if (aname == "origin") camera->setCenter(result);
-            else if (aname == "target") camera->setTarget(result);
-            else if (aname == "up") camera->setUp(result);
-        }
+    if (nname == "transform") {
+        Transform* tran = new Transform();
+        parseTransform(node, tran);
+        Matrix4d M = tran->getTransform();
+        Vector4d center(0, 0, 0, 1), target(0, 0, 1, 1), up(0, 1, 0, 1); 
+        center = M * center;
+        target = M * target;
+        up = M * up;
+        camera->setCenter(center.xyz());
+        camera->setTarget(target.xyz());
+        camera->setUp(up.xyz());
+        delete tran;
         return;
     }
-    //if (nname == "") {
-    //}
     if (nname == "integer") {
         std::pair<std::string, int> result = parseInt(node.first_attribute());
         if (result.first == "width")
@@ -274,6 +276,22 @@ void Parser::parseTransform(const pugi::xml_node &node, Transform* &tran) {
                 }
         }
         tran->appendTransform(mat);
+    } else if (nname == "lookat") {
+        Vector3d center, target, up, horizon;
+        for (pugi::xml_attribute attr = node.first_attribute(); attr; attr = attr.next_attribute()) {
+            std::string aname = attr.name();
+            Vector3d result = stringToV3d(attr.value());
+            if (aname == "origin") center = result;
+            else if (aname == "target") target = result;
+            else if (aname == "up") up = result;
+        }
+        target -= center;
+        horizon = Vector3d::cross(target, up);
+        Matrix4d M(-horizon.x(), up.x(), target.x(), center.x(),
+                   -horizon.y(), up.y(), target.y(), center.y(),
+                   -horizon.z(), up.z(), target.z(), center.z(),
+                   0,            0,      0,          1);
+        tran->appendTransform(M);
     }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
         parseTransform(child, tran);

@@ -29,6 +29,8 @@ public:
 
     inline void setMaterial(Material* _material) override {o->setMaterial(_material);}
 
+    inline Matrix4d getTransform() {return transform;}
+
     inline virtual bool intersect(const Ray &r, Hit &h, double tmin) {
         Vector3d trSource = transformPoint(transform.inverse(), r.getOrigin());
         Vector3d trDirection = transformDirection(transform.inverse(), r.getDirection());

@@ -7,7 +7,11 @@
 
 class Camera {
 public:
-    Camera() {}
+    Camera() {
+        center = Vector3d::ZERO;
+        target = Vector3d(0, 0, 1);
+        up = Vector3d(0, 1, 0);
+    }
 
     void setAngle(const double &_angle) {angle = _angle;}
 
@@ -17,7 +21,7 @@ public:
 
     void setTarget(const Vector3d &_target) {target = _target;}
 
-    void setUp(const Vector3d &_up) {up = _up.normalized();}
+    void setUp(const Vector3d &_up) {up = _up;}
 
     void setWidth(const int &_width) {width = _width;}
 
@@ -25,6 +29,7 @@ public:
 
     void finish() {
         direction = (target - center).normalized();
+        up = (up - center).normalized();
         horizontal = Vector3d::cross(direction, up);
     }
 
