@@ -139,10 +139,9 @@ int main(int argc, char *argv[]) {
         #pragma omp critical
         {
             ++finBlk;
+            renderedImg.SaveImage(argv[2]);
         }
     }
-
-    renderedImg.SaveImage(argv[2]);
     return 0;
 }
 
