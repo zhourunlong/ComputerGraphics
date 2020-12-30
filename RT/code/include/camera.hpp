@@ -1,5 +1,4 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include "ray.hpp"
 #include "vecmath/vecmath.h"
@@ -60,6 +59,3 @@ protected:
     int width, height;
     double angle;
 };
-
-#endif //CAMERA_H
-

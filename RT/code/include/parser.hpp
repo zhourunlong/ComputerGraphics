@@ -1,5 +1,4 @@
-#ifndef PARSER_H
-#define PARSER_H
+#pragma once
 
 #include <bits/stdc++.h>
 #include "pugi/pugixml.hpp"
@@ -466,5 +465,3 @@ void Parser::dfs(const pugi::xml_node &node, int dep) {
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
         dfs(child, dep + 1);
 }
-
-#endif

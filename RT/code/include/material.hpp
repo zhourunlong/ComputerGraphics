@@ -1,11 +1,11 @@
-#ifndef MATERIAL_H
-#define MATERIAL_H
+#pragma once
 
 #include <cassert>
 #include "vecmath/vecmath.h"
 
 #include "ray.hpp"
-#include "hit.hpp"
+#include "hit.h"
+#include "hit.cpp"
 #include <iostream>
 
 class Material {
@@ -94,6 +94,3 @@ protected:
     double intIor, extIor;
     std::string surfMaterial;
 };
-
-
-#endif // MATERIAL_H

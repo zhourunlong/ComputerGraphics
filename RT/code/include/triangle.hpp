@@ -1,12 +1,10 @@
-#ifndef TRIANGLE_H
-#define TRIANGLE_H
+#pragma once
 
 #include "object3d.hpp"
 #include "vecmath/vecmath.h"
 #include <cmath>
 #include <iostream>
 using namespace std;
-
 
 class Triangle: public Object3D {
 
@@ -102,5 +100,3 @@ protected:
     double d, size; // record plane
     BoundPlane planeX, planeY, planeZ; // bound plane
 };
-
-#endif //TRIANGLE_H

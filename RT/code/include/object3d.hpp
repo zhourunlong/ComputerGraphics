@@ -1,8 +1,8 @@
-#ifndef OBJECT3D_H
-#define OBJECT3D_H
+#pragma once
 
 #include "ray.hpp"
-#include "hit.hpp"
+#include "hit.h"
+#include "hit.cpp"
 #include "material.hpp"
 #include "parser.hpp"
 #include <bits/stdc++.h>
@@ -157,9 +157,9 @@ protected:
         query qX = rt->planeX.queryIntersectX(r),
               qY = rt->planeY.queryIntersectY(r),
               qZ = rt->planeZ.queryIntersectZ(r);
-        if (std::max(qX.first, std::max(qY.first, qZ.first)) >
-            std::min(qX.second, std::min(qY.second, qZ.second)))
-            return false;
+        double L = std::max(qX.first, std::max(qY.first, qZ.first)),
+               U = std::min(qX.second, std::min(qY.second, qZ.second));
+        if (L > U || U < tmin || L >= h.getT()) return false;
         bool ret = queryIntersect(rt->lc, r, h, tmin);
         ret |= queryIntersect(rt->rc, r, h, tmin);
         return ret;
@@ -172,6 +172,3 @@ protected:
         delete(rt); rt = NULL;
     }
 };
-
-#endif
-

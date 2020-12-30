@@ -1,5 +1,4 @@
-#ifndef TRANSFORM_H
-#define TRANSFORM_H
+#pragma once
 
 #include "vecmath/vecmath.h"
 #include "object3d.hpp"
@@ -88,5 +87,3 @@ protected:
     Matrix4d transform = Matrix4d::identity();
     BoundPlane planeX, planeY, planeZ;
 };
-
-#endif //TRANSFORM_H

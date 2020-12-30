@@ -16,5 +16,5 @@ cd ..
 # Run all testcases. 
 # You can comment some lines to disable the run of specific examples.
 mkdir -p output
-bin/RT testcases/smallpt.xml output/smallpt.bmp
+#bin/RT testcases/smallpt.xml output/smallpt.bmp
 bin/RT testcases/cornellbox.xml output/cornellbox.bmp

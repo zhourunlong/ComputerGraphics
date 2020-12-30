@@ -1,10 +1,9 @@
-#ifndef GROUP_H
-#define GROUP_H
-
+#pragma once
 
 #include "object3d.hpp"
 #include "ray.hpp"
-#include "hit.hpp"
+#include "hit.h"
+#include "hit.cpp"
 #include <iostream>
 #include <vector>
 
@@ -86,6 +85,3 @@ private:
 
     std::vector <Object3D*> v, plane;
 };
-
-#endif
-	

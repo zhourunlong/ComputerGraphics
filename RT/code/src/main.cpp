@@ -34,13 +34,16 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi) {
         return Vector3d(0);
     Object3D *o = hit.getObject();
     Material *m = o->getMaterial();
+    bool into = hit.getInto();
+    Vector3d f = Vector3d::ZERO, e = Vector3d::ZERO;
+    if (into || m->getTwoSided()) f = m->getRefl();
+    if (into) e = o->getEmmision();
     Vector3d x = r.pointAtParameter(hit.getT()),
-             n = hit.getNormal(),
-             f = m->getRefl();
+             n = hit.getNormal();
     double p = std::fmax(std::fmax(f.x(), f.y()), f.z());
     if (++dep > maxDep)
         if (erand48(Xi) < p) f *= 1 / p;
-        else return o->getEmmision();
+        else return e;
     Material::SurfaceType type = m->getType();
     if (type == Material::DIFF) {
         double r1 = 2 * M_PI * erand48(Xi), r2 = erand48(Xi), r2s = sqrt(r2);
@@ -48,20 +51,19 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi) {
         Vector3d u = Vector3d::cross(fabs(w.x()) > 0.1 ? Vector3d(0, 1, 0) : Vector3d(1, 0, 0), w).normalized();
         Vector3d v = Vector3d::cross(w, u);
         Vector3d d = (u * cos(r1) * r2s + v * sin(r1) * r2s + w * sqrt(1 - r2)).normalized();
-        return o->getEmmision() + f * rayTracing(Ray(x, d), dep, Xi);
+        return e + f * rayTracing(Ray(x, d), dep, Xi);
     }
     Vector3d rD = r.getDirection();
     Ray reflRay = Ray(x, rD - 2 * Vector3d::dot(rD, n) * n);
     if (type == Material::COND)
-        return o->getEmmision() + f * rayTracing(reflRay, dep, Xi);
+        return e + f * rayTracing(reflRay, dep, Xi);
     if (type == Material::DIEL) {
-        bool into = hit.getInto();
         double intIor = m->getIntIor(), extIor = m->getExtIor();
         if (!into) std::swap(intIor, extIor);
         double nnt = extIor / intIor, ddn = Vector3d::dot(rD, n),
                cos2t = 1 - nnt * nnt * (1 - ddn * ddn);
         if (cos2t < 0)
-            return o->getEmmision() + f * rayTracing(reflRay, dep, Xi);
+            return e + f * rayTracing(reflRay, dep, Xi);
         Vector3d refrDir = (rD * nnt - n * (ddn * nnt + sqrt(cos2t))).normalized(),
                  g = m->getTran();
         double a = intIor - extIor, b = intIor + extIor;
@@ -70,11 +72,11 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi) {
         double P = 0.25 + 0.5 * Re, RP = Re / P, TP = Tr / (1 - P);
         if (dep > std::min(5.0, 0.4 * maxDep))
             if (erand48(Xi) < P)
-                return o->getEmmision() + f * rayTracing(reflRay, dep, Xi) * RP;
+                return e + f * rayTracing(reflRay, dep, Xi) * RP;
             else
-                return o->getEmmision() + g * rayTracing(Ray(x, refrDir), dep, Xi) * TP;
+                return e + g * rayTracing(Ray(x, refrDir), dep, Xi) * TP;
         else
-            return o->getEmmision() + f * rayTracing(reflRay, dep, Xi) * Re
+            return e + f * rayTracing(reflRay, dep, Xi) * Re
                                     + g * rayTracing(Ray(x, refrDir), dep, Xi) * Tr;
     }
 }
@@ -111,12 +113,13 @@ int main(int argc, char *argv[]) {
 
     samps = parser.getSampleCount() / 4;
     maxDep = parser.getMaxDep();
-    int finBlk = 0;
+    int finPix = 0;
 
-    #pragma omp parallel for collapse(1) schedule(guided) shared(finBlk)
+    #pragma omp parallel for collapse(1) schedule(guided) shared(finPix)
     for (int idx = 0; idx < numBlk; ++idx) {
-        double load = 1.0 * finBlk / (numBlk - 1), t = omp_get_wtime() - timeStamp;
+        double load = 1.0 * finPix / w / h, t = omp_get_wtime() - timeStamp;
         fprintf(stderr, "\r %5.2lf%%\t\tUsed time: %5.2lf sec\t\tRemaining time: %5.2lf sec", 100 * load, t, t / load * (1 - load));
+
         int ey = std::min(h, kY[idx] + b), ex = std::min(w, kX[idx] + a);
         for (int y = kY[idx]; y < ey; ++y) {
             unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
@@ -134,14 +137,18 @@ int main(int argc, char *argv[]) {
                         finalColor = finalColor + Vector3d(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
                     }
                 renderedImg.SetPixel(x, y, finalColor);
+                #pragma omp critical
+                {
+                    ++finPix;
+                }
             }
         }
         #pragma omp critical
         {
-            ++finBlk;
             renderedImg.SaveImage(argv[2]);
         }
     }
+    fprintf(stderr, "\nfinished\n");
     return 0;
 }
 

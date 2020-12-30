@@ -1,5 +1,4 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#pragma once
 
 #include <cassert>
 #include "vecmath/vecmath.h"
@@ -364,6 +363,3 @@ void Image::SaveImage(const char * filename)
         SaveTGA(filename);
     }
 }
-
-
-#endif // IMAGE_H

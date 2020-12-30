@@ -1,5 +1,4 @@
-#ifndef MESH_H
-#define MESH_H
+#pragma once
 
 #include <vector>
 #include <fstream>
@@ -145,5 +144,3 @@ private:
     }
     std::vector <Object3D*> triangles;
 };
-
-#endif

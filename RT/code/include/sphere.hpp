@@ -1,5 +1,4 @@
-#ifndef SPHERE_H
-#define SPHERE_H
+#pragma once
 
 #include "object3d.hpp"
 #include "vecmath/vecmath.h"
@@ -36,7 +35,6 @@ public:
             t = c / (det - b);
             if (t < th) t = det - b;
         }
-        //fprintf(stderr, "(b=%lf t=%lf)", b, t);
         t /= r.getDirection().length();
         if (t >= tmin && t < h.getT()) {
             Vector3d n = center - r.pointAtParameter(t);
@@ -76,6 +74,3 @@ protected:
     Vector3d center;
     double radius;
 };
-
-
-#endif
