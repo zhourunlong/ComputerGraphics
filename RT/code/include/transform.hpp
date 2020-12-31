@@ -16,11 +16,15 @@ inline static Vector3d transformDirection(const Matrix4d &mat, const Vector3d &d
 
 class Transform : public Object3D {
 public:
-    Transform() {}
+    Transform() {
+        isTransform = true;
+    }
     
     inline void appendTransform(const Matrix4d &m) {transform = m * transform;}
 
     inline void setObject(Object3D* _o) {o = _o;}
+
+    inline Object3D* getObject() {return o;}
 
     inline std::string getMatRef() override {return o->getMatRef();}
 
@@ -29,6 +33,12 @@ public:
     inline void setMaterial(Material* _material) override {o->setMaterial(_material);}
 
     inline Matrix4d getTransform() {return transform;}
+
+    inline void setTriangle(Triangle* _t) {t = _t;}
+
+    inline Triangle* getTriangle() {return t;}
+
+    inline Vector3d getEmmision() override {return o->getEmmision();}
 
     inline virtual bool intersect(const Ray &r, Hit &h, double tmin) {
         Vector3d trSource = transformPoint(transform.inverse(), r.getOrigin());
@@ -39,6 +49,18 @@ public:
             h.set(h.getT(), h.getObject(), transformDirection(transform, h.getNormal()).normalized(), h.getInto());
         }
         return inter;
+    }
+
+    inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, unsigned short *Xi) override {
+        bool ret = o->getSample(transformPoint(transform.inverse(), x), y, ny, A, Xi);
+        if (!ret) return false;
+        y = transformPoint(transform, y);
+        ny = transformDirection(transform, ny).normalized();
+        Vector3d a = transformPoint(transform, t->getA()),
+                 b = transformPoint(transform, t->getB()),
+                 c = transformPoint(transform, t->getC());
+        A = Vector3d::cross(b - a, c - a).length() / 2;
+        return true;
     }
 
     inline BoundPlane getBoundPlaneX() override {return planeX;}
@@ -84,6 +106,7 @@ public:
 
 protected:
     Object3D *o = NULL; //un-transformed object
+    Triangle *t = NULL;
     Matrix4d transform = Matrix4d::identity();
     BoundPlane planeX, planeY, planeZ;
 };

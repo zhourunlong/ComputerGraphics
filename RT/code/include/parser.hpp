@@ -98,8 +98,10 @@ public:
             exit(-1);
         }
         //dfs(doc, 0);
+        lights.clear();
         parse(doc);
         setMatToAll();
+        checkLights();
         group->finish();
     }
 
@@ -112,6 +114,8 @@ public:
     int getMaxDep() const {return maxDep;}
 
     int getSampleCount() const {return samps;}
+
+    std::vector <Object3D*> getLights() {return lights;}
 
     void dfs(const pugi::xml_node &node, int dep);
 
@@ -140,14 +144,29 @@ private:
             obj->setMaterial(materialMap[obj->getMatRef()]);
         }
     }
-
+    void checkLights() {
+        int n = group->getGroupSize();
+        for (int i = 0; i < n; ++i) {
+            Object3D* obj = group->getObj(i);
+            if (obj->getIsTransform()) {
+                Transform* _obj = static_cast<Transform*>(obj);
+                Triangle* tri = _obj->getTriangle();
+                if (tri && tri->getEmmision() != Vector3d::ZERO)
+                    lights.push_back(obj);
+            } else {
+                if (obj->getEmmision() != Vector3d::ZERO)
+                    lights.push_back(obj);
+            }
+        }
+    }
+    
     int idCounter = 0;
     int maxDep = 5;
     int samps = 100;
     Camera *camera = new Camera();
     std::map <std::string, Material*> materialMap;
     Group *group = new Group();
-
+    std::vector <Object3D*> lights;
 };
 
 void Parser::parseSensor(const pugi::xml_node &node) {
@@ -222,7 +241,10 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m) {
                 if (val == "twosided") m->setTwoSided(true);
                 else if (val == "diffuse") m->setType(Material::DIFF);
                 else if (val == "conductor") m->setType(Material::COND);
-                else if (val == "dielectric") m->setType(Material::DIEL);
+                else if (val == "dielectric") {
+                    m->setType(Material::DIEL);
+                    m->setTwoSided(true);
+                }
             } else if (aname == "id")
                 m->setId(val);
         }
@@ -342,6 +364,7 @@ void Parser::parseTriangle(const pugi::xml_node &node, Triangle* &tri, const boo
         parseTransform(node, tran);
         tran->setObject(tri);
         group->addObject(tran);
+        tran->setTriangle(tri);
         return;
     }
     if (nname == "ref") {

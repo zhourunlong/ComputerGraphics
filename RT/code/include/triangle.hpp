@@ -50,6 +50,10 @@ public:
         planeZ = (BoundPlane){Min, Max};
     }
 
+    inline Vector3d getA() {return a;}
+    inline Vector3d getB() {return b;}
+    inline Vector3d getC() {return c;}
+
 	inline bool intersect(const Ray& r,  Hit& h, double tmin) override {
         Vector3d p = r.getOrigin(), v = r.getDirection();
 
@@ -79,6 +83,16 @@ public:
 
         return false;
 	}
+
+    inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, unsigned short *Xi) override {
+        if (Vector3d::dot(normal, x - a) <= 0) return false;
+        A = size / 2;
+        double u = sqrt(erand48(Xi));
+        double alpha = 1 - u, beta = erand48(Xi) * u;
+        y = alpha * a + beta * b + (1 - alpha - beta) * c;
+        ny = normal;
+        return true;
+    }
 
     inline BoundPlane getBoundPlaneX() override {return planeX;}
     inline BoundPlane getBoundPlaneY() override {return planeY;}

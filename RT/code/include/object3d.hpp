@@ -76,7 +76,7 @@ public:
 
     inline virtual void setMaterial(Material* _material) {material = _material;}
 
-    inline Vector3d getEmmision() {return emmision;}
+    inline virtual Vector3d getEmmision() {return emmision;}
 
     inline void setEmmision(const Vector3d &_emmision) {emmision = _emmision;}
 
@@ -84,8 +84,12 @@ public:
 
     inline void setNeedTransform(const bool &_needTransform) {needTransform = _needTransform;}
 
+    inline bool getIsTransform() {return isTransform;}
+
     // Intersect Ray with this object. If hit, store information in hit structure.
     inline virtual bool intersect(const Ray &r, Hit &h, double tmin) = 0;
+
+    inline virtual bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, unsigned short *Xi) {}
 
     inline virtual BoundPlane getBoundPlaneX() = 0;
     inline virtual BoundPlane getBoundPlaneY() = 0;
@@ -103,7 +107,7 @@ protected:
     std::string ref = "";
     Material* material;
     Vector3d emmision = Vector3d::ZERO;
-    bool needTransform = false;
+    bool needTransform = false, isTransform = false;
 
     struct TreeNode {
         TreeNode *lc, *rc;
@@ -160,6 +164,7 @@ protected:
         double L = std::max(qX.first, std::max(qY.first, qZ.first)),
                U = std::min(qX.second, std::min(qY.second, qZ.second));
         if (L > U || U < tmin || L >= h.getT()) return false;
+        if (L > U) return false;
         bool ret = queryIntersect(rt->lc, r, h, tmin);
         ret |= queryIntersect(rt->rc, r, h, tmin);
         return ret;

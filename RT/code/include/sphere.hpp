@@ -47,6 +47,21 @@ public:
         return false;
     }
 
+    inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, unsigned short *Xi) override {
+        Vector3d tz = x - center;
+        double l = tz.length();
+        if (l <= radius) return false;
+        double cosThMx = radius / l;
+        A = 2 * M_PI * radius * radius * (1 - cosThMx);
+        double theta = acos(cosThMx + erand48(Xi) * (1 - cosThMx)), phi = 2 * M_PI * erand48(Xi);
+        tz.normalize();
+        Vector3d tx = Vector3d::cross(tz, (fabs(tz.x()) > 0.1) ? Vector3d(0, 1, 0) : Vector3d(1, 0, 0)).normalized();
+        Vector3d ty = Vector3d::cross(tz, tx);
+        ny = sin(theta) * cos(phi) * tx + sin(theta) * sin(phi) * ty + cos(theta) * tz;
+        y = center + radius * ny;
+        return true;
+    }
+
     inline BoundPlane getBoundPlaneX() override {
         return (BoundPlane){center.x() - radius, center.x() + radius};
     }
