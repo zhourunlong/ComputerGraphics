@@ -96,7 +96,7 @@ public:
     inline ObjectType getObjType() {return objType;}
 
     // Intersect Ray with this object. If hit, store information in hit structure.
-    inline virtual bool intersect(const Ray &r, Hit &h, double tmin) = 0;
+    inline virtual bool intersect(const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) = 0;
 
     inline virtual bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, unsigned short *Xi) {}
 
@@ -162,18 +162,18 @@ protected:
         rt-> obj = NULL;
     }
 
-    bool queryIntersect(TreeNode *rt, const Ray &r, Hit &h, double tmin) {
+    bool queryIntersect(TreeNode *rt, const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) {
         if (rt == NULL) return false;
-        if (rt->obj != NULL) return rt->obj->intersect(r, h, tmin);
+        if (rt->obj != NULL) return rt->obj->intersect(r, h, tmin, testLs);
         query qX = rt->planeX.queryIntersectX(r),
               qY = rt->planeY.queryIntersectY(r),
               qZ = rt->planeZ.queryIntersectZ(r);
         double L = std::max(qX.first, std::max(qY.first, qZ.first)),
                U = std::min(qX.second, std::min(qY.second, qZ.second));
         if (L > U || U < tmin || L >= h.getT()) return false;
-        if (L > U) return false;
-        bool ret = queryIntersect(rt->lc, r, h, tmin);
-        ret |= queryIntersect(rt->rc, r, h, tmin);
+        bool ret = queryIntersect(rt->lc, r, h, tmin, testLs);
+        if (testLs && ret) return true;
+        ret |= queryIntersect(rt->rc, r, h, tmin, testLs);
         return ret;
     }
 

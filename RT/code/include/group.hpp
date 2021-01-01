@@ -24,8 +24,8 @@ public:
         //deleteTree(rt);
     }
 
-    inline bool intersect(const Ray &r, Hit &h, double tmin) override {
-        return queryIntersect(rt, r, h, tmin);
+    inline bool intersect(const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) override {
+        return queryIntersect(rt, r, h, tmin, testLs);
     }
 
     inline void addObject(Object3D *obj) {v.push_back(obj);}

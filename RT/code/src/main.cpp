@@ -69,17 +69,10 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi, const bool return
             if (cosTh <= 0)
                 continue;
             double cosThP = Vector3d::dot(ny, -z);
+            double dist = (x - y).length();
             Ray testRay(x, z);
-            Hit testHit = Hit();
-            baseGroup->intersect(testRay, testHit, 1e-9);
-            double squaredDist = (testRay.pointAtParameter(testHit.getT()) - y).squaredLength();
-            if (squaredDist > 1e-9)
-                continue;
-            if (l->getObjType() == Object3D::TRANSFORM) {
-                Transform* _o = static_cast<Transform*>(l);
-                if (testHit.getObject() != _o->getObject())
-                    continue;
-            } else if (testHit.getObject() != l)
+            Hit testHit = Hit(dist + 1e-9, NULL, Vector3d::ZERO, true);
+            if (baseGroup->intersect(testRay, testHit, 1e-9, true))
                 continue;
             // to add branch: mesh light!!!!
             illum += l->getEmmision() * cosTh * cosThP / (y - x).squaredLength() * A;
@@ -182,11 +175,8 @@ int main(int argc, char *argv[]) {
                 }
             }
         }
-        #pragma omp critical
-        {
-            renderedImg.SaveImage(argv[2]);
-        }
     }
-    fprintf(stderr, "\nfinished\n");
+    renderedImg.SaveImage(argv[2]);
+    fprintf(stderr, "\nfinished, time = %5.2lf sec\n", omp_get_wtime() - timeStamp);
     return 0;
 }

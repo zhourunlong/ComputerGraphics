@@ -22,7 +22,7 @@ public:
 
     inline void setCenter(const Vector3d &_center) {center = _center;}
 
-    inline bool intersect(const Ray &r, Hit &h, double tmin) override {
+    inline bool intersect(const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) override {
         Vector3d v = r.getDirection().normalized(), pc = r.getOrigin() - center;
         double b = Vector3d::dot(v, pc), c = pc.squaredLength() - radius * radius;
         double det = b * b - c;
@@ -38,6 +38,9 @@ public:
         }
         t /= r.getDirection().length();
         if (t >= tmin && t < h.getT()) {
+            if (testLs)
+                if (t < h.getT() - 2e-9) return true;
+                else return false;
             Vector3d n = center - r.pointAtParameter(t);
             if (Vector3d::dot(n, v) < 0)
                 h.set(t, this, n, false);

@@ -56,7 +56,7 @@ public:
     inline Vector3d getB() {return b;}
     inline Vector3d getC() {return c;}
 
-	inline bool intersect(const Ray& r,  Hit& h, double tmin) override {
+	inline bool intersect(const Ray& r,  Hit& h, const double &tmin, const bool &testLs = false) override {
         Vector3d p = r.getOrigin(), v = r.getDirection();
 
         // parallel 
@@ -76,6 +76,9 @@ public:
 
         double beta = Vector3d::dot(normal, Vector3d::cross(q - a, c - a));
         if (beta >= 0 && alpha + beta <= size) {
+            if (testLs)
+                if (t < h.getT() - 2e-9) return true;
+                else return false;
             if (Vector3d::dot(v, normal) < 0)
                 h.set(t, this, normal, true);
             else 

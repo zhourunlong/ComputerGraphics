@@ -40,11 +40,11 @@ public:
 
     inline Vector3d getEmmision() override {return o->getEmmision();}
 
-    inline virtual bool intersect(const Ray &r, Hit &h, double tmin) {
+    inline virtual bool intersect(const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) {
         Vector3d trSource = transformPoint(inv, r.getOrigin());
         Vector3d trDirection = transformDirection(inv, r.getDirection());
         Ray tr(trSource, trDirection);
-        bool inter = o->intersect(tr, h, tmin);
+        bool inter = o->intersect(tr, h, tmin, testLs);
         if (inter) {
             h.set(h.getT(), h.getObject(), transformDirection(invTranspose, h.getNormal()).normalized(), h.getInto());
         }

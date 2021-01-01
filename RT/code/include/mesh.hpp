@@ -106,8 +106,8 @@ public:
     std::vector<Vector3d> v; // point index pool
     std::vector<TriangleIndex> t; // point indices for each triangle
     std::vector<Vector3d> n; // normal vectors for each triangle
-    inline bool intersect(const Ray &r, Hit &h, double tmin) {
-        return queryIntersect(rt, r, h, tmin);
+    inline bool intersect(const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) {
+        return queryIntersect(rt, r, h, tmin, testLs);
     }
 
     inline BoundPlane getBoundPlaneX() override {
