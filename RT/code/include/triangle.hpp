@@ -14,11 +14,13 @@ public:
     // a b c are three vertex positions of the triangle
     inline Triangle(const Vector3d& a, const Vector3d& b, const Vector3d& c)
         : a(a), b(b), c(c) {
+        objType = TRIANGLE;
         calc();
 	}
 
 	inline Triangle(const Vector3d& a, const Vector3d& b, const Vector3d& c, Material* m)
         : Object3D(m), a(a), b(b), c(c) {
+        objType = TRIANGLE;
         calc();
 	}
 

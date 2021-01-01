@@ -14,7 +14,6 @@ SET(RT_INCLUDES
         include/camera.hpp
         include/group.hpp
         include/hit.h
-        include/hit.cpp
         include/image.hpp
         include/material.hpp
         include/mesh.hpp

@@ -11,10 +11,15 @@
 #include <omp.h>
 
 int samps, maxDep;
+double filmGamma;
 Group* baseGroup;
 std::vector <Object3D*> lights;
 
-inline double clamp(double x) {return x < 0 ? 0 : (x > 1 ? 1 : x);}
+inline double clamp(const double &x) {return x < 0 ? 0 : (x > 1 ? 1 : x);}
+inline double gammaCorrection(const double &x) {return pow(clamp(x), 1.0 / filmGamma);}
+inline Vector3d gammaCorrection(const Vector3d &v) {
+    return Vector3d(gammaCorrection(v.x()), gammaCorrection(v.y()), gammaCorrection(v.z()));
+}
 
 inline int calcBlock(int n) {
     double r = 0;
@@ -37,7 +42,7 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi, const bool return
     Object3D *o = hit.getObject();
     Material *m = o->getMaterial();
     bool into = hit.getInto();
-    Vector3d f = Vector3d::ZERO, e = Vector3d::ZERO;
+    Vector3d e = Vector3d::ZERO, f = Vector3d::ZERO, g = m->getTran();
     if (into || m->getTwoSided()) f = m->getRefl();
     if (into) e = o->getEmmision();
     if (e != Vector3d::ZERO)
@@ -47,7 +52,7 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi, const bool return
              n = hit.getNormal();
     double p = std::fmax(std::fmax(f.x(), f.y()), f.z());
     if (++dep > maxDep)
-        if (erand48(Xi) < p) f *= 1 / p;
+        if (erand48(Xi) < p) {f *= 1 / p; g *= 1 / p;}
         else return Vector3d::ZERO;
     if (f == Vector3d::ZERO)
         return Vector3d::ZERO;
@@ -70,7 +75,7 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi, const bool return
             double squaredDist = (testRay.pointAtParameter(testHit.getT()) - y).squaredLength();
             if (squaredDist > 1e-9)
                 continue;
-            if (l->getIsTransform()) {
+            if (l->getObjType() == Object3D::TRANSFORM) {
                 Transform* _o = static_cast<Transform*>(l);
                 if (testHit.getObject() != _o->getObject())
                     continue;
@@ -97,8 +102,7 @@ Vector3d rayTracing(const Ray &r, int dep, unsigned short *Xi, const bool return
                cos2t = 1 - nnt * nnt * (1 - ddn * ddn);
         if (cos2t < 0)
             return f * rayTracing(reflRay, dep, Xi);
-        Vector3d refrDir = (rD * nnt - n * (ddn * nnt + sqrt(cos2t))).normalized(),
-                 g = m->getTran();
+        Vector3d refrDir = (rD * nnt - n * (ddn * nnt + sqrt(cos2t))).normalized();
         double a = intIor - extIor, b = intIor + extIor;
         double R0 = a * a / (b * b), c = 1 + (into ? ddn : Vector3d::dot(n, refrDir));
         double Re = R0 + (1 - R0) * c * c * c * c * c, Tr = 1 - Re;
@@ -147,6 +151,7 @@ int main(int argc, char *argv[]) {
 
     samps = parser.getSampleCount() / 4;
     maxDep = parser.getMaxDep();
+    filmGamma = parser.getGamma();
     int finPix = 0;
 
     #pragma omp parallel for collapse(1) schedule(guided) shared(finPix)
@@ -170,7 +175,7 @@ int main(int argc, char *argv[]) {
                         }
                         finalColor = finalColor + Vector3d(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
                     }
-                renderedImg.SetPixel(x, y, finalColor);
+                renderedImg.SetPixel(x, y, gammaCorrection(finalColor));
                 #pragma omp critical
                 {
                     ++finPix;

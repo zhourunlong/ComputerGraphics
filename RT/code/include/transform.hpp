@@ -17,10 +17,14 @@ inline static Vector3d transformDirection(const Matrix4d &mat, const Vector3d &d
 class Transform : public Object3D {
 public:
     Transform() {
-        isTransform = true;
+        objType = TRANSFORM;
     }
     
-    inline void appendTransform(const Matrix4d &m) {transform = m * transform;}
+    inline void appendTransform(const Matrix4d &m) {
+        transform = m * transform;
+        inv = transform.inverse();
+        invTranspose = inv.transposed();
+    }
 
     inline void setObject(Object3D* _o) {o = _o;}
 
@@ -34,28 +38,26 @@ public:
 
     inline Matrix4d getTransform() {return transform;}
 
-    inline void setTriangle(Triangle* _t) {t = _t;}
-
-    inline Triangle* getTriangle() {return t;}
-
     inline Vector3d getEmmision() override {return o->getEmmision();}
 
     inline virtual bool intersect(const Ray &r, Hit &h, double tmin) {
-        Vector3d trSource = transformPoint(transform.inverse(), r.getOrigin());
-        Vector3d trDirection = transformDirection(transform.inverse(), r.getDirection());
+        Vector3d trSource = transformPoint(inv, r.getOrigin());
+        Vector3d trDirection = transformDirection(inv, r.getDirection());
         Ray tr(trSource, trDirection);
         bool inter = o->intersect(tr, h, tmin);
         if (inter) {
-            h.set(h.getT(), h.getObject(), transformDirection(transform, h.getNormal()).normalized(), h.getInto());
+            h.set(h.getT(), h.getObject(), transformDirection(invTranspose, h.getNormal()).normalized(), h.getInto());
         }
         return inter;
     }
 
     inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, unsigned short *Xi) override {
-        bool ret = o->getSample(transformPoint(transform.inverse(), x), y, ny, A, Xi);
+        bool ret = o->getSample(transformPoint(inv, x), y, ny, A, Xi);
         if (!ret) return false;
         y = transformPoint(transform, y);
         ny = transformDirection(transform, ny).normalized();
+        assert(o->getObjType() == TRIANGLE);
+        Triangle* t = static_cast<Triangle*>(o);
         Vector3d a = transformPoint(transform, t->getA()),
                  b = transformPoint(transform, t->getB()),
                  c = transformPoint(transform, t->getC());
@@ -106,7 +108,8 @@ public:
 
 protected:
     Object3D *o = NULL; //un-transformed object
-    Triangle *t = NULL;
-    Matrix4d transform = Matrix4d::identity();
+    Matrix4d transform = Matrix4d::identity(),
+             inv = Matrix4d::identity(),
+             invTranspose = Matrix4d::identity();
     BoundPlane planeX, planeY, planeZ;
 };

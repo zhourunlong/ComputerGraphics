@@ -15,6 +15,7 @@ class Mesh : public Object3D {
 
 public:
     inline Mesh() {
+        objType = MESH;
         triangles.clear();
     }
     

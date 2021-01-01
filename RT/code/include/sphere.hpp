@@ -7,12 +7,13 @@
 class Sphere : public Object3D {
 public:
     inline Sphere() {
-        // unit ball at the center
+        objType = SPHERE;
         center = Vector3d(0, 0, 0);
         radius = 1;
     }
 
     inline Sphere(const Vector3d &center, double radius, Material *material) : Object3D(material) {
+        objType = SPHERE;
         this->center = center;
         this->radius = radius;
     }

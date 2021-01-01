@@ -115,6 +115,8 @@ public:
 
     int getSampleCount() const {return samps;}
 
+    double getGamma() const {return gamma;}
+
     std::vector <Object3D*> getLights() {return lights;}
 
     void dfs(const pugi::xml_node &node, int dep);
@@ -148,14 +150,17 @@ private:
         int n = group->getGroupSize();
         for (int i = 0; i < n; ++i) {
             Object3D* obj = group->getObj(i);
-            if (obj->getIsTransform()) {
+            if (obj->getObjType() == Object3D::TRANSFORM) {
                 Transform* _obj = static_cast<Transform*>(obj);
-                Triangle* tri = _obj->getTriangle();
-                if (tri && tri->getEmmision() != Vector3d::ZERO)
+                assert(_obj->getObject()->getObjType() == Object3D::TRIANGLE);
+                Triangle* tri = static_cast<Triangle*>(_obj->getObject());
+                if (tri->getEmmision() != Vector3d::ZERO)
                     lights.push_back(obj);
             } else {
-                if (obj->getEmmision() != Vector3d::ZERO)
+                if (obj->getEmmision() != Vector3d::ZERO) {
+                    assert(obj->getObjType() == Object3D::TRIANGLE);
                     lights.push_back(obj);
+                }
             }
         }
     }
@@ -163,6 +168,7 @@ private:
     int idCounter = 0;
     int maxDep = 5;
     int samps = 100;
+    double gamma = 2.2;
     Camera *camera = new Camera();
     std::map <std::string, Material*> materialMap;
     Group *group = new Group();
@@ -200,6 +206,11 @@ void Parser::parseSensor(const pugi::xml_node &node) {
         else if (result.first == "samplecount")
             samps = result.second;
         return;
+    }
+    if (nname == "float") {
+        std::pair<std::string, double> result = parseDouble(node.first_attribute());
+        if (result.first == "gamma")
+            gamma = result.second;
     }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
         parseSensor(child);
@@ -364,7 +375,6 @@ void Parser::parseTriangle(const pugi::xml_node &node, Triangle* &tri, const boo
         parseTransform(node, tran);
         tran->setObject(tri);
         group->addObject(tran);
-        tran->setTriangle(tri);
         return;
     }
     if (nname == "ref") {

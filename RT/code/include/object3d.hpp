@@ -60,6 +60,15 @@ struct BoundPlane {
 class Object3D {
 
 public:
+
+    enum ObjectType {
+        SPHERE,
+        TRIANGLE,
+        MESH,
+        GROUP,
+        TRANSFORM
+    };
+
     Object3D() : material(nullptr) {}
 
     ~Object3D() = default;
@@ -84,7 +93,7 @@ public:
 
     inline void setNeedTransform(const bool &_needTransform) {needTransform = _needTransform;}
 
-    inline bool getIsTransform() {return isTransform;}
+    inline ObjectType getObjType() {return objType;}
 
     // Intersect Ray with this object. If hit, store information in hit structure.
     inline virtual bool intersect(const Ray &r, Hit &h, double tmin) = 0;
@@ -95,19 +104,17 @@ public:
     inline virtual BoundPlane getBoundPlaneY() = 0;
     inline virtual BoundPlane getBoundPlaneZ() = 0;
 
-    inline bool getIsPlane() {return isPlane;}
-
     inline virtual void print() = 0;
 
     inline virtual void finish() {}
 
 protected:
 
-    bool isPlane = false;
     std::string ref = "";
     Material* material;
     Vector3d emmision = Vector3d::ZERO;
-    bool needTransform = false, isTransform = false;
+    bool needTransform = false;
+    ObjectType objType;
 
     struct TreeNode {
         TreeNode *lc, *rc;
