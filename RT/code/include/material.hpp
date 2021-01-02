@@ -12,17 +12,19 @@ class Material {
 public:
 
     enum SurfaceType {
-        DIFF, // diffuse
-        COND, // conductor
-        DIEL  // dielectric
+        DIFFUSE,
+        CONDUCTOR,
+        DIELECTRIC,
+        PLASTIC
     };
 
     inline Material() {
         id = "";
         twoSided = false;
-        type = DIFF;
+        type = DIFFUSE;
         refl = tran = Vector3d::ZERO;
-        intIor = extIor = 1;
+        intIor = 1.5046;
+        extIor = 1.000277;
         surfMaterial = "";
     }
 
@@ -66,15 +68,20 @@ public:
         if (twoSided)
             std::cout << "two sided\n";
         switch (type) {
-            case DIFF:
+            case DIFFUSE:
                 std::cout << "diffuse\n";
                 break;
-            case COND:
+            case CONDUCTOR:
                 std::cout << "conductor\n";
                 std::cout << "surface material = " << surfMaterial << "\n";
                 break;
-            case DIEL:
+            case DIELECTRIC:
                 std::cout << "dielectric\n";
+                std::cout << "int ior = " << intIor << "\n";
+                std::cout << "ext ior = " << extIor << "\n";
+                break;
+            case PLASTIC:
+                std::cout << "plastic, reflectance means spec refl, transmittance means diff refl\n";
                 std::cout << "int ior = " << intIor << "\n";
                 std::cout << "ext ior = " << extIor << "\n";
                 break;

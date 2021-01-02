@@ -33,9 +33,16 @@ public:
     }
 
     Ray generateRay(const Vector2d &point) {
-        Vector3d dir = tan(angle / 2) * (point.x() / height * 2 - 1.0 * width / height) * horizontal +
-                       tan(angle / 2) * (point.y() / height * 2 - 1) * up +
-                       direction;
+        Vector3d dir;
+        if (width >= height)
+            dir = tan(angle / 2) * (point.x() / height * 2 - 1.0 * width / height) * horizontal
+                + tan(angle / 2) * (point.y() / height * 2 - 1) * up
+                + direction;
+        else
+            dir = tan(angle / 2) * (point.y() / width * 2 - 1.0 * height / width) * up
+                + tan(angle / 2) * (point.x() / width * 2 - 1) * horizontal
+                + direction;
+        
         return Ray(this->center, dir.normalized());
     }
 

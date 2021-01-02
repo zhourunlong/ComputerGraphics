@@ -225,9 +225,9 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m) {
     std::string nname = node.name();
     if (nname == "rgb") {
         std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
-        if (endsWith(result.first, "reflectance"))
+        if (endsWith(result.first, "reflectance") && result.first != "diffusereflectance")
             m->setRefl(result.second);
-        else if (endsWith(result.first, "transmittance"))
+        else if (endsWith(result.first, "transmittance") || result.first == "diffusereflectance")
             m->setTran(result.second);
         return;
     }
@@ -250,11 +250,20 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m) {
         if (nname == "bsdf") {
             if (aname == "type") {
                 if (val == "twosided") m->setTwoSided(true);
-                else if (val == "diffuse") m->setType(Material::DIFF);
-                else if (val == "conductor") m->setType(Material::COND);
-                else if (val == "dielectric") {
-                    m->setType(Material::DIEL);
+                else if (val == "diffuse") m->setType(Material::DIFFUSE);
+                else if (val == "conductor") {
+                    m->setType(Material::CONDUCTOR);
+                    m->setRefl(Vector3d(1));
+                } else if (val == "dielectric") {
+                    m->setType(Material::DIELECTRIC);
+                    m->setRefl(Vector3d(1));
+                    m->setTran(Vector3d(1));
                     m->setTwoSided(true);
+                } else if (val == "plastic" || val == "roughplastic") {
+                    m->setType(Material::PLASTIC);
+                    m->setRefl(Vector3d(1)); // specular reflectance
+                    m->setTran(Vector3d(0.5)); // diffuse reflectance
+                    m->setIntIor(1.49);
                 }
             } else if (aname == "id")
                 m->setId(val);
@@ -433,6 +442,11 @@ void Parser::parseMesh(const pugi::xml_node &node, Mesh* &mesh) {
         std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
         if (result.first == "radiance")
             mesh->setEmmision(result.second);
+    }
+    if (nname == "boolean") {
+        std::pair<std::string, std::string> result = parseString(node.first_attribute());
+        if (result.first == "facenormals")
+            if (deformat(result.second) == "true") mesh->setFaceNorm(true);
     }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
         parseMesh(child, mesh);

@@ -56,6 +56,18 @@ public:
     inline Vector3d getB() {return b;}
     inline Vector3d getC() {return c;}
 
+    inline void setVertexNormal(Vector3d _va, Vector3d _vb, Vector3d _vc) {
+        va = _va; vb = _vb; vc = _vc;
+        vertexNormal = true;
+    }
+
+    inline void setTextureCoordinate(Vector2d _ta, Vector2d _tb, Vector2d _tc) {
+        ta = _ta; tb = _tb; tc = _tc;
+        textureCoordinate = true;
+    }
+
+    inline void disableVertexNormal() {vertexNormal = false;}
+
 	inline bool intersect(const Ray& r,  Hit& h, const double &tmin, const bool &testLs = false) override {
         Vector3d p = r.getOrigin(), v = r.getDirection();
 
@@ -79,10 +91,12 @@ public:
             if (testLs)
                 if (t < h.getT() - 2e-9) return true;
                 else return false;
+            Vector3d realNormal =
+                vertexNormal ? ((alpha * va + beta * vb + (size - alpha - beta) * vc) / size).normalized() : normal;
             if (Vector3d::dot(v, normal) < 0)
-                h.set(t, this, normal, true);
+                h.set(t, this, realNormal, true);
             else 
-                h.set(t, this, -normal, false);
+                h.set(t, this, -realNormal, false);
             return true;
         }
 
@@ -114,8 +128,9 @@ public:
     }
 	
 protected:
-
-    Vector3d normal, a, b, c;
+    bool vertexNormal = false, textureCoordinate = false;
+    Vector3d normal, a, b, c, va, vb, vc;
+    Vector2d ta, tb, tc;
     double d, size; // record plane
     BoundPlane planeX, planeY, planeZ; // bound plane
 };

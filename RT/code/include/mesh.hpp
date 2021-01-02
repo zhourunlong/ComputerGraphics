@@ -17,6 +17,7 @@ public:
     inline Mesh() {
         objType = MESH;
         triangles.clear();
+        faceNormals = false;
     }
     
     inline void setFile(const char* filename) {
@@ -31,9 +32,9 @@ public:
         std::string vTok("v");
         std::string fTok("f");
         std::string texTok("vt");
+        std::string normTok("vn");
         char bslash = '/', space = ' ';
         std::string tok;
-        int texID;
         while (true) {
             std::getline(f, line);
             if (f.eof()) {
@@ -52,16 +53,17 @@ public:
                 ss >> vec[0] >> vec[1] >> vec[2];
                 v.push_back(vec);
             } else if (tok == fTok) {
+                // !! consider without tex corrdinate 
                 if (line.find(bslash) != std::string::npos) {
                     std::replace(line.begin(), line.end(), bslash, space);
                     std::stringstream facess(line);
-                    TriangleIndex trig;
+                    TriangleIndex trig, texId, normId;
                     facess >> tok;
                     for (int ii = 0; ii < 3; ii++) {
-                        facess >> trig[ii] >> texID;
-                        trig[ii]--;
+                        facess >> trig[ii] >> texId[ii] >> normId[ii];
+                        --trig[ii]; --texId[ii]; --normId[ii];
                     }
-                    t.push_back(trig);
+                    t.push_back(trig); ve.push_back(normId); tx.push_back(texId);
                 } else {
                     TriangleIndex trig;
                     for (int ii = 0; ii < 3; ii++) {
@@ -71,25 +73,47 @@ public:
                     t.push_back(trig);
                 }
             } else if (tok == texTok) {
-                Vector2d texcoord;
-                ss >> texcoord[0];
-                ss >> texcoord[1];
+                Vector2d tex;
+                ss >> tex[0];
+                ss >> tex[1];
+                texCoor.push_back(tex);
+            } else if (tok == normTok) {
+                Vector3d norm;
+                ss >> norm[0];
+                ss >> norm[1];
+                ss >> norm[2];
+                verNorm.push_back(norm.normalized());
             }
         }
-        computeNormal();
         f.close();
 
         for (int triId = 0; triId < t.size(); ++triId) {
             TriangleIndex& triIndex = t[triId];
-            triangles.push_back(new Triangle(v[triIndex[0]], v[triIndex[1]], v[triIndex[2]], material));
+            Triangle* tri = new Triangle(v[triIndex[0]], v[triIndex[1]], v[triIndex[2]], material);
+            if (ve.size())
+                tri->setVertexNormal(
+                    verNorm[ve[triId][0]], verNorm[ve[triId][1]], verNorm[ve[triId][2]]);
+            if (tx.size())
+                tri->setTextureCoordinate(
+                    texCoor[tx[triId][0]], texCoor[tx[triId][1]], texCoor[tx[triId][2]]);
+            triangles.push_back(tri);
         }
 
         buildTree(rt, triangles, 0);
     }
 
-    inline Material* getMaterial() override {return triangles[0]->getMaterial();}
+    inline void setFaceNorm(bool _faceNormals) {
+        if (_faceNormals)
+            for (int i = 0; i < triangles.size(); ++i) {
+                Triangle* tri = static_cast<Triangle*>(triangles[i]);
+                tri->disableVertexNormal();
+            }
+    }
+
+    inline Material* getMaterial() override {return material;}
 
     inline void setMaterial(Material* _material) override {
+        material = _material;
         for (int i = 0; i < triangles.size(); ++i)
             triangles[i]->setMaterial(_material);
     }
@@ -103,9 +127,6 @@ public:
         int x[3]{};
     };
 
-    std::vector<Vector3d> v; // point index pool
-    std::vector<TriangleIndex> t; // point indices for each triangle
-    std::vector<Vector3d> n; // normal vectors for each triangle
     inline bool intersect(const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) {
         return queryIntersect(rt, r, h, tmin, testLs);
     }
@@ -131,17 +152,10 @@ public:
     }
 
 private:
-
-    // Normal can be used for light estimation
-    inline void computeNormal() {
-        n.resize(t.size());
-        for (int triId = 0; triId < (int) t.size(); ++triId) {
-            TriangleIndex& triIndex = t[triId];
-            Vector3d a = v[triIndex[1]] - v[triIndex[0]];
-            Vector3d b = v[triIndex[2]] - v[triIndex[0]];
-            b = Vector3d::cross(a, b);
-            n[triId] = b.normalized();
-        }
-    }
+    bool faceNormals = false;
+    std::vector <Vector3d> v;              // point index pool
+    std::vector <TriangleIndex> t, ve, tx; // point indices for each triangle
+    std::vector <Vector3d> verNorm;        // vertex normals
+    std::vector <Vector2d> texCoor;        // texture coordinate
     std::vector <Object3D*> triangles;
 };
