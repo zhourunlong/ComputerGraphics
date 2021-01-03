@@ -3,7 +3,9 @@
 #include "ray.hpp"
 #include "hit.h"
 #include "hit.cpp"
-#include "material.hpp"
+#include "../vecmath/vecmath.h"
+#include "../utils.hpp"
+#include "../sampler.hpp"
 #include "parser.hpp"
 #include <bits/stdc++.h>
 
@@ -78,19 +80,15 @@ public:
     }
 
     inline virtual std::string getMatRef() {return ref;}
-
     inline void setMatRef(const std::string &_ref) {ref = _ref;}
 
     inline virtual Material* getMaterial() {return material;}
-
     inline virtual void setMaterial(Material* _material) {material = _material;}
 
     inline virtual Vector3d getEmmision() {return emmision;}
-
     inline void setEmmision(const Vector3d &_emmision) {emmision = _emmision;}
 
     inline bool getNeedTransform() {return needTransform;}
-
     inline void setNeedTransform(const bool &_needTransform) {needTransform = _needTransform;}
 
     inline ObjectType getObjType() {return objType;}
@@ -98,7 +96,7 @@ public:
     // Intersect Ray with this object. If hit, store information in hit structure.
     inline virtual bool intersect(const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) = 0;
 
-    inline virtual bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, unsigned short *Xi) {}
+    inline virtual bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, Sampler *Xi) {}
 
     inline virtual BoundPlane getBoundPlaneX() = 0;
     inline virtual BoundPlane getBoundPlaneY() = 0;
@@ -180,7 +178,6 @@ protected:
     void deleteTree(TreeNode *&rt) {
         if (rt == NULL) return;
         deleteTree(rt->lc); deleteTree(rt->rc);
-        delete(rt->obj);
         delete(rt); rt = NULL;
     }
 };

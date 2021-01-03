@@ -51,8 +51,8 @@ public:
         return inter;
     }
 
-    inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, unsigned short *Xi) override {
-        bool ret = o->getSample(transformPoint(inv, x), y, ny, A, Xi);
+    inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, Sampler* sampler) override {
+        bool ret = o->getSample(transformPoint(inv, x), y, ny, A, sampler);
         if (!ret) return false;
         y = transformPoint(transform, y);
         ny = transformDirection(transform, ny).normalized();

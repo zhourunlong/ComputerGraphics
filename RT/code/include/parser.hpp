@@ -2,14 +2,14 @@
 
 #include <bits/stdc++.h>
 #include "pugi/pugixml.hpp"
-#include "material.hpp"
+#include "bsdf/bsdf.h"
 #include "camera.hpp"
-#include "object3d.hpp"
-#include "group.hpp"
-#include "mesh.hpp"
-#include "sphere.hpp"
-#include "triangle.hpp"
-#include "transform.hpp"
+#include "object/object3d.hpp"
+#include "object/group.hpp"
+#include "object/mesh.hpp"
+#include "object/sphere.hpp"
+#include "object/triangle.hpp"
+#include "object/transform.hpp"
 #include "vecmath/vecmath.h"
 
 double degreeToRadian(const double &x) {return (M_PI * x) / 180.0;}
@@ -132,7 +132,7 @@ private:
     }
 
     void parseSensor(const pugi::xml_node &node);
-    void parseBsdf(const pugi::xml_node &node, Material* &m);
+    void parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pass);
     void parseTransform(const pugi::xml_node &node, Transform* &tran);
     void parseSphere(const pugi::xml_node &node, Sphere* &sph);
     void parseTriangle(const pugi::xml_node &node, Triangle* &tri, const bool &isRoot);
@@ -170,7 +170,7 @@ private:
     int samps = 100;
     double gamma = 2.2;
     Camera *camera = new Camera();
-    std::map <std::string, Material*> materialMap;
+    std::unordered_map <std::string, Material*> materialMap;
     Group *group = new Group();
     std::vector <Object3D*> lights;
 };
@@ -181,6 +181,8 @@ void Parser::parseSensor(const pugi::xml_node &node) {
         std::pair<std::string, double> result = parseDouble(node.first_attribute());
         if (result.first == "fov")
             camera->setAngle(degreeToRadian(result.second));
+        else if (result.first == "gamma")
+            gamma = result.second;
         return;
     }
     if (nname == "transform") {
@@ -207,71 +209,89 @@ void Parser::parseSensor(const pugi::xml_node &node) {
             samps = result.second;
         return;
     }
-    if (nname == "float") {
-        std::pair<std::string, double> result = parseDouble(node.first_attribute());
-        if (result.first == "gamma")
-            gamma = result.second;
-    }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
         parseSensor(child);
 }
 
-void Parser::parseBsdf(const pugi::xml_node &node, Material* &m) {
-    bool isRoot = false;
-    if (m == NULL) {
-        isRoot = true;
-        m = new Material();
-    }
+void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pass) {
     std::string nname = node.name();
-    if (nname == "rgb") {
-        std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
-        if (endsWith(result.first, "reflectance") && result.first != "diffusereflectance")
-            m->setRefl(result.second);
-        else if (endsWith(result.first, "transmittance") || result.first == "diffusereflectance")
+    if (pass == 1 && nname == "rgb") {
+        std::pair<std::string, Vector3d>
+            result = parseV3d(node.first_attribute());
+        if (result.first == "diffusereflectance"
+            || result.first == "reflectance")
+            m->setDiffRefl(result.second);
+        else if (result.first == "specularreflectance")
+            m->setSpecRefl(result.second);
+        else if (endsWith(result.first, "transmittance"))
             m->setTran(result.second);
         return;
     }
-    if (nname == "double" || nname == "float") {
+    if (pass == 1 && (nname == "double" || nname == "float")) {
         std::pair<std::string, double> result = parseDouble(node.first_attribute());
         if (result.first == "intior")
             m->setIntIor(result.second);
         else if (result.first == "extior")
             m->setExtIor(result.second);
+        else if (result.first == "alpha")
+            m->setAlpha(result.second);
         return;
     }
+    /*
     if (nname == "string") {
         std::pair<std::string, std::string> result = parseString(node.first_attribute());
         if (result.first == "material")
             m->setSurfMaterial(result.second);
         return;
     }
+    */
     for (pugi::xml_attribute attr = node.first_attribute(); attr; attr = attr.next_attribute()) {
         std::string aname = attr.name(), val = attr.value();
         if (nname == "bsdf") {
             if (aname == "type") {
-                if (val == "twosided") m->setTwoSided(true);
-                else if (val == "diffuse") m->setType(Material::DIFFUSE);
-                else if (val == "conductor") {
-                    m->setType(Material::CONDUCTOR);
-                    m->setRefl(Vector3d(1));
-                } else if (val == "dielectric") {
-                    m->setType(Material::DIELECTRIC);
-                    m->setRefl(Vector3d(1));
-                    m->setTran(Vector3d(1));
-                    m->setTwoSided(true);
-                } else if (val == "plastic" || val == "roughplastic") {
-                    m->setType(Material::PLASTIC);
-                    m->setRefl(Vector3d(1)); // specular reflectance
-                    m->setTran(Vector3d(0.5)); // diffuse reflectance
-                    m->setIntIor(1.49);
+                if (pass == 1 && val == "twosided") m->setTwoSided(true);
+                else if (pass == 0) {
+                    if (val == "diffuse") {
+                        m = new Diffuse();
+                        m->setType(Material::DIFFUSE);
+                        m->setDiffRefl(Vector3d(0.5));
+                    } else if (val == "conductor") {
+                        m = new Conductor();
+                        m->setType(Material::CONDUCTOR);
+                        m->setSpecRefl(Vector3d(1));
+                    } else if (val == "dielectric") {
+                        m = new Dielectric();
+                        m->setType(Material::DIELECTRIC);
+                        m->setSpecRefl(Vector3d(1));
+                        m->setTran(Vector3d(1));
+                        m->setTwoSided(true);
+                        m->setIntIor(1.5046);
+                        m->setExtIor(1.000277);
+                    } else if (val == "plastic") {
+                        m = new Plastic();
+                        m->setType(Material::PLASTIC);
+                        m->setDiffRefl(Vector3d(0.5));
+                        m->setSpecRefl(Vector3d(1));
+                        m->setIntIor(1.49);
+                        m->setExtIor(1.000277);
+                    } else if (val == "roughplastic") {
+                        //m = new RoughPlastic();
+                        m = new Plastic();
+                        m->setType(Material::ROUGHPLASTIC);
+                        m->setDiffRefl(Vector3d(0.5));
+                        m->setSpecRefl(Vector3d(1));
+                        m->setIntIor(1.49);
+                        m->setExtIor(1.000277);
+                        m->setAlpha(0.1);
+                    }
                 }
-            } else if (aname == "id")
+            } else if (pass == 1 && aname == "id")
                 m->setId(val);
         }
     }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
-        parseBsdf(child, m);
-    if (isRoot) {
+        parseBsdf(child, m, dep + 1, pass);
+    if (dep == 0 && pass == 1) {
         if (m->getId() == "")
             m->setId(genNextId());
         materialMap[m->getId()] = m;
@@ -361,7 +381,8 @@ void Parser::parseSphere(const pugi::xml_node &node, Sphere* &sph) {
     }
     if (nname == "bsdf") {
         Material *m = NULL;
-        parseBsdf(node, m);
+        parseBsdf(node, m, 0, 0);
+        parseBsdf(node, m, 0, 1);
         sph->setMatRef(m->getId());
         return;
     }
@@ -392,7 +413,8 @@ void Parser::parseTriangle(const pugi::xml_node &node, Triangle* &tri, const boo
     }
     if (nname == "bsdf") {
         Material *m = NULL;
-        parseBsdf(node, m);
+        parseBsdf(node, m, 0, 0);
+        parseBsdf(node, m, 0, 1);
         tri->setMatRef(m->getId());
         return;
     }
@@ -434,7 +456,8 @@ void Parser::parseMesh(const pugi::xml_node &node, Mesh* &mesh) {
     }
     if (nname == "bsdf") {
         Material *m = NULL;
-        parseBsdf(node, m);
+        parseBsdf(node, m, 0, 0);
+        parseBsdf(node, m, 0, 1);
         mesh->setMatRef(m->getId());
         return;
     }
@@ -493,7 +516,8 @@ void Parser::parse(const pugi::xml_node &node) {
     }
     if (nname == "bsdf") {
         Material *m = NULL;
-        parseBsdf(node, m);
+        parseBsdf(node, m, 0, 0);
+        parseBsdf(node, m, 0, 1);
         return;
     }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())

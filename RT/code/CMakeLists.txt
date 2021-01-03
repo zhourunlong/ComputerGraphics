@@ -12,16 +12,17 @@ SET(RT_SOURCES
 SET(RT_INCLUDES
         include/parser.hpp
         include/camera.hpp
-        include/group.hpp
         include/hit.h
         include/image.hpp
-        include/material.hpp
-        include/mesh.hpp
-        include/object3d.hpp
         include/ray.hpp
-        include/sphere.hpp
-        include/transform.hpp
-        include/triangle.hpp
+        include/utils.hpp
+        include/bsdf/bsdf.h
+        include/object/group.hpp
+        include/object/mesh.hpp
+        include/object/object3d.hpp
+        include/object/sphere.hpp
+        include/object/transform.hpp
+        include/object/triangle.hpp
         include/pugi/pugiconfig.hpp
         include/pugi/pugixml.hpp
         include/vecmath/Matrix2d.h

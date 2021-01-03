@@ -1,7 +1,6 @@
 #pragma once
 
 #include "object3d.hpp"
-#include "vecmath/vecmath.h"
 #include <cmath>
 #include <iostream>
 using namespace std;
@@ -103,12 +102,11 @@ public:
         return false;
 	}
 
-    inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, unsigned short *Xi) override {
+    inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, Sampler* sampler) override {
         if (Vector3d::dot(normal, x - a) <= 0) return false;
         A = size / 2;
-        double u = sqrt(erand48(Xi));
-        double alpha = 1 - u, beta = erand48(Xi) * u;
-        y = alpha * a + beta * b + (1 - alpha - beta) * c;
+        Vector2d s = sampler->sampleTriangle();
+        y = s.x() * a + s.y() * b + (1 - s.x() - s.y()) * c;
         ny = normal;
         return true;
     }

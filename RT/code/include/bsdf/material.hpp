@@ -1,12 +1,13 @@
 #pragma once
 
-#include <cassert>
-#include "vecmath/vecmath.h"
+#include <bits/stdc++.h>
+#include "../vecmath/vecmath.h"
 
-#include "ray.hpp"
-#include "hit.h"
-#include "hit.cpp"
-#include <iostream>
+#include "../ray.hpp"
+#include "../hit.h"
+#include "../hit.cpp"
+#include "../sampler.hpp"
+#include "../utils.hpp"
 
 class Material {
 public:
@@ -15,52 +16,52 @@ public:
         DIFFUSE,
         CONDUCTOR,
         DIELECTRIC,
-        PLASTIC
+        PLASTIC,
+        ROUGHPLASTIC
     };
 
     inline Material() {
         id = "";
         twoSided = false;
         type = DIFFUSE;
-        refl = tran = Vector3d::ZERO;
-        intIor = 1.5046;
-        extIor = 1.000277;
-        surfMaterial = "";
     }
 
     virtual ~Material() = default;
 
     inline std::string getId() {return id;}
-
     inline void setId(const std::string &_id) {id = _id;}
 
     inline bool getTwoSided() {return twoSided;}
-
     inline void setTwoSided(const bool &_twoSided) {twoSided = _twoSided;}
 
     inline SurfaceType getType() {return type;}
-    
     inline void setType(const SurfaceType &_type) {type = _type;}
 
-    inline Vector3d getRefl() {return refl;}
+    inline Vector3d getSpecRefl() {return specRefl;}
+    inline void setSpecRefl(const Vector3d &_specRefl) {specRefl = _specRefl;}
 
-    inline void setRefl(const Vector3d &_refl) {refl = _refl;}
+    inline Vector3d getDiffRefl() {return diffRefl;}
+    inline void setDiffRefl(const Vector3d &_diffRefl) {diffRefl = _diffRefl;}
 
     inline Vector3d getTran() {return tran;}
-
     inline void setTran(const Vector3d &_tran) {tran = _tran;}
 
     inline double getIntIor() {return intIor;}
-
     inline void setIntIor(const double &_intIor) {intIor = _intIor;}
 
     inline double getExtIor() {return extIor;}
-
     inline void setExtIor(const double &_extIor) {extIor = _extIor;}
 
-    inline std::string getSurfMaterial() {return surfMaterial;}
+    inline double getAlpha() {return alpha;}
+    inline void setAlpha(const double &_alpha) {alpha = _alpha;}
 
-    inline void setSurfMaterial(const std::string &_surfMaterial) {surfMaterial = _surfMaterial;}
+    inline bool needLightSampling() {return needLS;}
+
+    inline virtual Vector3d getColor(const Vector3d &wo,
+        const Vector3d &wi, const Hit &hit) {return Vector3d::ZERO;}
+
+    inline virtual void sampleBSDF(const Vector3d &wo, Vector3d &wi,
+        const Hit &hit, Vector3d &f, Sampler* sampler, bool &lastDiffuse) {}
 
     inline void print() {
         std::cout << "===== Material =====\n";
@@ -73,7 +74,6 @@ public:
                 break;
             case CONDUCTOR:
                 std::cout << "conductor\n";
-                std::cout << "surface material = " << surfMaterial << "\n";
                 break;
             case DIELECTRIC:
                 std::cout << "dielectric\n";
@@ -81,13 +81,21 @@ public:
                 std::cout << "ext ior = " << extIor << "\n";
                 break;
             case PLASTIC:
-                std::cout << "plastic, reflectance means spec refl, transmittance means diff refl\n";
+                std::cout << "plastic\n";
                 std::cout << "int ior = " << intIor << "\n";
                 std::cout << "ext ior = " << extIor << "\n";
                 break;
+            case ROUGHPLASTIC:
+                std::cout << "rough plastic\n";
+                std::cout << "int ior = " << intIor << "\n";
+                std::cout << "ext ior = " << extIor << "\n";
+                std::cout << "alpha = " << alpha << "\n";
+                break;
         }
-        if (refl != Vector3d::ZERO)
-            std::cout << "Reflectance = " << refl << "\n";
+        if (specRefl != Vector3d::ZERO)
+            std::cout << "Specular Reflectance = " << specRefl << "\n";
+        if (diffRefl != Vector3d::ZERO)
+            std::cout << "Diffuse Reflectance = " << diffRefl << "\n";
         if (tran != Vector3d::ZERO)
             std::cout << "Transmittance = " << tran << "\n";
         std::cout << "--------------------\n";
@@ -95,9 +103,8 @@ public:
 
 protected:
     std::string id;
-    bool twoSided;
+    bool twoSided, needLS;
     SurfaceType type;
-    Vector3d refl, tran; // reflectance, transmittance
-    double intIor, extIor;
-    std::string surfMaterial;
+    Vector3d specRefl, diffRefl, tran; // specular & diffuse reflectance, transmittance
+    double intIor, extIor, alpha;
 };

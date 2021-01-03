@@ -1,7 +1,6 @@
 #pragma once
 
 #include "object3d.hpp"
-#include "vecmath/vecmath.h"
 #include <cmath>
 
 class Sphere : public Object3D {
@@ -51,17 +50,17 @@ public:
         return false;
     }
 
-    inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, unsigned short *Xi) override {
+    inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, Sampler* sampler) override {
         Vector3d tz = x - center;
         double l = tz.length();
         if (l <= radius) return false;
         double cosThMx = radius / l;
         A = 2 * M_PI * radius * radius * (1 - cosThMx);
-        double theta = acos(cosThMx + erand48(Xi) * (1 - cosThMx)), phi = 2 * M_PI * erand48(Xi);
+        Vector3d s = sampler->sampleThetaSphereUniform(cosThMx);
         tz.normalize();
-        Vector3d tx = Vector3d::cross(tz, (fabs(tz.x()) > 0.1) ? Vector3d(0, 1, 0) : Vector3d(1, 0, 0)).normalized();
-        Vector3d ty = Vector3d::cross(tz, tx);
-        ny = sin(theta) * cos(phi) * tx + sin(theta) * sin(phi) * ty + cos(theta) * tz;
+        Vector3d tx, ty;
+        computeBasis(tz, tx, ty);
+        ny = s.x() * tx + s.y() * ty + s.z() * tz;
         y = center + radius * ny;
         return true;
     }
