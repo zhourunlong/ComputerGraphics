@@ -17,13 +17,6 @@ public:
         //deleteTree(rt);
     }
 
-    inline Group (int num_objects) {
-        objType = GROUP;
-        v.clear();
-        v.resize(num_objects);
-        //deleteTree(rt);
-    }
-
     inline bool intersect(const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) override {
         return queryIntersect(rt, r, h, tmin, testLs);
     }

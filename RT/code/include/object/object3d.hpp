@@ -168,7 +168,7 @@ protected:
               qZ = rt->planeZ.queryIntersectZ(r);
         double L = std::max(qX.first, std::max(qY.first, qZ.first)),
                U = std::min(qX.second, std::min(qY.second, qZ.second));
-        if (L > U || U < tmin || L >= h.getT()) return false;
+        if (L > U || U < 0 || L >= h.getT()) return false;
         bool ret = queryIntersect(rt->lc, r, h, tmin, testLs);
         if (testLs && ret) return true;
         ret |= queryIntersect(rt->rc, r, h, tmin, testLs);

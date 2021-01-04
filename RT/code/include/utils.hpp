@@ -36,17 +36,16 @@ inline double tanTheta(const double &cost) {
 }
 
 inline double tanTheta2(const double &cost) {
-    return 1 / cost * cost - 1;
+    return 1 / (cost * cost) - 1;
 }
 
 // https://zhuanlan.zhihu.com/p/20119162
 inline double GGX_D(const Vector3d &wm, const double &alpha) {
-    double tant2 = tanTheta2(wm.z());
 	double cost2 = wm.z() * wm.z();
 
-	double root = alpha / (cost2 * (alpha * alpha + tant2));
+	double root = alpha / (1 + (alpha * alpha - 1) * cost2);
 
-	return 1 / M_PI * (root * root);
+	return root * root / M_PI;
 }
 inline double Smith_G1(const Vector3d &v, Vector3d wm,
     const double &alpha) {

@@ -12,6 +12,7 @@ public:
     inline Vector3d getColor(const Vector3d &woo, const Vector3d &wii,
         const Hit &hit) override {
         
+        //std::cerr << "getcolor\n";
         Vector3d n = hit.getNormal(), x, y;
         computeBasis(n, x, y);
         Vector3d wo(Vector3d::dot(woo, x),
@@ -30,10 +31,13 @@ public:
         Vector3d diff = T * diffRefl / M_PI / (1 - diffRefl / M_PI * Fdr)
                       / (eta * eta);
         Vector3d wm = (wo + wi).normalized();
-        Vector3d spec = diffRefl * GGX_D(wm, alpha)
+        Vector3d spec = specRefl * GGX_D(wm, alpha)
                       * Fresnel(Vector3d::dot(wo, wm), tmp, eta)
                       * Smith_G(wo, wi, wm, alpha)
                       / (4 * wo.z() * wi.z());
+        //std::cerr << "woo = " << woo << "\n";
+        //std::cerr << "wo = " << wo << "\n";
+        //std::cerr << "smith = " << Smith_G(wo, wi, wm, alpha) << "\n";
         //std::cerr << "diff = " << diff << "\nspec = " << spec << "\n";
         return diff + spec;
         // https://hal.inria.fr/hal-01386157/document
@@ -48,29 +52,43 @@ public:
 
         Vector3d n = hit.getNormal(), x, y;
         computeBasis(n, x, y);
+        //std::cerr << "woo = " << woo << "\n";
         Vector3d wo(Vector3d::dot(woo, x),
                     Vector3d::dot(woo, y),
                     Vector3d::dot(woo, n)),
                  wm, wi;
         if (sampler->sampleDouble() < 0.5) {
+            //std::cerr << "microfacet\n";
             wm = GgxVndf(wo, alpha,
                          sampler->sampleDouble(),
                          sampler->sampleDouble());
-            wi = 2 * Vector3d::dot(wm, wo) - wo;
+            wi = 2 * Vector3d::dot(wm, wo) * wm - wo;
             // pdf1
         } else {
-            Vector3d wi = sampler->sampleHemiSphereCos();
-            if (wo.z() < 0)
-                wi = Vector3d(wi.x(), wi.y(), -wi.z());
+            //std::cerr << "diffuse\n";
+            wi = sampler->sampleHemiSphereCos();
             wm = (wo + wi).normalized(); 
             // pdf2 = wi.z() / M_PI;
         }
         wii = wi.x() * x + wi.y() * y + wi.z() * n;
+        //std::cerr << "sample bsdf\n";
+        //std::cerr << wi << " " << wm << " " << wo << "\n";
         double pdf1 = Smith_G1(wi, wm, alpha)
                     * GGX_D(wm, alpha) * abs(Vector3d::dot(wo, wm))
                     / (4 * abs(Vector3d::dot(wi, wm)) * abs(wo.z())),
                pdf2 = abs(wi.z()) / M_PI;
 		double pdf = (pdf1 + pdf2) / 2;
+        //std::cerr << "done sample bsdf\n";
+        
+        
+        /*
+        std::cerr << Smith_G1(wi, wm, alpha) << " "
+                  << GGX_D(wm, alpha) << " "
+                  << abs(Vector3d::dot(wo, wm)) << " "
+                  << abs(Vector3d::dot(wi, wm)) << " "
+                  << abs(wo.z()) << "\n";
+                  */
+        
         f = getColor(woo, wii, hit) / pdf;
     }
 

@@ -171,6 +171,7 @@ private:
     double gamma = 2.2;
     Camera *camera = new Camera();
     std::unordered_map <std::string, Material*> materialMap;
+    std::unordered_map <std::string, Mesh*> meshMap;
     Group *group = new Group();
     std::vector <Object3D*> lights;
 };
@@ -437,8 +438,12 @@ void Parser::parseMesh(const pugi::xml_node &node, Mesh* &mesh) {
     std::string nname = node.name();
     if (nname == "string") {
         std::pair<std::string, std::string> result = parseString(node.first_attribute());
-        if (result.first == "filename")
-            mesh->setFile(result.second.c_str());
+        if (result.first == "filename") {
+            if (meshMap.find(result.second) == meshMap.end()) {
+                mesh->setFile(result.second.c_str());
+                meshMap[result.second] = mesh;
+            } else mesh = meshMap[result.second];
+        }
         return;
     }
     if (nname == "transform") {
