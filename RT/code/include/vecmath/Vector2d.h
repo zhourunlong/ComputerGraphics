@@ -86,3 +86,8 @@ Vector2d operator / ( const Vector2d& v, double f );
 
 bool operator == ( const Vector2d& v0, const Vector2d& v1 );
 bool operator != ( const Vector2d& v0, const Vector2d& v1 );
+
+inline std::ostream &operator<<(std::ostream &os, const Vector2d &v) {
+    os << "(" << v.x() << ", " << v.y() << ")";
+    return os;
+}

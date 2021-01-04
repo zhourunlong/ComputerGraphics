@@ -7,11 +7,12 @@
 	</integrator>
 	<sensor type="perspective" >
 		<float name="fov" value="60" />
+        <string name="fovAxis" value="y"/>
 		<transform name="toWorld" >
 			<matrix value="-0.89874 -0.0182716 -0.4381 1.211 0 0.999131 -0.0416703 1.80475 0.438481 -0.0374507 -0.89796 3.85239 0 0 0 1"/>
 		</transform>
 		<sampler type="sobol" >
-			<integer name="sampleCount" value="64" />
+			<integer name="sampleCount" value="10000" />
 		</sampler>
 		<film type="ldrfilm" >
 			<integer name="width" value="1280" />
@@ -105,7 +106,7 @@
 			<float name="extIOR" value="1" />
 			<boolean name="nonlinear" value="true" />
 			<texture name="diffuseReflectance" type="bitmap" >
-				<string name="filename" value="textures/Worktopt-light.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/Worktopt-light.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -145,7 +146,7 @@
 			<float name="extIOR" value="1" />
 			<boolean name="nonlinear" value="true" />
 			<texture name="diffuseReflectance" type="bitmap" >
-				<string name="filename" value="textures/Tabletop-light.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/Tabletop-light.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -153,7 +154,7 @@
 	<bsdf type="twosided" id="ChoppingBoard" >
 		<bsdf type="diffuse" >
 			<texture name="reflectance" type="bitmap" >
-				<string name="filename" value="textures/Chopping-Board.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/Chopping-Board.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -176,7 +177,7 @@
 			<float name="extIOR" value="1" />
 			<boolean name="nonlinear" value="true" />
 			<texture name="diffuseReflectance" type="bitmap" >
-				<string name="filename" value="textures/Kitchen-book-leftpage.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/Kitchen-book-leftpage.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -189,7 +190,7 @@
 			<float name="extIOR" value="1" />
 			<boolean name="nonlinear" value="true" />
 			<texture name="diffuseReflectance" type="bitmap" >
-				<string name="filename" value="textures/Kitchen-bookpage-large.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/Kitchen-bookpage-large.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -197,7 +198,7 @@
 	<bsdf type="twosided" id="Carrots" >
 		<bsdf type="diffuse" >
 			<texture name="reflectance" type="bitmap" >
-				<string name="filename" value="textures/Kitchen-carrot-uv.png" />
+				<string name="filename" value="testcases/kitchen/textures/Kitchen-carrot-uv.png" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -250,7 +251,7 @@
 	<bsdf type="twosided" id="SlicedMushroms" >
 		<bsdf type="diffuse" >
 			<texture name="reflectance" type="bitmap" >
-				<string name="filename" value="textures/Kitchen-mushroom-texture.png" />
+				<string name="filename" value="testcases/kitchen/textures/Kitchen-mushroom-texture.png" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -301,7 +302,7 @@
 			<float name="extIOR" value="1" />
 			<boolean name="nonlinear" value="true" />
 			<texture name="diffuseReflectance" type="bitmap" >
-				<string name="filename" value="textures/Worktopt-light.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/Worktopt-light.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -309,7 +310,7 @@
 	<bsdf type="twosided" id="Towel" >
 		<bsdf type="diffuse" >
 			<texture name="reflectance" type="bitmap" >
-				<string name="filename" value="textures/Tea-Towel.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/Tea-Towel.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -382,7 +383,7 @@
 	<bsdf type="twosided" id="RadioDialBack" >
 		<bsdf type="diffuse" >
 			<texture name="reflectance" type="bitmap" >
-				<string name="filename" value="textures/radio-dial-idea.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/radio-dial-idea.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -472,13 +473,13 @@
 	</bsdf>
 	<bsdf type="bumpmap" >
 		<texture name="map" type="bitmap" >
-			<string name="filename" value="textures/cushion-bump.jpg" />
+			<string name="filename" value="testcases/kitchen/textures/cushion-bump.jpg" />
 			<string name="filterType" value="trilinear" />
 		</texture>
 		<bsdf type="twosided" id="Cushion1" >
 			<bsdf type="diffuse" >
 				<texture name="reflectance" type="bitmap" >
-					<string name="filename" value="textures/cushion-red.jpg" />
+					<string name="filename" value="testcases/kitchen/textures/cushion-red.jpg" />
 					<string name="filterType" value="trilinear" />
 				</texture>
 			</bsdf>
@@ -556,13 +557,13 @@
 	</bsdf>
 	<bsdf type="bumpmap" >
 		<texture name="map" type="bitmap" >
-			<string name="filename" value="textures/bread-bin-front-bump.png" />
+			<string name="filename" value="testcases/kitchen/textures/bread-bin-front-bump.png" />
 			<string name="filterType" value="trilinear" />
 		</texture>
 		<bsdf type="twosided" id="BreadBinFront" >
 			<bsdf type="diffuse" >
 				<texture name="reflectance" type="bitmap" >
-					<string name="filename" value="textures/Worktopt-light.jpg" />
+					<string name="filename" value="testcases/kitchen/textures/Worktopt-light.jpg" />
 					<string name="filterType" value="trilinear" />
 				</texture>
 			</bsdf>
@@ -571,7 +572,7 @@
 	<bsdf type="twosided" id="BreadBinSides" >
 		<bsdf type="diffuse" >
 			<texture name="reflectance" type="bitmap" >
-				<string name="filename" value="textures/Worktopt-light.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/Worktopt-light.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -579,7 +580,7 @@
 	<bsdf type="twosided" id="BreadBinTop" >
 		<bsdf type="diffuse" >
 			<texture name="reflectance" type="bitmap" >
-				<string name="filename" value="textures/Worktopt-light.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/Worktopt-light.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -592,7 +593,7 @@
 			<float name="extIOR" value="1" />
 			<boolean name="nonlinear" value="true" />
 			<texture name="diffuseReflectance" type="bitmap" >
-				<string name="filename" value="textures/Tabletop-light.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/Tabletop-light.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -600,7 +601,7 @@
 	<bsdf type="twosided" id="CushionTies" >
 		<bsdf type="diffuse" >
 			<texture name="reflectance" type="bitmap" >
-				<string name="filename" value="textures/cushion-red.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/cushion-red.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -633,7 +634,7 @@
 			<float name="extIOR" value="1" />
 			<boolean name="nonlinear" value="true" />
 			<texture name="diffuseReflectance" type="bitmap" >
-				<string name="filename" value="textures/wood.jpg" />
+				<string name="filename" value="testcases/kitchen/textures/wood.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -646,7 +647,7 @@
 	<bsdf type="twosided" id="MushroomEnds" >
 		<bsdf type="diffuse" >
 			<texture name="reflectance" type="bitmap" >
-				<string name="filename" value="textures/Kitchen-mushroom-texture.png" />
+				<string name="filename" value="testcases/kitchen/textures/Kitchen-mushroom-texture.png" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -712,91 +713,91 @@
 		</bsdf>
 	</bsdf>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh129.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh129.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WallSocket" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh165.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh165.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WindowLock" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh263.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh263.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="ExtractorHood" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh126.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh126.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CushionTies" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh087.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh087.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CushionTies" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh130.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh130.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CushionTies" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh088.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh088.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cable" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh124.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh124.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cushion1" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh136.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh136.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cushion1" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh251.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh251.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cushion1" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh164.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh164.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cushion1" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh147.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh147.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CeilingLightFitting" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh171.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh171.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -804,21 +805,21 @@
 		<ref id="WallSocket" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh140.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh140.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BreadBinTop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh122.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh122.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WineGlasses" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh172.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh172.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -826,7 +827,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh113.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh113.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -834,7 +835,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh139.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh139.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -842,7 +843,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh174.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh174.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -850,7 +851,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh144.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh144.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -858,7 +859,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh175.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh175.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -866,7 +867,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh247.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh247.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -874,7 +875,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh083.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh083.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -882,7 +883,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh178.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh178.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -890,7 +891,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh167.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh167.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -898,7 +899,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh183.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh183.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -906,7 +907,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh099.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh099.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -914,7 +915,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh284.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh284.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -922,43 +923,35 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh173.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh173.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh184.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh184.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh155.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh155.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh159.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh159.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh232.obj" />
-		<transform name="toWorld" >
-			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
-		</transform>
-		<boolean name="faceNormals" value="true" />
-		<ref id="TableCross" />
-	</shape>
-	<shape type="obj" >
-		<string name="filename" value="models/Mesh121.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh232.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -966,7 +959,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh278.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh121.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -974,7 +967,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh120.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh278.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -982,7 +975,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh235.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh120.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -990,7 +983,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh243.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh235.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -998,7 +991,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh117.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh243.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1006,7 +999,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh157.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh117.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1014,7 +1007,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh116.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh157.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1022,7 +1015,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh207.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh116.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1030,7 +1023,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh107.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh207.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1038,7 +1031,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh112.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh107.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1046,7 +1039,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh287.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh112.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1054,7 +1047,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh105.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh287.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1062,7 +1055,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh103.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh105.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1070,7 +1063,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh102.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh103.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1078,7 +1071,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh100.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh102.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1086,7 +1079,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh095.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh100.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1094,7 +1087,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh098.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh095.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1102,7 +1095,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh259.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh098.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1110,7 +1103,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh143.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh259.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1118,7 +1111,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh255.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh143.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1126,7 +1119,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh128.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh255.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1134,7 +1127,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh150.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh128.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1142,7 +1135,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh200.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh150.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1150,7 +1143,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh085.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh200.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1158,21 +1151,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh114.obj" />
-		<transform name="toWorld" >
-			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
-		</transform>
-		<ref id="TableCross" />
-	</shape>
-	<shape type="obj" >
-		<string name="filename" value="models/Mesh182.obj" />
-		<transform name="toWorld" >
-			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
-		</transform>
-		<ref id="TableCross" />
-	</shape>
-	<shape type="obj" >
-		<string name="filename" value="models/Mesh082.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh085.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1180,7 +1159,21 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh106.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh114.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="TableCross" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="testcases/kitchen/models/Mesh182.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="TableCross" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="testcases/kitchen/models/Mesh082.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1188,7 +1181,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh132.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh106.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1196,7 +1189,15 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh166.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh132.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<boolean name="faceNormals" value="true" />
+		<ref id="TableCross" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="testcases/kitchen/models/Mesh166.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1204,7 +1205,7 @@
 		<ref id="Tabletop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh161.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh161.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1212,7 +1213,7 @@
 		<ref id="WoodTop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh137.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh137.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1220,14 +1221,14 @@
 		<ref id="ExtractorHood" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh145.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh145.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Tiles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh133.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh133.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1235,14 +1236,14 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh074.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh074.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MetalHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh068.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh068.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1250,7 +1251,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh125.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh125.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1258,7 +1259,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh079.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh079.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1266,14 +1267,14 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh169.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh169.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MetalHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh093.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh093.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1281,7 +1282,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh097.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh097.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1289,7 +1290,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh181.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh181.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1297,7 +1298,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh260.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh260.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1305,21 +1306,21 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh274.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh274.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MetalHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh066.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh066.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MetalHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh141.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh141.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1327,225 +1328,217 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh238.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh238.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerIron" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh076.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh076.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MetalHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh177.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh177.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerBlack" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh185.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh185.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerChrome" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh186.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh186.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerChrome" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh188.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh188.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerBlack" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh189.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh189.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerChrome" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh115.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh115.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerBlack" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh162.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh162.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="LeftPage" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh134.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh134.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BreadBinSides" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh192.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh192.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BreadBinHandle" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh131.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh131.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BreadBinTop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh077.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh077.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BreadBinSides" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh229.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh229.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BreadBinFront" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh281.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh281.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="PotHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh194.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh194.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="SteelPot" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh195.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh195.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="SlicedMushroms" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh104.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh104.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="SlicedMushroms" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh196.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh196.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="SlicedMushroms" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh197.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh197.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="SlicedMushroms" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh256.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh256.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="SlicedMushroms" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh081.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh081.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="SlicedMushroms" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh209.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh209.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="SlicedMushroms" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh210.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh210.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="SlicedMushroms" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh211.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh211.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Carrots" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh213.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh213.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Carrots" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh216.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh216.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Carrots" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh146.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh146.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Carrots" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh219.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh219.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh220.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh220.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh221.obj" />
-		<transform name="toWorld" >
-			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
-		</transform>
-		<boolean name="faceNormals" value="true" />
-		<ref id="TableCross" />
-	</shape>
-	<shape type="obj" >
-		<string name="filename" value="models/Mesh268.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh221.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1553,7 +1546,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh223.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh268.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1561,7 +1554,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh227.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh223.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1569,7 +1562,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh199.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh227.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1577,7 +1570,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh271.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh199.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1585,7 +1578,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh233.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh271.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1593,7 +1586,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh202.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh233.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1601,7 +1594,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh230.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh202.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1609,7 +1602,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh240.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh230.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1617,7 +1610,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh176.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh240.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1625,7 +1618,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh234.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh176.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1633,7 +1626,7 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh142.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh234.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1641,7 +1634,15 @@
 		<ref id="TableCross" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh069.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh142.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<boolean name="faceNormals" value="true" />
+		<ref id="TableCross" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="testcases/kitchen/models/Mesh069.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1649,14 +1650,14 @@
 		<ref id="Worktops" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh236.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh236.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Worktops" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh135.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh135.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1664,7 +1665,7 @@
 		<ref id="Floor" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh153.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh153.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1672,7 +1673,7 @@
 		<ref id="Ceiling" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh239.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh239.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1680,189 +1681,189 @@
 		<ref id="Walls" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh242.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh242.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Tomatoes" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh244.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh244.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MushroomEnds" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh249.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh249.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MushroomEnds" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh075.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh075.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="SlicedMushroms" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh291.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh291.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Mushrooms" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh254.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh254.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Pepper-Yellow" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh257.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh257.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="PepperStems" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh258.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh258.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Pepper-Green" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh089.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh089.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="PepperStems" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh261.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh261.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Pepper-Red" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh119.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh119.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="PepperStems" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh264.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh264.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="PepperStems" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh127.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh127.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cutlery" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh091.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh091.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cutlery" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh225.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh225.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cutlery" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh266.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh266.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cutlery" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh190.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh190.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cutlery" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh245.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh245.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cutlery" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh267.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh267.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cutlery" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh179.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh179.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cutlery" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh269.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh269.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cutlery" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh270.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh270.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cutlery" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh214.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh214.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cutlery" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh108.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh108.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Cutlery" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh080.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh080.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="SteelPot" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh272.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh272.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="PotHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh273.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh273.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -1870,196 +1871,196 @@
 		<ref id="KettleHandle" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh275.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh275.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="KettleHandle" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh086.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh086.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="KettleGreen" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh241.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh241.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Kettle" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh222.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh222.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh276.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh276.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh279.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh279.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh248.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh248.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh282.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh282.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh277.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh277.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh180.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh180.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh285.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh285.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh170.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh170.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh293.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh293.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh215.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh215.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh252.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh252.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh204.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh204.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh286.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh286.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh096.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh096.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh288.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh288.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh253.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh253.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh109.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh109.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Utensils" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh289.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh289.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MicrowaveBack" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh152.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh152.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Microwave" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh226.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh226.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Microwave" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh290.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh290.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Microwave" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh292.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh292.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Microwave" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh208.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh208.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Microwave" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh191.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh191.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2067,91 +2068,91 @@
 		<ref id="MicrowaveGlass" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh201.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh201.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MicrowaveDigital" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh294.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh294.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Microwave" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh065.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh065.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WineGlasses" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh064.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh064.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="TableMats" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh094.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh094.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Plates" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh063.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh063.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BookPages" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh062.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh062.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BookCover" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh092.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh092.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BookPages" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh061.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh061.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="ChoppingKnifeBlade" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh059.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh059.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="ChoppingKnifeHandle" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh058.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh058.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="ChoppingKnifeEdge" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh057.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh057.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="ChoppingBoard" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh056.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh056.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2159,14 +2160,14 @@
 		<ref id="WallSocket" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh055.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh055.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Bulb" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh138.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh138.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2174,7 +2175,7 @@
 		<ref id="Grout" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh224.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh224.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2182,35 +2183,35 @@
 		<ref id="WoodTop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh054.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh054.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Tiles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh053.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh053.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="LampCable" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh052.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh052.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Lamp" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh050.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh050.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="LampInside" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh049.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh049.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2218,28 +2219,28 @@
 		<ref id="WindowFrame" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh163.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh163.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Window" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh154.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh154.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Window" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh078.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh078.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MetalHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh246.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh246.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2247,7 +2248,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh048.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh048.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2255,7 +2256,7 @@
 		<ref id="WindowFrame" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh047.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh047.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2263,7 +2264,7 @@
 		<ref id="WindowFrame" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh046.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh046.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2271,22 +2272,14 @@
 		<ref id="WindowFrame" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh045.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh045.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WindowFrame" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh044.obj" />
-		<transform name="toWorld" >
-			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
-		</transform>
-		<boolean name="faceNormals" value="true" />
-		<ref id="WindowFrame" />
-	</shape>
-	<shape type="obj" >
-		<string name="filename" value="models/Mesh043.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh044.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2294,7 +2287,7 @@
 		<ref id="WindowFrame" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh041.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh043.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2302,7 +2295,7 @@
 		<ref id="WindowFrame" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh193.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh041.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2310,14 +2303,7 @@
 		<ref id="WindowFrame" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh040.obj" />
-		<transform name="toWorld" >
-			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
-		</transform>
-		<ref id="WindowFrame" />
-	</shape>
-	<shape type="obj" >
-		<string name="filename" value="models/Mesh218.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh193.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2325,7 +2311,14 @@
 		<ref id="WindowFrame" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh039.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh040.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<ref id="WindowFrame" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="testcases/kitchen/models/Mesh218.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2333,7 +2326,15 @@
 		<ref id="WindowFrame" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh187.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh039.obj" />
+		<transform name="toWorld" >
+			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+		</transform>
+		<boolean name="faceNormals" value="true" />
+		<ref id="WindowFrame" />
+	</shape>
+	<shape type="obj" >
+		<string name="filename" value="testcases/kitchen/models/Mesh187.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2341,49 +2342,49 @@
 		<ref id="Skirting" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh073.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh073.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MetalHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh042.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh042.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MetalHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh037.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh037.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MetalHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh035.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh035.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MetalHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh034.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh034.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MetalHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh033.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh033.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="MetalHandles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh038.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh038.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2391,7 +2392,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh072.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh072.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2399,7 +2400,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh231.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh231.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2407,7 +2408,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh032.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh032.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2415,14 +2416,14 @@
 		<ref id="SmallWorktop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh031.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh031.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="SmallWorktop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh030.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh030.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2430,7 +2431,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh029.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh029.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2438,147 +2439,147 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh028.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh028.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Burners" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh027.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh027.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BurnersTop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh198.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh198.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Burners" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh026.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh026.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BurnersTop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh071.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh071.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Burners" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh149.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh149.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BurnersTop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh025.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh025.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Burners" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh203.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh203.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BurnersTop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh024.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh024.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Burners" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh023.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh023.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BurnersTop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh022.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh022.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Burners" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh020.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh020.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BurnersTop" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh084.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh084.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerBlack" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh019.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh019.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerChrome" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh017.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh017.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerChrome" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh280.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh280.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerBlack" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh015.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh015.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerBlack" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh014.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh014.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerChrome" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh090.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh090.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerBlack" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh206.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh206.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="CookerGlass" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh228.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh228.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2586,7 +2587,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh111.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh111.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2594,14 +2595,14 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh168.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh168.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="ExtractorHood" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh148.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh148.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2609,7 +2610,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh013.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh013.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2617,7 +2618,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh012.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh012.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2625,7 +2626,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh158.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh158.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2633,14 +2634,14 @@
 		<ref id="Worktops" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh237.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh237.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Worktops" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh011.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh011.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2648,7 +2649,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh018.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh018.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2656,7 +2657,7 @@
 		<ref id="CupboardUnits" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh262.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh262.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2664,7 +2665,7 @@
 		<ref id="Walls" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh010.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh010.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2672,7 +2673,7 @@
 		<ref id="Walls" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh212.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh212.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2680,21 +2681,21 @@
 		<ref id="BlindEnds" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh156.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh156.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BlindStringKnob" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh151.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh151.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BlindString" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh009.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh009.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2702,7 +2703,7 @@
 		<ref id="BlindWoodStrip" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh110.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh110.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2710,7 +2711,7 @@
 		<ref id="Blinds" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh118.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh118.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2718,7 +2719,7 @@
 		<ref id="BlindEnds" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh008.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh008.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2726,28 +2727,28 @@
 		<ref id="BlindEnds" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh007.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh007.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Blinds" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh250.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh250.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioHandle" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh021.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh021.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioPlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh205.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh205.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2755,14 +2756,14 @@
 		<ref id="BushLogo" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh067.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh067.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BushLogo" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh283.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh283.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -2770,119 +2771,119 @@
 		<ref id="RadioDialLine" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh005.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh005.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioDialBack" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh016.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh016.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioMetalRing" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh265.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh265.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioGlass" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh006.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh006.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioPlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh004.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh004.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioPlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh060.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh060.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="ChromeHandle" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh123.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh123.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioPlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh160.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh160.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioInside" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh051.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh051.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioKnob" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh003.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh003.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioSurround" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh002.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh002.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioEdges" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh001.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh001.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RadioEdges" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh036.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh036.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WhitePot" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh070.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh070.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Towel" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh101.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh101.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Towel" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh000.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh000.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WallSocket" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh217.obj" />
+		<string name="filename" value="testcases/kitchen/models/Mesh217.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>

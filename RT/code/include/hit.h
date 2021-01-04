@@ -10,7 +10,8 @@ class Hit {
 public:
     Hit();
 
-    Hit(double _t, Object3D* _o, const Vector3d &n, const bool &_into);
+    Hit(double _t, Object3D* _o, const Vector3d &n, const Vector2d &_texCoor,
+        const bool &_into);
 
     ~Hit() = default;
 
@@ -22,11 +23,15 @@ public:
 
     bool getInto() const;
 
-    void set(double _t, Object3D* _o, const Vector3d &n, const bool &_into);
+    Vector2d getTexCoor() const;
+
+    void set(double _t, Object3D* _o, const Vector3d &n,
+        const Vector2d &_texCoor, const bool &_into);
 
 private:
     double t;
     Object3D* o;
     Vector3d normal;
+    Vector2d texCoor;
     bool into;
 };

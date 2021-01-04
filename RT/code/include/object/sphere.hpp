@@ -42,9 +42,9 @@ public:
                 else return false;
             Vector3d n = center - r.pointAtParameter(t);
             if (Vector3d::dot(n, v) < 0)
-                h.set(t, this, n, false);
+                h.set(t, this, n, Vector2d::ZERO, false);
             else
-                h.set(t, this, -n, true);
+                h.set(t, this, -n, Vector2d::ZERO, true);
             return true;
         }
         return false;

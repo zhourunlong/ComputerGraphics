@@ -11,6 +11,7 @@
 #include "object/triangle.hpp"
 #include "object/transform.hpp"
 #include "vecmath/vecmath.h"
+#include "ClmbsImg.hpp"
 
 double degreeToRadian(const double &x) {return (M_PI * x) / 180.0;}
 
@@ -41,6 +42,7 @@ Vector3d stringToV3d(const std::string &s) {
 }
 
 bool endsWith(const std::string &s, const std::string &t) {
+    if (s.length() < t.length()) return false;
     std::string r = s.substr(s.length() - t.length(), s.length());
     return r == t;
 }
@@ -90,6 +92,7 @@ class Parser {
 public:
 
     Parser(const char* fname) {
+        fprintf(stderr, "started parsing\n");
         Material* m = new Material();
         materialMap[""] = m;
         pugi::xml_document doc;
@@ -103,6 +106,7 @@ public:
         setMatToAll();
         checkLights();
         group->finish();
+        fprintf(stderr, "finished parsing\n");
     }
 
     ~Parser() = default;
@@ -132,6 +136,7 @@ private:
     }
 
     void parseSensor(const pugi::xml_node &node);
+    void parseTexture(const pugi::xml_node &node, Texture* &tex);
     void parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pass);
     void parseTransform(const pugi::xml_node &node, Transform* &tran);
     void parseSphere(const pugi::xml_node &node, Sphere* &sph);
@@ -172,6 +177,7 @@ private:
     Camera *camera = new Camera();
     std::unordered_map <std::string, Material*> materialMap;
     std::unordered_map <std::string, Mesh*> meshMap;
+    std::unordered_map <std::string, ClmbsImg_Data*> imageMap;
     Group *group = new Group();
     std::vector <Object3D*> lights;
 };
@@ -210,25 +216,63 @@ void Parser::parseSensor(const pugi::xml_node &node) {
             samps = result.second;
         return;
     }
+    if (nname == "string") {
+        std::pair<std::string, std::string> result = parseString(node.first_attribute());
+        if (result.first == "fovaxis")
+            camera->setFovAxis(result.second);
+        return;
+    }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
         parseSensor(child);
 }
 
+void Parser::parseTexture(const pugi::xml_node &node, Texture* &tex) {
+    std::pair<std::string, std::string> result = parseString(node.first_attribute());
+    if (result.first == "filename") {
+        if (imageMap.find(result.second) != imageMap.end())
+            tex->setFile(imageMap[result.second]);
+        else {
+            ClmbsImg_Data* img = new ClmbsImg_Data(
+                ClmbsImg_Load(result.second.c_str()));
+            //std::cerr << "-----\n";
+            //img->print();
+            imageMap[result.second] = img;
+            tex->setFile(img);
+            //delete(img);
+            //imageMap[result.second]->print();
+            //std::cerr << "*****\n";
+        }
+    }
+    if (result.first == "filtertype") {
+        std::string type = deformat(result.second);
+        if (type == "ewa")
+            tex->setFilterType(Texture::EWA);
+        else if (type == "trilinear")
+            tex->setFilterType(Texture::TRILINEAR);
+        else if (type == "nearest")
+            tex->setFilterType(Texture::NEAREST);
+    }
+    for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
+        parseTexture(child, tex);
+}
+
 void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pass) {
     std::string nname = node.name();
-    if (pass == 1 && nname == "rgb") {
-        std::pair<std::string, Vector3d>
-            result = parseV3d(node.first_attribute());
+  if (pass == 1) {
+    if (nname == "rgb") {
+        std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
+        Texture* rgb = new Texture(result.second);
         if (result.first == "diffusereflectance"
             || result.first == "reflectance")
-            m->setDiffRefl(result.second);
+            
+            m->setDiffRefl(rgb);
         else if (result.first == "specularreflectance")
-            m->setSpecRefl(result.second);
+            m->setSpecRefl(rgb);
         else if (endsWith(result.first, "transmittance"))
-            m->setTran(result.second);
+            m->setTran(rgb);
         return;
     }
-    if (pass == 1 && (nname == "double" || nname == "float")) {
+    if (nname == "double" || nname == "float") {
         std::pair<std::string, double> result = parseDouble(node.first_attribute());
         if (result.first == "intior")
             m->setIntIor(result.second);
@@ -238,14 +282,22 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
             m->setAlpha(result.second);
         return;
     }
-    /*
-    if (nname == "string") {
+    if (nname == "texture") {
         std::pair<std::string, std::string> result = parseString(node.first_attribute());
-        if (result.first == "material")
-            m->setSurfMaterial(result.second);
-        return;
+        if (result.second == "bitmap") {
+            Texture* tex = new Texture();
+            parseTexture(node, tex);
+            if (result.first == "diffusereflectance"
+                || result.first == "reflectance")
+                
+                m->setDiffRefl(tex);
+            else if (result.first == "specularreflectance")
+                m->setSpecRefl(tex);
+            else if (endsWith(result.first, "transmittance"))
+                m->setTran(tex);
+        }
     }
-    */
+  }
     for (pugi::xml_attribute attr = node.first_attribute(); attr; attr = attr.next_attribute()) {
         std::string aname = attr.name(), val = attr.value();
         if (nname == "bsdf") {
@@ -255,31 +307,31 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
                     if (val == "diffuse") {
                         m = new Diffuse();
                         m->setType(Material::DIFFUSE);
-                        m->setDiffRefl(Vector3d(0.5));
-                    } else if (val == "conductor") {
+                        m->setDiffRefl(new Texture(Vector3d(0.5)));
+                    } else if (val == "conductor" || val == "roughconductor") {
                         m = new Conductor();
                         m->setType(Material::CONDUCTOR);
-                        m->setSpecRefl(Vector3d(1));
-                    } else if (val == "dielectric") {
+                        m->setSpecRefl(new Texture(Vector3d(1)));
+                    } else if (val == "dielectric" || val == "thindielectric") {
                         m = new Dielectric();
                         m->setType(Material::DIELECTRIC);
-                        m->setSpecRefl(Vector3d(1));
-                        m->setTran(Vector3d(1));
+                        m->setSpecRefl(new Texture(Vector3d(1)));
+                        m->setTran(new Texture(Vector3d(1)));
                         m->setTwoSided(true);
                         m->setIntIor(1.5046);
                         m->setExtIor(1.000277);
                     } else if (val == "plastic") {
                         m = new Plastic();
                         m->setType(Material::PLASTIC);
-                        m->setDiffRefl(Vector3d(0.5));
-                        m->setSpecRefl(Vector3d(1));
+                        m->setDiffRefl(new Texture(Vector3d(0.5)));
+                        m->setSpecRefl(new Texture(Vector3d(1)));
                         m->setIntIor(1.49);
                         m->setExtIor(1.000277);
                     } else if (val == "roughplastic") {
                         m = new RoughPlastic();
                         m->setType(Material::ROUGHPLASTIC);
-                        m->setDiffRefl(Vector3d(0.5));
-                        m->setSpecRefl(Vector3d(1));
+                        m->setDiffRefl(new Texture(Vector3d(0.5)));
+                        m->setSpecRefl(new Texture(Vector3d(1)));
                         m->setIntIor(1.49);
                         m->setExtIor(1.000277);
                         m->setAlpha(0.1);

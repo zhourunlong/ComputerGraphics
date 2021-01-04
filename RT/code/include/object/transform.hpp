@@ -45,9 +45,10 @@ public:
         Vector3d trDirection = transformDirection(inv, r.getDirection());
         Ray tr(trSource, trDirection);
         bool inter = o->intersect(tr, h, tmin, testLs);
-        if (inter) {
-            h.set(h.getT(), h.getObject(), transformDirection(invTranspose, h.getNormal()).normalized(), h.getInto());
-        }
+        if (inter)
+            h.set(h.getT(), h.getObject(),
+                transformDirection(invTranspose, h.getNormal()).normalized(),
+                h.getTexCoor(), h.getInto());
         return inter;
     }
 

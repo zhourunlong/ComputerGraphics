@@ -18,4 +18,5 @@ cd ..
 mkdir -p output
 #bin/RT testcases/cornellbox.xml output/cornellbox.bmp
 #bin/RT testcases/smallpt.xml output/smallpt.bmp
-bin/RT testcases/coffee/scene.xml output/coffee.bmp
+#bin/RT testcases/coffee/scene.xml output/coffee.bmp
+bin/RT testcases/kitchen/scene.xml output/kitchen.bmp

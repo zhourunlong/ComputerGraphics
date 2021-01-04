@@ -18,6 +18,6 @@ public:
         // pdf = 1;
         // color = specRefl; 
         // f = color / pdf / cost;
-        f = specRefl / abs(cost);
+        f = specRefl->albedo(hit.getTexCoor()) / abs(cost);
     }
 };

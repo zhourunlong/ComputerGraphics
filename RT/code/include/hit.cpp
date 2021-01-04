@@ -8,10 +8,13 @@ inline Hit::Hit() {
     into = true;
 }
 
-inline Hit::Hit(double _t, Object3D* _o, const Vector3d &n, const bool &_into) {
+inline Hit::Hit(double _t, Object3D* _o, const Vector3d &n,
+    const Vector2d &_texCoor, const bool &_into) {
+
     t = _t;
     o = _o;
     normal = n.normalized();
+    texCoor = _texCoor;
     into = _into;
 }
 
@@ -23,9 +26,14 @@ inline Vector3d Hit::getNormal() const {return normal;}
 
 inline bool Hit::getInto() const {return into;}
 
-inline void Hit::set(double _t, Object3D* _o, const Vector3d &n, const bool &_into) {
+inline Vector2d Hit::getTexCoor() const {return texCoor;}
+
+inline void Hit::set(double _t, Object3D* _o, const Vector3d &n,
+    const Vector2d &_texCoor, const bool &_into) {
+
     t = _t;
     o = _o;
     normal = n.normalized();
+    texCoor = _texCoor;
     into = _into;
 }

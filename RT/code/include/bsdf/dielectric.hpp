@@ -18,10 +18,10 @@ public:
 
         if (r == 1 || sampler->sampleDouble() < r) {
             wi = 2 * cosi * n - wo;
-            f = specRefl / cosi;
+            f = specRefl->albedo(hit.getTexCoor()) / cosi;
         } else {
             wi = (-wo / eta - (cost - cosi / eta) * n).normalized();
-            f = tran / (cost * eta * eta);
+            f = tran->albedo(hit.getTexCoor()) / (cost * eta * eta);
             // eta^-2: convert energy to radiance
             // http://web.cs.wpi.edu/~emmanuel/courses/cs563/S10/talks/wk11_p2_wadii_simple_transparency.pdf
         }

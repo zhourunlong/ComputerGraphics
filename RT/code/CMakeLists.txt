@@ -13,10 +13,11 @@ SET(RT_INCLUDES
         include/parser.hpp
         include/camera.hpp
         include/hit.h
-        include/image.hpp
         include/ray.hpp
         include/utils.hpp
         include/bsdf/bsdf.h
+        include/image.hpp
+        include/ClmbsImg.hpp
         include/object/group.hpp
         include/object/mesh.hpp
         include/object/object3d.hpp
@@ -41,3 +42,4 @@ SET(CMAKE_CXX_FLAGS "-O2 -fopenmp")
 
 ADD_EXECUTABLE(${PROJECT_NAME} ${RT_SOURCES} ${RT_INCLUDES})
 TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME} PRIVATE include)
+target_link_libraries(${PROJECT_NAME} png16 jpeg)

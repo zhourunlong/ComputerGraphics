@@ -38,7 +38,8 @@ inline Vector3d lightSampling(Material* m, const Vector3d &x,
         double cosThP = Vector3d::dot(ny, -z);
         double dist = (x - y).length();
         Ray testRay(x, z);
-        Hit testHit = Hit(dist + 1e-9, NULL, Vector3d::ZERO, true);
+        Hit testHit = Hit(dist + 1e-9, NULL, Vector3d::ZERO, Vector2d::ZERO,
+                          true);
         if (baseGroup->intersect(testRay, testHit, 1e-9, true))
             continue;
         illum += l->getEmmision() * color * cosTh * cosThP
@@ -105,6 +106,7 @@ int main(int argc, char *argv[]) {
     maxDep = parser.getMaxDep();
     filmGamma = parser.getGamma();
 
+    fprintf(stderr, "started rendering\n");
     #pragma omp parallel for collapse(1) schedule(dynamic, 1) num_threads(60)
     for (int y = 0; y < h; ++y) {
     //for (int y = 308; y < 310; ++y) {
@@ -135,7 +137,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "%5.2lf%%\t\tUsed time: %5.2lf sec\t\tRemaining time: %5.2lf sec\n", 100 * load, t, t / load * (1 - load));
     }
     renderedImg.SaveImage(argv[2]);
-    fprintf(stderr, "finished, time = %5.2lf sec\n", omp_get_wtime() - timeStamp);
+    fprintf(stderr, "finished rendering, time = %5.2lf sec\n", omp_get_wtime() - timeStamp);
 
 /*
     int x = 621, y = 301;

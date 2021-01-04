@@ -158,14 +158,14 @@
 		</bsdf>
 	</bsdf>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh013.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh013.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="FrostedGlass" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh016.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh016.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -173,21 +173,21 @@
 		<ref id="WhitePlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh015.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh015.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WhitePlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh023.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh023.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="FrostedGlass" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh020.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh020.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -195,14 +195,14 @@
 		<ref id="WhitePlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh017.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh017.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WhitePlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh024.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh024.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -210,7 +210,7 @@
 		<ref id="None" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh041.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh041.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -218,210 +218,210 @@
 		<ref id="BlackPaint" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh011.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh011.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BlackPaint" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh026.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh026.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Ceramic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh018.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh018.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Gold" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh007.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh007.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RoughMetal" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh005.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh005.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="PaintedCeramic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh019.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh019.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Gold" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh021.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh021.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Ceramic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh037.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh037.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Ceramic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh004.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh004.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Gold" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh014.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh014.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="PaintedCeramic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh012.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh012.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Gold" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh028.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh028.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Ceramic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh025.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh025.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RoughMetal" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh008.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh008.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Ceramic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh032.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh032.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WhitePlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh035.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh035.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Chrome" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh042.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh042.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BlackRubber" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh010.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh010.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WhitePlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh036.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh036.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Chrome" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh027.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh027.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BlackRubber" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh043.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh043.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WhitePlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh044.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh044.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Chrome" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh031.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh031.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BlackRubber" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh022.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh022.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WhitePlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh038.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh038.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Chrome" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh030.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh030.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BlackRubber" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh046.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh046.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WhitePlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh047.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh047.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Chrome" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh034.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh034.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BlackRubber" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh033.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh033.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -429,7 +429,7 @@
 		<ref id="WhiteMarble" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh006.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh006.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1.05106 -0.452102 0 0 0 1"/>
 		</transform>
@@ -437,7 +437,7 @@
 		<ref id="FloorTiles" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh048.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh048.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
@@ -445,77 +445,77 @@
 		<ref id="Walls" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh049.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh049.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="WhitePlastic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh051.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh051.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Chrome" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh040.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh040.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="BlackRubber" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh003.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh003.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Ceramic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh002.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh002.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Ceramic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh009.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh009.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Gold" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh045.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh045.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="RoughMetal" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh029.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh029.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="PaintedCeramic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh039.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh039.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Gold" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh050.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh050.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>
 		<ref id="Ceramic" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh001.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh001.obj" />
 		<transform name="toWorld" >
 			<matrix value="-1 0 -1.50996e-007 -0.621391 0 1 0 4.02309 1.50996e-007 0 -1 -4.47482 0 0 0 1"/>
 		</transform>
@@ -523,7 +523,7 @@
 		<ref id="Artwork" />
 	</shape>
 	<shape type="obj" >
-		<string name="filename" value="models/Mesh000.obj" />
+		<string name="filename" value="testcases/dining-room/models/Mesh000.obj" />
 		<transform name="toWorld" >
 			<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
 		</transform>

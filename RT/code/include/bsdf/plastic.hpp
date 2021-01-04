@@ -21,8 +21,8 @@ public:
         double T = (1 - Fresnel(Vector3d::dot(wo, n), tmp, eta))
                  * (1 - Fresnel(cost, tmp, eta));
         if (Fdr == -1) computeFdr();
-        return T * diffRefl / M_PI / (1 - diffRefl / M_PI * Fdr)
-             / (eta * eta);
+        Vector3d color = diffRefl->albedo(hit.getTexCoor()) / M_PI;
+        return T * color / (1 - color * Fdr) / (eta * eta);
         
         // https://hal.inria.fr/hal-01386157/document
     }
@@ -38,7 +38,7 @@ public:
         if (r == 1 || sampler->sampleDouble() < r) {
             lastDiffuse = false;
             wi = 2 * cosi * n - wo;
-            f = specRefl / cosi;
+            f = specRefl->albedo(hit.getTexCoor()) / cosi;
         } else {
             lastDiffuse = true;
             Vector3d x, y;

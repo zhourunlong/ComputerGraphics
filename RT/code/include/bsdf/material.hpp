@@ -2,12 +2,12 @@
 
 #include <bits/stdc++.h>
 #include "../vecmath/vecmath.h"
-
 #include "../ray.hpp"
 #include "../hit.h"
 #include "../hit.cpp"
 #include "../sampler.hpp"
 #include "../utils.hpp"
+#include "../texture.hpp"
 
 class Material {
 public:
@@ -37,14 +37,14 @@ public:
     inline SurfaceType getType() {return type;}
     inline void setType(const SurfaceType &_type) {type = _type;}
 
-    inline Vector3d getSpecRefl() {return specRefl;}
-    inline void setSpecRefl(const Vector3d &_specRefl) {specRefl = _specRefl;}
+    inline Texture* getSpecRefl() {return specRefl;}
+    inline void setSpecRefl(Texture* _specRefl) {specRefl = _specRefl;}
 
-    inline Vector3d getDiffRefl() {return diffRefl;}
-    inline void setDiffRefl(const Vector3d &_diffRefl) {diffRefl = _diffRefl;}
+    inline Texture* getDiffRefl() {return diffRefl;}
+    inline void setDiffRefl(Texture* _diffRefl) {diffRefl = _diffRefl;}
 
-    inline Vector3d getTran() {return tran;}
-    inline void setTran(const Vector3d &_tran) {tran = _tran;}
+    inline Texture* getTran() {return tran;}
+    inline void setTran(Texture* _tran) {tran = _tran;}
 
     inline double getIntIor() {return intIor;}
     inline void setIntIor(const double &_intIor) {intIor = _intIor;}
@@ -92,12 +92,12 @@ public:
                 std::cout << "alpha = " << alpha << "\n";
                 break;
         }
-        if (specRefl != Vector3d::ZERO)
-            std::cout << "Specular Reflectance = " << specRefl << "\n";
-        if (diffRefl != Vector3d::ZERO)
-            std::cout << "Diffuse Reflectance = " << diffRefl << "\n";
-        if (tran != Vector3d::ZERO)
-            std::cout << "Transmittance = " << tran << "\n";
+        std::cout << "Specular Reflectance:\n";
+        specRefl->print();
+        std::cout << "Diffuse Reflectance:\n";
+        diffRefl->print();
+        std::cout << "Transmittance:\n";
+        tran->print();
         std::cout << "--------------------\n";
     }
 
@@ -105,6 +105,8 @@ protected:
     std::string id;
     bool twoSided, needLS;
     SurfaceType type;
-    Vector3d specRefl, diffRefl, tran; // specular & diffuse reflectance, transmittance
+    Texture* specRefl;
+    Texture* diffRefl;
+    Texture* tran;
     double intIor, extIor, alpha;
 };

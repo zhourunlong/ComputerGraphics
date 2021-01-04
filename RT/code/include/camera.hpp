@@ -10,35 +10,40 @@ public:
         center = Vector3d::ZERO;
         target = Vector3d(0, 0, 1);
         up = Vector3d(0, 1, 0);
+        fovAxis = "x";
     }
 
-    void setAngle(const double &_angle) {angle = _angle;}
+    inline void setAngle(const double &_angle) {angle = _angle;}
 
-    Vector3d getCenter() {return center;}
+    inline void setFovAxis(const std::string &_foxAxis) {fovAxis = _foxAxis;}
 
-    void setCenter(const Vector3d &_center) {center = _center;}
+    inline Vector3d getCenter() {return center;}
 
-    void setTarget(const Vector3d &_target) {target = _target;}
+    inline void setCenter(const Vector3d &_center) {center = _center;}
 
-    void setUp(const Vector3d &_up) {up = _up;}
+    inline void setTarget(const Vector3d &_target) {target = _target;}
 
-    void setWidth(const int &_width) {width = _width;}
+    inline void setUp(const Vector3d &_up) {up = _up;}
 
-    void setHeight(const int &_height) {height = _height;}
+    inline void setWidth(const int &_width) {width = _width;}
+    inline int getWidth() {return width;}
 
-    void finish() {
+    inline void setHeight(const int &_height) {height = _height;}
+    inline int getHeight() {return height;}
+
+    inline void finish() {
         direction = (target - center).normalized();
         up = (up - center).normalized();
         horizontal = Vector3d::cross(direction, up);
     }
 
-    Ray generateRay(const Vector2d &point) {
+    inline Ray generateRay(const Vector2d &point) {
         Vector3d dir;
-        if (width >= height)
+        if (fovAxis == "x")
             dir = tan(angle / 2) * (point.x() / height * 2 - 1.0 * width / height) * horizontal
                 + tan(angle / 2) * (point.y() / height * 2 - 1) * up
                 + direction;
-        else
+        else if (fovAxis == "y")
             dir = tan(angle / 2) * (point.y() / width * 2 - 1.0 * height / width) * up
                 + tan(angle / 2) * (point.x() / width * 2 - 1) * horizontal
                 + direction;
@@ -46,11 +51,7 @@ public:
         return Ray(this->center, dir.normalized());
     }
 
-    int getWidth() {return width;}
-
-    int getHeight() {return height;}
-
-    void print() {
+    inline void print() {
         std::cout << "===== Camera =====\n";
         std::cout << "center: " << center << "\n";
         std::cout << "direction: " << direction << "\n";
@@ -65,4 +66,5 @@ protected:
     Vector3d center, direction, target, up, horizontal;
     int width, height;
     double angle;
+    std::string fovAxis;
 };

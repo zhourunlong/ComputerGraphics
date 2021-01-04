@@ -9,7 +9,7 @@ public:
     inline Vector3d getColor(const Vector3d &wo, const Vector3d &wi,
         const Hit &hit) override {
 
-        return diffRefl / M_PI;
+        return diffRefl->albedo(hit.getTexCoor()) / M_PI;
     }
 
     inline void sampleBSDF(const Vector3d &wo, Vector3d &wi,
@@ -24,6 +24,6 @@ public:
         // pdf = t.z() / M_PI;
         // color = diffRefl / M_PI;
         // f = color / pdf;
-        f = diffRefl / t.z();
+        f = diffRefl->albedo(hit.getTexCoor()) / t.z();
     }
 };

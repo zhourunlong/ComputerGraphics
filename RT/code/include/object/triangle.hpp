@@ -8,20 +8,20 @@ using namespace std;
 class Triangle: public Object3D {
 
 public:
-	Triangle() = delete;
+    Triangle() = delete;
 
     // a b c are three vertex positions of the triangle
     inline Triangle(const Vector3d& a, const Vector3d& b, const Vector3d& c)
         : a(a), b(b), c(c) {
         objType = TRIANGLE;
         calc();
-	}
+    }
 
-	inline Triangle(const Vector3d& a, const Vector3d& b, const Vector3d& c, Material* m)
+    inline Triangle(const Vector3d& a, const Vector3d& b, const Vector3d& c, Material* m)
         : Object3D(m), a(a), b(b), c(c) {
         objType = TRIANGLE;
         calc();
-	}
+    }
 
     inline void calc() {
         normal = Vector3d::cross(b - a, c - a);
@@ -67,7 +67,7 @@ public:
 
     inline void disableVertexNormal() {vertexNormal = false;}
 
-	inline bool intersect(const Ray& r,  Hit& h, const double &tmin, const bool &testLs = false) override {
+    inline bool intersect(const Ray& r,  Hit& h, const double &tmin, const bool &testLs = false) override {
         Vector3d p = r.getOrigin(), v = r.getDirection();
 
         // parallel 
@@ -92,15 +92,20 @@ public:
                 else return false;
             Vector3d realNormal =
                 vertexNormal ? ((alpha * va + beta * vb + (size - alpha - beta) * vc) / size).normalized() : normal;
+            Vector2d texCoor = (alpha * ta + beta * tb + (size - alpha - beta) * tc) / size;
+            //if (texCoor.x() < 0) {
+                //std::cerr << "hit " << alpha/size << " " << beta/size << "\n";
+              //  std::cerr << ta << tb << tc << "\n";
+            //}
             if (Vector3d::dot(v, normal) < 0)
-                h.set(t, this, realNormal, true);
+                h.set(t, this, realNormal, texCoor, true);
             else 
-                h.set(t, this, -realNormal, false);
+                h.set(t, this, -realNormal, texCoor, false);
             return true;
         }
 
         return false;
-	}
+    }
 
     inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, Sampler* sampler) override {
         if (Vector3d::dot(normal, x - a) <= 0) return false;
@@ -124,7 +129,7 @@ public:
             std::cout << "emmision: " << emmision << "\n";
         std::cout << "--------------------\n";
     }
-	
+
 protected:
     bool vertexNormal = false, textureCoordinate = false;
     Vector3d normal, a, b, c, va, vb, vc;
