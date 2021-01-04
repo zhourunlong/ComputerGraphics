@@ -9,45 +9,69 @@ public:
         Fdr = -1;
     }
 
-    inline Vector3d getColor(const Vector3d &wo, const Vector3d &wi,
+    inline Vector3d getColor(const Vector3d &woo, const Vector3d &wii,
         const Hit &hit) override {
         
-        Vector3d n = hit.getNormal();
-        double eta = intIor / extIor, cost = Vector3d::dot(wi, n);
-        double sint = sqrt(1 - cost * cost) / eta;
+        Vector3d n = hit.getNormal(), x, y;
+        computeBasis(n, x, y);
+        Vector3d wo(Vector3d::dot(woo, x),
+                    Vector3d::dot(woo, y),
+                    Vector3d::dot(woo, n)),
+                 wi(Vector3d::dot(wii, x),
+                    Vector3d::dot(wii, y),
+                    Vector3d::dot(wii, n));
+        double eta = intIor / extIor;
+        double sint = sqrt(1 - wi.z() * wi.z()) / eta;
         if (sint >= 1) return Vector3d::ZERO;
-        double tmp;
-        double T = (1 - Fresnel(Vector3d::dot(wo, n), tmp, eta))
+        double cost = sqrt(1 - sint * sint), tmp;
+        double T = (1 - Fresnel(abs(wo.z()), tmp, eta))
                  * (1 - Fresnel(cost, tmp, eta));
         if (Fdr == -1) computeFdr();
-        return T * diffRefl / M_PI / (1 - diffRefl / M_PI * Fdr)
-             / (eta * eta);
-        
+        Vector3d diff = T * diffRefl / M_PI / (1 - diffRefl / M_PI * Fdr)
+                      / (eta * eta);
+        Vector3d wm = (wo + wi).normalized();
+        Vector3d spec = diffRefl * GGX_D(wm, alpha)
+                      * Fresnel(Vector3d::dot(wo, wm), tmp, eta)
+                      * Smith_G(wo, wi, wm, alpha)
+                      / (4 * wo.z() * wi.z());
+        //std::cerr << "diff = " << diff << "\nspec = " << spec << "\n";
+        return diff + spec;
         // https://hal.inria.fr/hal-01386157/document
+        // https://zhuanlan.zhihu.com/p/20119162
     }
 
-    inline void sampleBSDF(const Vector3d &wo, Vector3d &wi,
+    inline void sampleBSDF(const Vector3d &woo, Vector3d &wii,
         const Hit &hit, Vector3d &f, Sampler* sampler, bool &lastDiffuse)
         override {
 
-        Vector3d n = hit.getNormal();
-        double cosi = Vector3d::dot(wo, n), cost;
-        double r = Fresnel(cosi, cost, intIor / extIor);
+        lastDiffuse = true;
 
-        if (r == 1 || sampler->sampleDouble() < r) {
-            lastDiffuse = false;
-            wi = 2 * cosi * n - wo;
-            f = specRefl / cosi;
+        Vector3d n = hit.getNormal(), x, y;
+        computeBasis(n, x, y);
+        Vector3d wo(Vector3d::dot(woo, x),
+                    Vector3d::dot(woo, y),
+                    Vector3d::dot(woo, n)),
+                 wm, wi;
+        if (sampler->sampleDouble() < 0.5) {
+            wm = GgxVndf(wo, alpha,
+                         sampler->sampleDouble(),
+                         sampler->sampleDouble());
+            wi = 2 * Vector3d::dot(wm, wo) - wo;
+            // pdf1
         } else {
-            lastDiffuse = true;
-            Vector3d z = hit.getNormal(), x, y;
-            computeBasis(z, x, y);
-            Vector3d t = sampler->sampleHemiSphereCos();
-            wi = t.x() * x + t.y() * y + t.z() * z;
-            // pdf = t.z() / M_PI;
-            // f = color / pdf; 
-            f = M_PI / t.z() * getColor(wo, wi, hit);
+            Vector3d wi = sampler->sampleHemiSphereCos();
+            if (wo.z() < 0)
+                wi = Vector3d(wi.x(), wi.y(), -wi.z());
+            wm = (wo + wi).normalized(); 
+            // pdf2 = wi.z() / M_PI;
         }
+        wii = wi.x() * x + wi.y() * y + wi.z() * n;
+        double pdf1 = Smith_G1(wi, wm, alpha)
+                    * GGX_D(wm, alpha) * abs(Vector3d::dot(wo, wm))
+                    / (4 * abs(Vector3d::dot(wi, wm)) * abs(wo.z())),
+               pdf2 = abs(wi.z()) / M_PI;
+		double pdf = (pdf1 + pdf2) / 2;
+        f = getColor(woo, wii, hit) / pdf;
     }
 
 protected:

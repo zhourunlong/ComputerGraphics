@@ -275,8 +275,7 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
                         m->setIntIor(1.49);
                         m->setExtIor(1.000277);
                     } else if (val == "roughplastic") {
-                        //m = new RoughPlastic();
-                        m = new Plastic();
+                        m = new RoughPlastic();
                         m->setType(Material::ROUGHPLASTIC);
                         m->setDiffRefl(Vector3d(0.5));
                         m->setSpecRefl(Vector3d(1));

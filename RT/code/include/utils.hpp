@@ -30,3 +30,68 @@ inline void computeBasis(const Vector3d &z, Vector3d &x, Vector3d &y) {
         : Vector3d(1, 0, 0), z).normalized();
     y = Vector3d::cross(z, x);
 }
+
+inline double tanTheta(const double &cost) {
+    return sqrt(1 - cost * cost) / cost;
+}
+
+inline double tanTheta2(const double &cost) {
+    return 1 / cost * cost - 1;
+}
+
+// https://zhuanlan.zhihu.com/p/20119162
+inline double GGX_D(const Vector3d &wm, const double &alpha) {
+    double tant2 = tanTheta2(wm.z());
+	double cost2 = wm.z() * wm.z();
+
+	double root = alpha / (cost2 * (alpha * alpha + tant2));
+
+	return 1 / M_PI * (root * root);
+}
+inline double Smith_G1(const Vector3d &v, Vector3d wm,
+    const double &alpha) {
+
+    if (wm.z() < 0) wm = -wm;
+
+    double tant = abs(tanTheta(v.z()));
+
+    if (tant == 0.0) return 1.0;
+
+    if (Vector3d::dot(v, wm) * v.z() <= 0) return 0.0;
+
+    double root = alpha * tant;
+    return 2.0 / (1 + sqrt(1 + root * root));
+}
+
+inline double Smith_G(const Vector3d &wo, const Vector3d &wi,
+    const Vector3d &wm, const double &alpha) {
+
+    return Smith_G1(wo, wm, alpha) * Smith_G1(wi, wm, alpha);
+}
+
+// https://schuttejoe.github.io/post/ggximportancesamplingpart2/
+Vector3d GgxVndf(Vector3d wo, const double &roughness,
+    const double &u1, const double &u2) {
+        
+    double ttt = 1;
+    if (wo.z() < 0) {
+        wo = Vector3d(wo.x(), wo.y(), -wo.z());
+        ttt = -1;
+    }
+    Vector3d v = Vector3d(wo.x() * roughness,
+                          wo.y() * roughness,
+                          wo.z()).normalized(),
+             t1, t2;
+    computeBasis(v, t1, t2);
+    double a = 1.0f / (1.0f + v.z());
+    double r = sqrtf(u1);
+    double phi = (u2 < a) ? (u2 / a) * M_PI 
+                         : M_PI + (u2 - a) / (1.0f - a) * M_PI;
+    double p1 = r * cos(phi);
+    double p2 = r * sin(phi) * ((u2 < a) ? 1.0f : v.z());
+    Vector3d n = p1 * t1 + p2 * t2
+               + sqrt(std::max(0.0, 1.0 - p1 * p1 - p2 * p2)) * v;
+    return Vector3d(roughness * n.x(),
+                    roughness * n.y(),
+                    std::max(0.0, n.z()) * ttt).normalized();
+}

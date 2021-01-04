@@ -16,6 +16,7 @@ public:
         double eta = intIor / extIor, cost = Vector3d::dot(wi, n);
         double sint = sqrt(1 - cost * cost) / eta;
         if (sint >= 1) return Vector3d::ZERO;
+        cost = sqrt(1 - sint * sint);
         double tmp;
         double T = (1 - Fresnel(Vector3d::dot(wo, n), tmp, eta))
                  * (1 - Fresnel(cost, tmp, eta));
@@ -40,10 +41,10 @@ public:
             f = specRefl / cosi;
         } else {
             lastDiffuse = true;
-            Vector3d z = hit.getNormal(), x, y;
-            computeBasis(z, x, y);
+            Vector3d x, y;
+            computeBasis(n, x, y);
             Vector3d t = sampler->sampleHemiSphereCos();
-            wi = t.x() * x + t.y() * y + t.z() * z;
+            wi = t.x() * x + t.y() * y + t.z() * n;
             // pdf = t.z() / M_PI;
             // f = color / pdf; 
             f = M_PI / t.z() * getColor(wo, wi, hit);

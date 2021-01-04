@@ -10,7 +10,7 @@
 			<lookat origin="50, 52, 295.6" target="50, 51.957427, 294.600907" up="0, 0.999093, -0.042573"/>
 		</transform>
 		<sampler type="independent">
-			<integer name="sample_count" value="1000"/>
+			<integer name="sample_count" value="10000"/>
 		</sampler>
 		<film type="hdrfilm">
 			<integer name="width" value="1024"/>
