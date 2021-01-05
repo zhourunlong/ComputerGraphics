@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
     filmGamma = parser.getGamma();
 
     fprintf(stderr, "started rendering\n");
-    #pragma omp parallel for collapse(1) schedule(dynamic, 1) num_threads(60)
+    #pragma omp parallel for collapse(1) schedule(dynamic, 1) num_threads(90)
     for (int y = 0; y < h; ++y) {
     //for (int y = 340; y < 342; ++y) {
         unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
