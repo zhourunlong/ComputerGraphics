@@ -116,8 +116,8 @@ public:
                  py((b - a).y(), (c - a).y()),
                  pz((b - a).z(), (c - a).z());
         px = m * px; py = m * py; pz = m * pz;
-        pu = Vector3d(px.x(), py.x(), pz.x());
-        pv = Vector3d(px.y(), py.y(), pz.y());
+        pu = Vector3d(px.x(), py.x(), pz.x()).normalized();
+        pv = Vector3d(px.y(), py.y(), pz.y()).normalized();
     }
 
     inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, Sampler* sampler) override {

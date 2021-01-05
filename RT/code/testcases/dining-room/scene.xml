@@ -61,7 +61,7 @@
 	<bsdf type="twosided" id="Artwork" >
 		<bsdf type="diffuse" >
 			<texture name="reflectance" type="bitmap" >
-				<string name="filename" value="textures/picture3.jpg" />
+				<string name="filename" value="testcases/dining-room/textures/picture3.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -74,7 +74,7 @@
 	<bsdf type="twosided" id="FloorTiles" >
 		<bsdf type="diffuse" >
 			<texture name="reflectance" type="bitmap" >
-				<string name="filename" value="textures/Tiles.jpg" />
+				<string name="filename" value="testcases/dining-room/textures/Tiles.jpg" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>
@@ -132,7 +132,7 @@
 			<float name="extIOR" value="1" />
 			<boolean name="nonlinear" value="true" />
 			<texture name="diffuseReflectance" type="bitmap" >
-				<string name="filename" value="textures/Teacup.png" />
+				<string name="filename" value="testcases/dining-room/textures/Teacup.png" />
 				<string name="filterType" value="trilinear" />
 			</texture>
 		</bsdf>

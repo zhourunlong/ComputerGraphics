@@ -2,11 +2,11 @@
 
 <scene version="0.5.0">
 	<integrator type="path">
-		<integer name="maxDepth" value="16"/>
+		<integer name="maxDepth" value="64"/>
 	</integrator>
 	<sensor type="perspective">
 		<float name="fov" value="28.7993"/>
-        <string name="fovAxis" value="x"/>
+        <string name="fovAxis" value="y"/>
 		<transform name="to_world">
 			<lookat origin="50, 52, 295.6" target="50, 51.957427, 294.600907" up="0, 0.999093, -0.042573"/>
 		</transform>
@@ -49,7 +49,7 @@
 			<translate value="50, 40.8, -100000"/>
 		</transform>
         <bsdf type="conductor">
-			<string name="material" value="Mo"/>
+			<string name="material" value="none"/>
 			<rgb name="specular_reflectance" value="0.999, 0.999, 0.999"/>
 		</bsdf>
 	</shape>
@@ -90,7 +90,7 @@
 			<translate value="27, 16.5, 47"/>
 		</transform>
 		<bsdf type="conductor">
-			<string name="material" value="Mo"/>
+			<string name="material" value="none"/>
 			<rgb name="specular_reflectance" value="0.999, 0.999, 0.999"/>
 		</bsdf>
 	</shape>

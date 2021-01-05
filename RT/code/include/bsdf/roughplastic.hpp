@@ -71,6 +71,7 @@ public:
                pdf2 = abs(wi.z()) / M_PI;
 		double pdf = (pdf1 + pdf2) / 2;
         f = getColor(woo, wii, hit) / pdf;
+        // http://jcgt.org/published/0007/04/01/paper.pdf
     }
 
 protected:

@@ -25,6 +25,15 @@ inline double Fresnel(const double &cosi, double &cost, const double &ior) {
     return 0.5 * (r2 * r2 + r1 * r1);
 }
 
+inline Vector3d FresnelConductor(const double &cos,
+    const Vector3d &eta, const Vector3d &k) {
+    
+    Vector3d t = eta * eta + k * k, r = eta * cos;
+    Vector3d Rs = Vector3d(1) - 4 * r / (t + 2 * r + Vector3d(cos * cos)),
+             Rp = Vector3d(1) - 4 * r / (t * cos * cos + 2 * r + Vector3d(1));
+    return 0.5 * (Rs + Rp);
+}
+
 inline void computeBasis(const Vector3d &z, Vector3d &x, Vector3d &y) {
     x = Vector3d::cross(fabs(z.x()) > 0.1 ? Vector3d(0, 1, 0)
         : Vector3d(1, 0, 0), z).normalized();
@@ -47,6 +56,7 @@ inline double GGX_D(const Vector3d &wm, const double &alpha) {
 
 	return root * root / M_PI;
 }
+
 inline double Smith_G1(const Vector3d &v, Vector3d wm,
     const double &alpha) {
 

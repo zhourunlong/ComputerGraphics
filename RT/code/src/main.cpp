@@ -1,4 +1,3 @@
-
 #include <bits/stdc++.h>
 
 #include "parser.hpp"
@@ -30,10 +29,7 @@ inline Vector3d lightSampling(Material* m, const Vector3d &x,
         double cosTh = Vector3d::dot(hit.getShadeNormal(), z);
         if (cosTh <= 0)
             continue;
-        //std::cerr << "getcolor:\n";
-        //m->print();
         Vector3d color = m->getColor(wo, z, hit);
-        //std::cerr << "getcolor!\n";
         if (color.length() < 1e-9) continue;
         double cosThP = Vector3d::dot(ny, -z);
         double dist = (x - y).length();
@@ -56,7 +52,7 @@ Vector3d rayTracing(Ray r, Sampler* sampler) {
         Hit hit = Hit();
         bool isIntersect = baseGroup->intersect(r, hit, 1e-9);
         if (!isIntersect) break;
-        //std::cerr << r << "\n";
+
         Object3D *o = hit.getObject();
         Material *m = o->getMaterial();
         bool into = hit.getInto();
@@ -69,14 +65,10 @@ Vector3d rayTracing(Ray r, Sampler* sampler) {
         Vector3d x = r.pointAtParameter(hit.getT());
         if (m->needLightSampling())
             res += f * lightSampling(m, x, hit, -r.getDirection(), sampler);
-        
-        //std::cerr << "res = " << res << "\n";
 
         Vector3d d, g;
         m->sampleBSDF(-r.getDirection(), d, hit, g, sampler, lastDiffuse);
         f = abs(Vector3d::dot(d, hit.getShadeNormal())) * g * f;
-
-        //std::cerr << abs(Vector3d::dot(d, hit.getNormal())) << " " << g << " " << f << "\n";
 
         if (f.length() < 1e-9) break;
         double P = max(max(f.x(), f.y()), f.z());
@@ -109,11 +101,11 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "started rendering\n");
     #pragma omp parallel for collapse(1) schedule(dynamic, 1) num_threads(60)
     for (int y = 0; y < h; ++y) {
-    //for (int y = 308; y < 310; ++y) {
+    //for (int y = 340; y < 342; ++y) {
         unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
         Sampler* sampler = new Sampler(Xi);
         for (int x = 0; x < w; ++x) {
-        //for (int x = 620; x < 622; ++x) {
+        //for (int x = 550; x < 552; ++x) {
             Vector3d finalColor(0);
             for (int sy = -1; sy < 2; sy += 2)
                 for (int sx = -1; sx < 2; sx += 2) {
@@ -127,8 +119,7 @@ int main(int argc, char *argv[]) {
                     }
                     finalColor = finalColor + Vector3d(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
                 }
-            //if (finalColor.length() < 1e-1)
-            //    std::cerr << x << " " << y << " " << finalColor << "\n";
+            //std::cerr << x << " " << y << " " << finalColor << "\n";
             renderedImg.SetPixel(x, y, gammaCorrection(finalColor, filmGamma));
         }
         delete sampler;
@@ -140,7 +131,7 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "finished rendering, time = %5.2lf sec\n", omp_get_wtime() - timeStamp);
 
 /*
-    int x = 621, y = 301;
+    int x = 149, y = 239;
     unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
     Sampler* sampler = new Sampler(Xi);
     Ray camRay = camera->generateRay(Vector2d(x, y));

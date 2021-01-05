@@ -17,6 +17,7 @@ public:
     enum SurfaceType {
         DIFFUSE,
         CONDUCTOR,
+        ROUGHCONDUCTOR,
         DIELECTRIC,
         PLASTIC,
         ROUGHPLASTIC
@@ -59,6 +60,12 @@ public:
 
     inline bool needLightSampling() {return needLS;}
 
+    inline void setEta(const Vector3d &_eta) {eta = _eta;}
+
+    inline void setK(const Vector3d &_k) {k = _k;}
+
+    inline void setExtEta(const double &_extEta) {extEta = _extEta;}
+
     inline virtual Vector3d getColor(const Vector3d &wo,
         const Vector3d &wi, Hit &hit) {return Vector3d::ZERO;}
 
@@ -94,12 +101,18 @@ public:
                 std::cout << "alpha = " << alpha << "\n";
                 break;
         }
-        std::cout << "Specular Reflectance:\n";
-        specRefl->print();
-        std::cout << "Diffuse Reflectance:\n";
-        diffRefl->print();
-        std::cout << "Transmittance:\n";
-        tran->print();
+        if (specRefl) {
+            std::cout << "Specular Reflectance:\n";
+            specRefl->print();
+        }
+        if (diffRefl) {
+            std::cout << "Diffuse Reflectance:\n";
+            diffRefl->print();
+        }
+        if (tran) {
+            std::cout << "Transmittance:\n";
+            tran->print();
+        }
         std::cout << "--------------------\n";
     }
 
@@ -107,8 +120,9 @@ protected:
     std::string id;
     bool twoSided, needLS;
     SurfaceType type;
-    Texture* specRefl;
-    Texture* diffRefl;
-    Texture* tran;
-    double intIor, extIor, alpha;
+    Texture* specRefl = NULL;
+    Texture* diffRefl = NULL;
+    Texture* tran = NULL;
+    double intIor, extIor, alpha, extEta;
+    Vector3d eta, k;
 };

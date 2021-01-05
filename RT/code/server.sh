@@ -5,8 +5,7 @@ cp sources.list /etc/apt/sources.list
 apt update
 apt upgrade
 apt install -y clang-9 libc++-9-dev libc++abi-9-dev cmake ninja-build
-apt install -y libz-dev libpng-dev libjpeg-dev libxrandr-dev libxinerama-dev libxcursor-dev
-apt install -y python3-dev python3-distutils python3-setuptools
+apt install -y libz-dev libpng-dev libjpeg-dev
 
 if [[ ! -d build ]]; then
     mkdir -p build

@@ -19,6 +19,7 @@ public:
         // color = specRefl; 
         // f = color / pdf / cost;
         specRefl->albedo(hit);
-        f = hit.getColor() / abs(cost);
+        Vector3d Fres = FresnelConductor(cost, eta, k);
+        f = Fres * hit.getColor() / abs(cost);
     }
 };

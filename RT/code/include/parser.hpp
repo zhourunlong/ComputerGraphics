@@ -95,7 +95,9 @@ public:
 
     Parser(const char* fname) {
         fprintf(stderr, "started parsing\n");
-        Material* m = new Material();
+        Material* m = new Diffuse();
+        m->setType(Material::DIFFUSE);
+        m->setDiffRefl(tex05);
         materialMap[""] = m;
         pugi::xml_document doc;
         if (!doc.load_file(fname)) {
@@ -105,7 +107,7 @@ public:
         //dfs(doc, 0);
         lights.clear();
         parse(doc);
-        setMatToAll();
+        concludeAllObjects();
         checkLights();
         group->finish();
         fprintf(stderr, "finished parsing\n");
@@ -146,7 +148,7 @@ private:
     void parseMesh(const pugi::xml_node &node, Mesh* &m);
     void parseShape(const pugi::xml_node &node);
     void parse(const pugi::xml_node &node);
-    void setMatToAll() {
+    void concludeAllObjects() {
         int n = group->getGroupSize();
         for (int i = 0; i < n; ++i) {
             Object3D* obj = group->getObj(i);
@@ -182,6 +184,8 @@ private:
     std::unordered_map <std::string, ClmbsImg_Data*> imageMap;
     Group *group = new Group();
     std::vector <Object3D*> lights;
+    Texture* tex05 = new Texture(Vector3d(0.5));
+    Texture* tex1 = new Texture(Vector3d(1));
 };
 
 void Parser::parseSensor(const pugi::xml_node &node) {
@@ -255,6 +259,10 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
   if (pass == 1) {
     if (nname == "rgb") {
         std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
+        if (result.first == "eta")
+            m->setEta(result.second);
+        else if (result.first == "k")
+            m->setK(result.second);
         Texture* tex = new Texture(result.second);
         if (bump && obump) {
             Bump* nbump = new Bump(obump);
@@ -287,8 +295,18 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
             m->setExtIor(result.second);
         else if (result.first == "alpha")
             m->setAlpha(result.second);
+        else if (result.first == "exteta")
+            m->setExtEta(result.second);
         return;
     }
+    if (nname == "string") {
+        std::pair<std::string, std::string> result = parseString(node.first_attribute());
+        if (result.first == "material" && deformat(result.second) != "none") {
+            std::cout << "[X] material name is not supported now\n";
+            std::cout << "[X] check https://pixelandpoly.com/ior.html and https://refractiveindex.info/\n";
+        }
+    }
+    
     if (nname == "texture") {
         std::pair<std::string, std::string> result = parseString(node.first_attribute());
         if (result.second == "bitmap") {
@@ -331,34 +349,43 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
                 if (pass == 1) {
                     if (val == "twosided") m->setTwoSided(true);
                 } else if (pass == 0) {
-                    if (val == "diffuse") {
+                    if (val == "diffuse" || val == "roughdiffuse") {
                         m = new Diffuse();
                         m->setType(Material::DIFFUSE);
-                        m->setDiffRefl(new Texture(Vector3d(0.5)));
-                    } else if (val == "conductor" || val == "roughconductor") {
+                        m->setDiffRefl(tex05);
+                    } else if (val == "conductor") {
                         m = new Conductor();
                         m->setType(Material::CONDUCTOR);
-                        m->setSpecRefl(new Texture(Vector3d(1)));
+                        m->setSpecRefl(tex1);
+                        m->setExtEta(1);
+                        m->setEta(Vector3d(0));
+                        m->setK(Vector3d(1));
+                    } else if (val == "roughconductor") {
+                        m = new RoughConductor();
+                        m->setType(Material::ROUGHCONDUCTOR);
+                        m->setSpecRefl(tex1);
+                        m->setAlpha(0.1);
+                        m->setExtEta(1);
                     } else if (val == "dielectric" || val == "thindielectric") {
                         m = new Dielectric();
                         m->setType(Material::DIELECTRIC);
-                        m->setSpecRefl(new Texture(Vector3d(1)));
-                        m->setTran(new Texture(Vector3d(1)));
+                        m->setSpecRefl(tex1);
+                        m->setTran(tex1);
                         m->setTwoSided(true);
                         m->setIntIor(1.5046);
                         m->setExtIor(1.000277);
                     } else if (val == "plastic") {
                         m = new Plastic();
                         m->setType(Material::PLASTIC);
-                        m->setDiffRefl(new Texture(Vector3d(0.5)));
-                        m->setSpecRefl(new Texture(Vector3d(1)));
+                        m->setDiffRefl(tex05);
+                        m->setSpecRefl(tex1);
                         m->setIntIor(1.49);
                         m->setExtIor(1.000277);
                     } else if (val == "roughplastic") {
                         m = new RoughPlastic();
                         m->setType(Material::ROUGHPLASTIC);
-                        m->setDiffRefl(new Texture(Vector3d(0.5)));
-                        m->setSpecRefl(new Texture(Vector3d(1)));
+                        m->setDiffRefl(tex05);
+                        m->setSpecRefl(tex1);
                         m->setIntIor(1.49);
                         m->setExtIor(1.000277);
                         m->setAlpha(0.1);

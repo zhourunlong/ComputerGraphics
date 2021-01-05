@@ -22,10 +22,8 @@ public:
         std::cout << "data = " << &data << "\n";
     }
 
-    inline unsigned char getPixel(int x, int y, int z) {
-        x = (x % w + w) % w;
-        y = (y % h + h) % h;
-        return data[(y * w + x) * bpp + z];
+    inline unsigned char getPixel(int x, int y) {
+        return data[(y * w + x) * bpp];
     }
 
     unsigned int w; //Image width
@@ -92,7 +90,7 @@ ClmbsImg_Data ClmbsImg_Load(const char* file) {
     ClmbsImg_Data err = ClmbsImg_Data();
     FILE* fp = fopen(file, "rb");
     if (fp == NULL) {
-        std::cerr << "cannot open texture image file!!!\n";
+        std::cout << "[X] cannot open texture image file!!!\n";
         return err;
     }
 
@@ -111,7 +109,7 @@ ClmbsImg_Data ClmbsImg_Load(const char* file) {
     //if (ClmbsImg_IsTGA(file))
     //    return ClmbsImg_LoadTGA(file);
 
-    std::cerr << "cannot determine format of " << file << "!!!\n";
+    std::cout << "[X] cannot determine format of " << file << "!!!\n";
 
     return err;
 }
@@ -480,7 +478,7 @@ bool ClmbsImg_IsJPG(const char* file)
         magic[1] == 'x' &&
         magic[2] == 'i' &&
         magic[3] == 'f')
-        std::cerr << "Only support JFIF compression of JPG, manually convert it!!!\n";
+        std::cerr << "[X] only support JFIF compression of JPG, manually convert it\n";
 
     if (magic[0] == 'J' &&
         magic[1] == 'F' &&

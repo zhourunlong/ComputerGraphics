@@ -22,28 +22,24 @@ public:
     }
 
     inline void albedo(Hit &hit) override {
+        nestedBitmap->albedo(hit);
         int w = bitmap->w,
             h = bitmap->h;
         Vector2d texCoor = hit.getTexCoor();
         int x = (int(texCoor.x() * w) % w + w) % w,
             y = (int(texCoor.y() * h) % h + h) % h;
-        if (x == 0 || x == w - 1 || y == 0 || y == h - 1) {
-            nestedBitmap->albedo(hit);
+        if (x == 0 || x == w - 1 || y == 0 || y == h - 1)
             return;
-        }
-        double bu = (bitmap->getPixel(x + 1, y, 0)
-                  - bitmap->getPixel(x - 1, y, 0)) / 2.0,
-               bv = (bitmap->getPixel(x, y + 1, 0)
-                  - bitmap->getPixel(x, y - 1, 0)) / 2.0;
-        Vector3d pu, pv, n;
+        double bu = (bitmap->getPixel(x + 1, y)
+                  - bitmap->getPixel(x - 1, y)) / 2.0 / 256,
+               bv = (bitmap->getPixel(x, y + 1)
+                  - bitmap->getPixel(x, y - 1)) / 2.0 / 256;
+        Vector3d pu, pv, n, shadeN = hit.getShadeNormal();
         hit.getTangent(pu, pv);
-        n = hit.getShadeNormal()
-          + Vector3d::cross(hit.getShadeNormal(), bu * pv - bv * pu);
-        //std::cerr << "bubv = " << bu << " " << bv << "\n";
-        //std::cerr << "pupv = " << pu << " " << pv << "\n";
-        //std::cerr << hit.getShadeNormal() << " " << n.normalized() << "\n";
-        hit.setShadeNormal(n.normalized());
-        nestedBitmap->albedo(hit);
+        n = (shadeN + Vector3d::cross(shadeN, bu * pv - bv * pu)).normalized();
+        if (Vector3d::dot(n, shadeN) < 0) n = -n;
+        hit.setShadeNormal(n);
+        // https://web.eecs.umich.edu/~sugih/courses/eecs487/lectures/26-BumpMap+ProcTex.pdf
     }
 
     inline void print() {
