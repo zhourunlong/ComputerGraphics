@@ -45,10 +45,17 @@ public:
         Vector3d trDirection = transformDirection(inv, r.getDirection());
         Ray tr(trSource, trDirection);
         bool inter = o->intersect(tr, h, tmin, testLs);
-        if (inter)
+        if (inter) {
+            Vector3d shadeN = h.getShadeNormal(), pu, pv;
+            h.getTangent(pu, pv);
             h.set(h.getT(), h.getObject(),
-                transformDirection(invTranspose, h.getNormal()).normalized(),
+                transformDirection(invTranspose, h.getGeoNormal()).normalized(),
                 h.getTexCoor(), h.getInto());
+            h.setShadeNormal(transformDirection(invTranspose, shadeN).normalized());
+            transformDirection(transform, pu);
+            transformDirection(transform, pv);
+            h.setTangent(pu, pv);
+        }
         return inter;
     }
 

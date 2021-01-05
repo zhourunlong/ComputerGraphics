@@ -19,7 +19,9 @@ public:
 
     Object3D* getObject() const;
 
-    Vector3d getNormal() const;
+    Vector3d getGeoNormal() const;
+    Vector3d getShadeNormal() const;
+    void setShadeNormal(const Vector3d &_n);
 
     bool getInto() const;
 
@@ -27,11 +29,17 @@ public:
 
     void set(double _t, Object3D* _o, const Vector3d &n,
         const Vector2d &_texCoor, const bool &_into);
+    
+    Vector3d getColor() const;
+    void setColor(const Vector3d &_color);
+
+    void getTangent(Vector3d &_pu, Vector3d &_pv);
+    void setTangent(const Vector3d &_pu, const Vector3d &_pv);
 
 private:
     double t;
     Object3D* o;
-    Vector3d normal;
+    Vector3d geoN, shadeN, color, pu, pv;
     Vector2d texCoor;
     bool into;
 };

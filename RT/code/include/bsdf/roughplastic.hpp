@@ -10,9 +10,9 @@ public:
     }
 
     inline Vector3d getColor(const Vector3d &woo, const Vector3d &wii,
-        const Hit &hit) override {
+        Hit &hit) override {
         
-        Vector3d n = hit.getNormal(), x, y;
+        Vector3d n = hit.getShadeNormal(), x, y;
         computeBasis(n, x, y);
         Vector3d wo(Vector3d::dot(woo, x),
                     Vector3d::dot(woo, y),
@@ -27,10 +27,12 @@ public:
         double T = (1 - Fresnel(abs(wo.z()), tmp, eta))
                  * (1 - Fresnel(cost, tmp, eta));
         if (Fdr == -1) computeFdr();
-        Vector3d color = diffRefl->albedo(hit.getTexCoor()) / M_PI;
+        diffRefl->albedo(hit);
+        Vector3d color = hit.getColor() / M_PI;
         Vector3d diff = T * color / (1 - color * Fdr) / (eta * eta);
         Vector3d wm = (wo + wi).normalized();
-        Vector3d spec = specRefl->albedo(hit.getTexCoor()) * GGX_D(wm, alpha)
+        specRefl->albedo(hit);
+        Vector3d spec = hit.getColor() * GGX_D(wm, alpha)
                       * Fresnel(Vector3d::dot(wo, wm), tmp, eta)
                       * Smith_G(wo, wi, wm, alpha)
                       / (4 * wo.z() * wi.z());
@@ -40,12 +42,12 @@ public:
     }
 
     inline void sampleBSDF(const Vector3d &woo, Vector3d &wii,
-        const Hit &hit, Vector3d &f, Sampler* sampler, bool &lastDiffuse)
+        Hit &hit, Vector3d &f, Sampler* sampler, bool &lastDiffuse)
         override {
 
         lastDiffuse = true;
 
-        Vector3d n = hit.getNormal(), x, y;
+        Vector3d n = hit.getShadeNormal(), x, y;
         computeBasis(n, x, y);
         Vector3d wo(Vector3d::dot(woo, x),
                     Vector3d::dot(woo, y),

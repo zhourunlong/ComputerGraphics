@@ -10,9 +10,9 @@ public:
     }
 
     inline Vector3d getColor(const Vector3d &wo, const Vector3d &wi,
-        const Hit &hit) override {
+        Hit &hit) override {
         
-        Vector3d n = hit.getNormal();
+        Vector3d n = hit.getShadeNormal();
         double eta = intIor / extIor, cost = Vector3d::dot(wi, n);
         double sint = sqrt(1 - cost * cost) / eta;
         if (sint >= 1) return Vector3d::ZERO;
@@ -21,24 +21,25 @@ public:
         double T = (1 - Fresnel(Vector3d::dot(wo, n), tmp, eta))
                  * (1 - Fresnel(cost, tmp, eta));
         if (Fdr == -1) computeFdr();
-        Vector3d color = diffRefl->albedo(hit.getTexCoor()) / M_PI;
+        diffRefl->albedo(hit);
+        Vector3d color = hit.getColor() / M_PI;
         return T * color / (1 - color * Fdr) / (eta * eta);
         
         // https://hal.inria.fr/hal-01386157/document
     }
 
     inline void sampleBSDF(const Vector3d &wo, Vector3d &wi,
-        const Hit &hit, Vector3d &f, Sampler* sampler, bool &lastDiffuse)
-        override {
+       Hit &hit, Vector3d &f, Sampler* sampler, bool &lastDiffuse) override {
 
-        Vector3d n = hit.getNormal();
+        Vector3d n = hit.getShadeNormal();
         double cosi = Vector3d::dot(wo, n), cost;
         double r = Fresnel(cosi, cost, intIor / extIor);
 
         if (r == 1 || sampler->sampleDouble() < r) {
             lastDiffuse = false;
             wi = 2 * cosi * n - wo;
-            f = specRefl->albedo(hit.getTexCoor()) / cosi;
+            specRefl->albedo(hit);
+            f = hit.getColor() / cosi;
         } else {
             lastDiffuse = true;
             Vector3d x, y;

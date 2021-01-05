@@ -4,6 +4,8 @@
 #include "pugi/pugixml.hpp"
 #include "bsdf/bsdf.h"
 #include "camera.hpp"
+#include "texture/bump.hpp"
+#include "texture/texture.h"
 #include "object/object3d.hpp"
 #include "object/group.hpp"
 #include "object/mesh.hpp"
@@ -11,7 +13,7 @@
 #include "object/triangle.hpp"
 #include "object/transform.hpp"
 #include "vecmath/vecmath.h"
-#include "ClmbsImg.hpp"
+#include "image/ClmbsImg.hpp"
 
 double degreeToRadian(const double &x) {return (M_PI * x) / 180.0;}
 
@@ -137,7 +139,7 @@ private:
 
     void parseSensor(const pugi::xml_node &node);
     void parseTexture(const pugi::xml_node &node, Texture* &tex);
-    void parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pass);
+    void parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pass, bool bump, Bump* &obump);
     void parseTransform(const pugi::xml_node &node, Transform* &tran);
     void parseSphere(const pugi::xml_node &node, Sphere* &sph);
     void parseTriangle(const pugi::xml_node &node, Triangle* &tri, const bool &isRoot);
@@ -227,49 +229,54 @@ void Parser::parseSensor(const pugi::xml_node &node) {
 }
 
 void Parser::parseTexture(const pugi::xml_node &node, Texture* &tex) {
+    std::string nname = node.name();
     std::pair<std::string, std::string> result = parseString(node.first_attribute());
     if (result.first == "filename") {
+        ClmbsImg_Data* img;
         if (imageMap.find(result.second) != imageMap.end())
-            tex->setFile(imageMap[result.second]);
+            img = imageMap[result.second];
         else {
-            ClmbsImg_Data* img = new ClmbsImg_Data(
+            img = new ClmbsImg_Data(
                 ClmbsImg_Load(result.second.c_str()));
-            //std::cerr << "-----\n";
-            //img->print();
             imageMap[result.second] = img;
-            tex->setFile(img);
-            //delete(img);
-            //imageMap[result.second]->print();
-            //std::cerr << "*****\n";
         }
-    }
-    if (result.first == "filtertype") {
-        std::string type = deformat(result.second);
-        if (type == "ewa")
-            tex->setFilterType(Texture::EWA);
-        else if (type == "trilinear")
-            tex->setFilterType(Texture::TRILINEAR);
-        else if (type == "nearest")
-            tex->setFilterType(Texture::NEAREST);
+        tex->setBitmap(img);
     }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
         parseTexture(child, tex);
 }
 
-void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pass) {
-    std::string nname = node.name();
+void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pass, bool bump, Bump* &obump) {
+    std::string nname = node.name(),
+                aname = node.first_attribute().name(),
+                val = node.first_attribute().value();
+    if (nname == "bsdf" && aname == "type" && val == "bumpmap")
+        bump = true;
   if (pass == 1) {
     if (nname == "rgb") {
         std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
-        Texture* rgb = new Texture(result.second);
-        if (result.first == "diffusereflectance"
-            || result.first == "reflectance")
-            
-            m->setDiffRefl(rgb);
-        else if (result.first == "specularreflectance")
-            m->setSpecRefl(rgb);
-        else if (endsWith(result.first, "transmittance"))
-            m->setTran(rgb);
+        Texture* tex = new Texture(result.second);
+        if (bump && obump) {
+            Bump* nbump = new Bump(obump);
+            nbump->setNestedBitmap(tex);
+            if (result.first == "diffusereflectance"
+                || result.first == "reflectance")
+                
+                m->setDiffRefl(nbump);
+            else if (result.first == "specularreflectance")
+                m->setSpecRefl(nbump);
+            else if (endsWith(result.first, "transmittance"))
+                m->setTran(nbump);
+        } else {
+            if (result.first == "diffusereflectance"
+                || result.first == "reflectance")
+                
+                m->setDiffRefl(tex);
+            else if (result.first == "specularreflectance")
+                m->setSpecRefl(tex);
+            else if (endsWith(result.first, "transmittance"))
+                m->setTran(tex);
+        }
         return;
     }
     if (nname == "double" || nname == "float") {
@@ -285,16 +292,35 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
     if (nname == "texture") {
         std::pair<std::string, std::string> result = parseString(node.first_attribute());
         if (result.second == "bitmap") {
-            Texture* tex = new Texture();
-            parseTexture(node, tex);
-            if (result.first == "diffusereflectance"
-                || result.first == "reflectance")
-                
-                m->setDiffRefl(tex);
-            else if (result.first == "specularreflectance")
-                m->setSpecRefl(tex);
-            else if (endsWith(result.first, "transmittance"))
-                m->setTran(tex);
+            if (result.first == "map") {
+                obump = new Bump();
+                Texture* tex = static_cast<Texture*>(obump);
+                parseTexture(node, tex);
+            } else {
+                Texture* tex = new Texture();
+                parseTexture(node, tex);
+                if (bump && obump) {
+                    Bump* nbump = new Bump(obump);
+                    nbump->setNestedBitmap(tex);
+                    if (result.first == "diffusereflectance"
+                        || result.first == "reflectance")
+                        
+                        m->setDiffRefl(nbump);
+                    else if (result.first == "specularreflectance")
+                        m->setSpecRefl(nbump);
+                    else if (endsWith(result.first, "transmittance"))
+                        m->setTran(nbump);
+                } else {
+                    if (result.first == "diffusereflectance"
+                        || result.first == "reflectance")
+                        
+                        m->setDiffRefl(tex);
+                    else if (result.first == "specularreflectance")
+                        m->setSpecRefl(tex);
+                    else if (endsWith(result.first, "transmittance"))
+                        m->setTran(tex);
+                }
+            }
         }
     }
   }
@@ -302,8 +328,9 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
         std::string aname = attr.name(), val = attr.value();
         if (nname == "bsdf") {
             if (aname == "type") {
-                if (pass == 1 && val == "twosided") m->setTwoSided(true);
-                else if (pass == 0) {
+                if (pass == 1) {
+                    if (val == "twosided") m->setTwoSided(true);
+                } else if (pass == 0) {
                     if (val == "diffuse") {
                         m = new Diffuse();
                         m->setType(Material::DIFFUSE);
@@ -342,7 +369,7 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
         }
     }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
-        parseBsdf(child, m, dep + 1, pass);
+        parseBsdf(child, m, dep + 1, pass, bump, obump);
     if (dep == 0 && pass == 1) {
         if (m->getId() == "")
             m->setId(genNextId());
@@ -433,8 +460,9 @@ void Parser::parseSphere(const pugi::xml_node &node, Sphere* &sph) {
     }
     if (nname == "bsdf") {
         Material *m = NULL;
-        parseBsdf(node, m, 0, 0);
-        parseBsdf(node, m, 0, 1);
+        Bump* obump = NULL;
+        parseBsdf(node, m, 0, 0, false, obump);
+        parseBsdf(node, m, 0, 1, false, obump);
         sph->setMatRef(m->getId());
         return;
     }
@@ -465,8 +493,9 @@ void Parser::parseTriangle(const pugi::xml_node &node, Triangle* &tri, const boo
     }
     if (nname == "bsdf") {
         Material *m = NULL;
-        parseBsdf(node, m, 0, 0);
-        parseBsdf(node, m, 0, 1);
+        Bump* obump = NULL;
+        parseBsdf(node, m, 0, 0, false, obump);
+        parseBsdf(node, m, 0, 1, false, obump);
         tri->setMatRef(m->getId());
         return;
     }
@@ -512,8 +541,9 @@ void Parser::parseMesh(const pugi::xml_node &node, Mesh* &mesh) {
     }
     if (nname == "bsdf") {
         Material *m = NULL;
-        parseBsdf(node, m, 0, 0);
-        parseBsdf(node, m, 0, 1);
+        Bump* obump = NULL;
+        parseBsdf(node, m, 0, 0, false, obump);
+        parseBsdf(node, m, 0, 1, false, obump);
         mesh->setMatRef(m->getId());
         return;
     }
@@ -572,8 +602,9 @@ void Parser::parse(const pugi::xml_node &node) {
     }
     if (nname == "bsdf") {
         Material *m = NULL;
-        parseBsdf(node, m, 0, 0);
-        parseBsdf(node, m, 0, 1);
+        Bump* obump = NULL;
+        parseBsdf(node, m, 0, 0, false, obump);
+        parseBsdf(node, m, 0, 1, false, obump);
         return;
     }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())

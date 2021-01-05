@@ -39,11 +39,11 @@ public:
 
     inline Ray generateRay(const Vector2d &point) {
         Vector3d dir;
-        if (fovAxis == "x")
+        if (fovAxis == "y")
             dir = tan(angle / 2) * (point.x() / height * 2 - 1.0 * width / height) * horizontal
                 + tan(angle / 2) * (point.y() / height * 2 - 1) * up
                 + direction;
-        else if (fovAxis == "y")
+        else if (fovAxis == "x")
             dir = tan(angle / 2) * (point.y() / width * 2 - 1.0 * height / width) * up
                 + tan(angle / 2) * (point.x() / width * 2 - 1) * horizontal
                 + direction;

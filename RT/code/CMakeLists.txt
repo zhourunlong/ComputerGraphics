@@ -15,9 +15,12 @@ SET(RT_INCLUDES
         include/hit.h
         include/ray.hpp
         include/utils.hpp
+        include/texture/texture.h
+        include/texture/texture.cpp
+        include/texture/bump.hpp
         include/bsdf/bsdf.h
-        include/image.hpp
-        include/ClmbsImg.hpp
+        include/image/image.hpp
+        include/image/ClmbsImg.hpp
         include/object/group.hpp
         include/object/mesh.hpp
         include/object/object3d.hpp

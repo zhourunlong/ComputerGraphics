@@ -2,7 +2,7 @@
 #include <bits/stdc++.h>
 
 #include "parser.hpp"
-#include "image.hpp"
+#include "image/image.hpp"
 #include "camera.hpp"
 #include "object/group.hpp"
 #include "bsdf/bsdf.h"
@@ -18,7 +18,7 @@ Group* baseGroup;
 std::vector <Object3D*> lights;
 
 inline Vector3d lightSampling(Material* m, const Vector3d &x,
-    const Hit& hit, const Vector3d &wo, Sampler* sampler) {
+    Hit& hit, const Vector3d &wo, Sampler* sampler) {
 
     Vector3d illum = Vector3d::ZERO;
     for (auto l: lights) {
@@ -27,13 +27,13 @@ inline Vector3d lightSampling(Material* m, const Vector3d &x,
         if (!l->getSample(x, y, ny, A, sampler))
             continue;
         Vector3d z = (y - x).normalized();
-        double cosTh = Vector3d::dot(hit.getNormal(), z);
+        double cosTh = Vector3d::dot(hit.getShadeNormal(), z);
         if (cosTh <= 0)
             continue;
-        //std::cerr << "ls\n";
-        //std::cerr << wo << " " << z << "\n";
+        //std::cerr << "getcolor:\n";
+        //m->print();
         Vector3d color = m->getColor(wo, z, hit);
-        //std::cerr << "color = " << color << "\n";
+        //std::cerr << "getcolor!\n";
         if (color.length() < 1e-9) continue;
         double cosThP = Vector3d::dot(ny, -z);
         double dist = (x - y).length();
@@ -74,7 +74,7 @@ Vector3d rayTracing(Ray r, Sampler* sampler) {
 
         Vector3d d, g;
         m->sampleBSDF(-r.getDirection(), d, hit, g, sampler, lastDiffuse);
-        f = abs(Vector3d::dot(d, hit.getNormal())) * g * f;
+        f = abs(Vector3d::dot(d, hit.getShadeNormal())) * g * f;
 
         //std::cerr << abs(Vector3d::dot(d, hit.getNormal())) << " " << g << " " << f << "\n";
 

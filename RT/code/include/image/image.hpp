@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cassert>
-#include "vecmath/vecmath.h"
+#include "../vecmath/vecmath.h"
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>

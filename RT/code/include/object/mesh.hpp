@@ -96,6 +96,7 @@ public:
             if (tx.size())
                 tri->setTextureCoordinate(
                     texCoor[tx[triId][0]], texCoor[tx[triId][1]], texCoor[tx[triId][2]]);
+            tri->calcTangent();
             triangles.push_back(tri);
         }
 

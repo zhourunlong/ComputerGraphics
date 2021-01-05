@@ -110,7 +110,7 @@ protected:
 
     std::string ref = "";
     Material* material;
-    Vector3d emmision = Vector3d::ZERO;
+    Vector3d emmision = Vector3d::ZERO, pu, pv;
     bool needTransform = false;
     ObjectType objType;
 

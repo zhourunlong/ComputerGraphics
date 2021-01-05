@@ -7,7 +7,9 @@
 #include "../hit.cpp"
 #include "../sampler.hpp"
 #include "../utils.hpp"
-#include "../texture.hpp"
+#include "../texture/texture.h"
+#include "../texture/texture.cpp"
+#include "../texture/bump.hpp"
 
 class Material {
 public:
@@ -58,10 +60,10 @@ public:
     inline bool needLightSampling() {return needLS;}
 
     inline virtual Vector3d getColor(const Vector3d &wo,
-        const Vector3d &wi, const Hit &hit) {return Vector3d::ZERO;}
+        const Vector3d &wi, Hit &hit) {return Vector3d::ZERO;}
 
     inline virtual void sampleBSDF(const Vector3d &wo, Vector3d &wi,
-        const Hit &hit, Vector3d &f, Sampler* sampler, bool &lastDiffuse) {}
+        Hit &hit, Vector3d &f, Sampler* sampler, bool &lastDiffuse) {}
 
     inline void print() {
         std::cout << "===== Material =====\n";

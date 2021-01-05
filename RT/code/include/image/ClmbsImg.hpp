@@ -1,6 +1,7 @@
 #pragma once
+
 #include <bits/stdc++.h>
-#include <png.h> //LibPNG header
+#include <png.h>
 #include <jpeglib.h>
 #include <setjmp.h>
 
@@ -19,6 +20,12 @@ public:
     void print() const {
         std::cout << "w = " << w << " h = " << h << " bpp = " << bpp << "\n";
         std::cout << "data = " << &data << "\n";
+    }
+
+    inline unsigned char getPixel(int x, int y, int z) {
+        x = (x % w + w) % w;
+        y = (y % h + h) % h;
+        return data[(y * w + x) * bpp + z];
     }
 
     unsigned int w; //Image width

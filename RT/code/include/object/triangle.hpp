@@ -90,21 +90,34 @@ public:
             if (testLs)
                 if (t < h.getT() - 2e-9) return true;
                 else return false;
-            Vector3d realNormal =
-                vertexNormal ? ((alpha * va + beta * vb + (size - alpha - beta) * vc) / size).normalized() : normal;
             Vector2d texCoor = (alpha * ta + beta * tb + (size - alpha - beta) * tc) / size;
-            //if (texCoor.x() < 0) {
-                //std::cerr << "hit " << alpha/size << " " << beta/size << "\n";
-              //  std::cerr << ta << tb << tc << "\n";
-            //}
-            if (Vector3d::dot(v, normal) < 0)
-                h.set(t, this, realNormal, texCoor, true);
-            else 
-                h.set(t, this, -realNormal, texCoor, false);
+            if (Vector3d::dot(v, normal) < 0) {
+                h.set(t, this, normal, texCoor, true);
+                if (vertexNormal)
+                    h.setShadeNormal(((alpha * va + beta * vb + (size - alpha - beta) * vc) / size).normalized());
+                h.setTangent(pu, pv);
+            } else {
+                h.set(t, this, -normal, texCoor, false);
+                if (vertexNormal)
+                    h.setShadeNormal(-((alpha * va + beta * vb + (size - alpha - beta) * vc) / size).normalized());
+                h.setTangent(-pu, -pv);
+            }
             return true;
         }
 
         return false;
+    }
+
+    inline void calcTangent() {
+        Matrix2d m((tb - ta).x(), (tc - ta).x(),
+                   (tb - ta).y(), (tc - ta).y());
+        m = m.inverse().transposed();
+        Vector2d px((b - a).x(), (c - a).x()),
+                 py((b - a).y(), (c - a).y()),
+                 pz((b - a).z(), (c - a).z());
+        px = m * px; py = m * py; pz = m * pz;
+        pu = Vector3d(px.x(), py.x(), pz.x());
+        pv = Vector3d(px.y(), py.y(), pz.y());
     }
 
     inline bool getSample(const Vector3d &x, Vector3d &y, Vector3d &ny, double &A, Sampler* sampler) override {
