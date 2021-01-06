@@ -8,11 +8,12 @@ inline Hit::Hit() {
     into = true;
 }
 
-inline Hit::Hit(double _t, Object3D* _o, const Vector3d &n,
+inline Hit::Hit(double _t, Object3D* _o, Material* _m, const Vector3d &n,
     const Vector2d &_texCoor, const bool &_into) {
 
     t = _t;
     o = _o;
+    m = _m;
     geoN = shadeN = n.normalized();
     texCoor = _texCoor;
     into = _into;
@@ -22,9 +23,22 @@ inline double Hit::getT() const {return t;}
 
 inline Object3D* Hit::getObject() const {return o;}
 
+inline void Hit::setMaterial(Material* _m) {m = _m;}
+inline Material* Hit::getMaterial() const {return m;}
+
 inline Vector3d Hit::getGeoNormal() const {return geoN;}
 inline Vector3d Hit::getShadeNormal() const {return shadeN;}
 inline void Hit::setShadeNormal(const Vector3d &_n) {shadeN = _n;}
+
+inline void Hit::setEmission(const Vector3d &_emission) {
+    emission = _emission;
+}
+
+inline Vector3d Hit::getEmission() {return emission;}
+
+inline void Hit::setSampleable(bool _sampleable) {sampleable = _sampleable;}
+
+inline bool Hit::isSampleable() {return sampleable;}
 
 inline bool Hit::getInto() const {return into;}
 
@@ -34,11 +48,12 @@ inline Vector3d Hit::getColor() const {return color;}
 
 inline void Hit::setColor(const Vector3d &_color) {color = _color;}
 
-inline void Hit::set(double _t, Object3D* _o, const Vector3d &n,
+inline void Hit::set(double _t, Object3D* _o, Material* _m, const Vector3d &n,
     const Vector2d &_texCoor, const bool &_into) {
 
     t = _t;
     o = _o;
+    m = _m;
     geoN = shadeN = n.normalized();
     texCoor = _texCoor;
     into = _into;

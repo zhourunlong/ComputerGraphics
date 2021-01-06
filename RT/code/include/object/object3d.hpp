@@ -85,11 +85,18 @@ public:
     inline virtual Material* getMaterial() {return material;}
     inline virtual void setMaterial(Material* _material) {material = _material;}
 
-    inline virtual Vector3d getEmmision() {return emmision;}
-    inline void setEmmision(const Vector3d &_emmision) {emmision = _emmision;}
+    inline virtual Vector3d getEmission() {return emission;}
+    inline virtual void setEmission(const Vector3d &_emission) {
+        emission = _emission;
+    }
+
+    inline bool isSampleable() {return sampleable;}
 
     inline bool getNeedTransform() {return needTransform;}
     inline void setNeedTransform(const bool &_needTransform) {needTransform = _needTransform;}
+    
+    inline void setTransform(Object3D* _transform) {transform = _transform;}
+    inline Object3D* getTransform() {return transform;}
 
     inline ObjectType getObjType() {return objType;}
 
@@ -102,6 +109,8 @@ public:
     inline virtual BoundPlane getBoundPlaneY() = 0;
     inline virtual BoundPlane getBoundPlaneZ() = 0;
 
+    inline virtual int numObjects() = 0;
+    
     inline virtual void print() = 0;
 
     inline virtual void finish() {}
@@ -110,8 +119,9 @@ protected:
 
     std::string ref = "";
     Material* material;
-    Vector3d emmision = Vector3d::ZERO, pu, pv;
-    bool needTransform = false;
+    Vector3d emission = Vector3d::ZERO, pu, pv;
+    bool needTransform = false, sampleable = false;
+    Object3D* transform;
     ObjectType objType;
 
     struct TreeNode {

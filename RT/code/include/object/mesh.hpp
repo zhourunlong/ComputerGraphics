@@ -111,14 +111,6 @@ public:
             }
     }
 
-    inline Material* getMaterial() override {return material;}
-
-    inline void setMaterial(Material* _material) override {
-        material = _material;
-        for (int i = 0; i < triangles.size(); ++i)
-            triangles[i]->setMaterial(_material);
-    }
-
     struct TriangleIndex {
         TriangleIndex() {
             x[0] = 0; x[1] = 0; x[2] = 0;
@@ -129,7 +121,19 @@ public:
     };
 
     inline bool intersect(const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) {
-        return queryIntersect(rt, r, h, tmin, testLs);
+        bool ret = queryIntersect(rt, r, h, tmin, testLs);
+        if (ret) {
+            h.setMaterial(material);
+            h.setSampleable(sampleable);
+            h.setEmission(emission);
+        }
+        return ret;
+    }
+
+    inline void setEmission(const Vector3d &_emission) override {
+        emission = _emission;
+        sampleable = false;
+        std::cerr << ref << " " << emission << "\n";
     }
 
     inline BoundPlane getBoundPlaneX() override {
@@ -142,13 +146,15 @@ public:
         if (rt != NULL) return rt->planeZ;
     }
 
+    inline int numObjects() override {return triangles.size();}
+
     inline void print() override {
         std::cout << "===== Mesh =====\n";
         std::cout << t.size() << " triangles\n";
         std::cout << "material: " << ref << "\n";
-        material->print();
-        if (emmision != Vector3d::ZERO)
-            std::cout << "emmision: " << emmision << "\n";
+        if (material) material->print();
+        if (emission != Vector3d::ZERO)
+            std::cout << "emission: " << emission << "\n";
         std::cout << "----------------\n";
     }
 

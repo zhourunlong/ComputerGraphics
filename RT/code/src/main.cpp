@@ -8,6 +8,7 @@
 #include "vecmath/vecmath.h"
 #include "sampler.hpp"
 #include "utils.hpp"
+#include "emitter.hpp"
 
 #include <omp.h>
 
@@ -15,6 +16,14 @@ int samps, maxDep;
 double filmGamma;
 Group* baseGroup;
 std::vector <Object3D*> lights;
+std::vector <Emitter*> emitters;
+
+inline Vector3d emission(const Ray &ray) {
+    Vector3d illum = Vector3d::ZERO;
+    for (auto l: emitters)
+        illum += l->radiance(ray);
+    return illum;
+}
 
 inline Vector3d lightSampling(Material* m, const Vector3d &x,
     Hit& hit, const Vector3d &wo, Sampler* sampler) {
@@ -34,11 +43,11 @@ inline Vector3d lightSampling(Material* m, const Vector3d &x,
         double cosThP = Vector3d::dot(ny, -z);
         double dist = (x - y).length();
         Ray testRay(x, z);
-        Hit testHit = Hit(dist + 1e-9, NULL, Vector3d::ZERO, Vector2d::ZERO,
+        Hit testHit = Hit(dist + 1e-9, NULL, NULL, Vector3d::ZERO, Vector2d::ZERO,
                           true);
         if (baseGroup->intersect(testRay, testHit, 1e-9, true))
             continue;
-        illum += l->getEmmision() * color * cosTh * cosThP
+        illum += l->getEmission() * color * cosTh * cosThP
                / (y - x).squaredLength() * A;
     }
     return illum;
@@ -51,14 +60,17 @@ Vector3d rayTracing(Ray r, Sampler* sampler) {
     for (int dep = 0; dep < maxDep; ++dep) {
         Hit hit = Hit();
         bool isIntersect = baseGroup->intersect(r, hit, 1e-9);
-        if (!isIntersect) break;
+        if (!isIntersect) {
+            res += f * emission(r);
+            break;
+        }
 
         Object3D *o = hit.getObject();
-        Material *m = o->getMaterial();
+        Material *m = hit.getMaterial();
         bool into = hit.getInto();
-        Vector3d e;
-        if (into && (e = o->getEmmision()) != Vector3d::ZERO)  {
-            if (!lastDiffuse) res += f * e;
+        Vector3d e = Vector3d::ZERO;
+        if (into && (e = hit.getEmission()) != Vector3d::ZERO)  {
+            if (!lastDiffuse || !hit.isSampleable()) res += f * e;
             break;
         }
 
@@ -89,7 +101,12 @@ int main(int argc, char *argv[]) {
     Parser parser(argv[1]);
     Camera *camera = parser.getCamera();
     baseGroup = parser.getGroup();
+    //baseGroup->print();
     lights = parser.getLights();
+    emitters = parser.getEmitters();
+
+    fprintf(stderr, "in total %d basic elements (triangles, spheres)\n",
+        baseGroup->numObjects());
 
     int w = camera->getWidth(), h = camera->getHeight();
     Image renderedImg(w, h);
@@ -101,11 +118,11 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "started rendering\n");
     #pragma omp parallel for collapse(1) schedule(dynamic, 1) num_threads(90)
     for (int y = 0; y < h; ++y) {
-    //for (int y = 340; y < 342; ++y) {
+    //for (int y = 660; y < 730; ++y) {
         unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
         Sampler* sampler = new Sampler(Xi);
         for (int x = 0; x < w; ++x) {
-        //for (int x = 550; x < 552; ++x) {
+        //for (int x = 430; x < 550; ++x) {
             Vector3d finalColor(0);
             for (int sy = -1; sy < 2; sy += 2)
                 for (int sx = -1; sx < 2; sx += 2) {

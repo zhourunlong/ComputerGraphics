@@ -40,6 +40,13 @@ public:
         if (rt != NULL) return rt->planeZ;
     }
 
+    inline int numObjects() override {
+        int ret = 0;
+        for (int i = 0; i < v.size(); ++i)
+            ret += v[i]->numObjects();
+        return ret;
+    }
+
     inline void print() override {
         std::cout << "===========================\n";
         std::cout << "=          Group          =\n";

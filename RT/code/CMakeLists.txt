@@ -15,6 +15,7 @@ SET(RT_INCLUDES
         include/hit.h
         include/ray.hpp
         include/utils.hpp
+        include/emitter.hpp
         include/texture/texture.h
         include/texture/bump.hpp
         include/bsdf/bsdf.h

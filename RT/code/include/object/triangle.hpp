@@ -51,6 +51,11 @@ public:
         planeZ = (BoundPlane){Min, Max};
     }
 
+    inline void setEmission(const Vector3d &_emission) override {
+        emission = _emission;
+        sampleable = true;
+    }
+
     inline Vector3d getA() {return a;}
     inline Vector3d getB() {return b;}
     inline Vector3d getC() {return c;}
@@ -92,16 +97,18 @@ public:
                 else return false;
             Vector2d texCoor = (alpha * ta + beta * tb + (size - alpha - beta) * tc) / size;
             if (Vector3d::dot(v, normal) < 0) {
-                h.set(t, this, normal, texCoor, true);
+                h.set(t, this, material, normal, texCoor, true);
                 if (vertexNormal)
                     h.setShadeNormal(((alpha * va + beta * vb + (size - alpha - beta) * vc) / size).normalized());
                 h.setTangent(pu, pv);
             } else {
-                h.set(t, this, -normal, texCoor, false);
+                h.set(t, this, material, -normal, texCoor, false);
                 if (vertexNormal)
                     h.setShadeNormal(-((alpha * va + beta * vb + (size - alpha - beta) * vc) / size).normalized());
                 h.setTangent(-pu, -pv);
             }
+            h.setSampleable(sampleable);
+            h.setEmission(emission);
             return true;
         }
 
@@ -133,13 +140,15 @@ public:
     inline BoundPlane getBoundPlaneY() override {return planeY;}
     inline BoundPlane getBoundPlaneZ() override {return planeZ;}
 
+    inline int numObjects() override {return 1;}
+
     inline void print() override {
         std::cout << "===== Triangle =====\n";
         std::cout << a << "\n" << b << "\n" << c << "\n";
         std::cout << "material: " << ref << "\n";
-        material->print();
-        if (emmision != Vector3d::ZERO)
-            std::cout << "emmision: " << emmision << "\n";
+        if (material) material->print();
+        if (emission != Vector3d::ZERO)
+            std::cout << "emission: " << emission << "\n";
         std::cout << "--------------------\n";
     }
 

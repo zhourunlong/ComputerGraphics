@@ -30,15 +30,12 @@ public:
 
     inline Object3D* getObject() {return o;}
 
-    inline std::string getMatRef() override {return o->getMatRef();}
-
-    inline Material* getMaterial() override {return o->getMaterial();}
-
-    inline void setMaterial(Material* _material) override {o->setMaterial(_material);}
-
     inline Matrix4d getTransform() {return transform;}
 
-    inline Vector3d getEmmision() override {return o->getEmmision();}
+    inline void setEmission(const Vector3d &_emission) override {
+        emission = _emission;
+        sampleable = (o->getObjType() != MESH);
+    }
 
     inline virtual bool intersect(const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) {
         Vector3d trSource = transformPoint(inv, r.getOrigin());
@@ -48,13 +45,16 @@ public:
         if (inter) {
             Vector3d shadeN = h.getShadeNormal(), pu, pv;
             h.getTangent(pu, pv);
-            h.set(h.getT(), h.getObject(),
+            h.set(h.getT(), h.getObject(), h.getMaterial(),
                 transformDirection(invTranspose, h.getGeoNormal()).normalized(),
                 h.getTexCoor(), h.getInto());
             h.setShadeNormal(transformDirection(invTranspose, shadeN).normalized());
             transformDirection(transform, pu);
             transformDirection(transform, pv);
             h.setTangent(pu, pv);
+            h.setMaterial(material);
+            h.setSampleable(sampleable);
+            h.setEmission(emission);
         }
         return inter;
     }
@@ -77,11 +77,18 @@ public:
     inline BoundPlane getBoundPlaneY() override {return planeY;}
     inline BoundPlane getBoundPlaneZ() override {return planeZ;}
 
+    inline int numObjects() override {return o->numObjects();}
+
     inline void print() override {
         std::cout << "===== Transform =====\n";
         std::cout << "matrix:\n";
         transform.print();
+        material->print();
         o->print();
+        if (emission != Vector3d::ZERO)
+            std::cout << "emission: " << emission << "\n";
+        if (sampleable)
+            std::cout << "sampleable\n";
         std::cout << "---------------------\n";
     }
 

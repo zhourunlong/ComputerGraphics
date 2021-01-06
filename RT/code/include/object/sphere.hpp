@@ -17,6 +17,11 @@ public:
         this->radius = radius;
     }
 
+    inline void setEmission(const Vector3d &_emission) override {
+        emission = _emission;
+        sampleable = true;
+    }
+
     inline void setRadius(const double &_radius) {radius = _radius;}
 
     inline void setCenter(const Vector3d &_center) {center = _center;}
@@ -42,9 +47,11 @@ public:
                 else return false;
             Vector3d n = center - r.pointAtParameter(t);
             if (Vector3d::dot(n, v) < 0)
-                h.set(t, this, n, Vector2d::ZERO, false);
+                h.set(t, this, material, n, Vector2d::ZERO, false);
             else
-                h.set(t, this, -n, Vector2d::ZERO, true);
+                h.set(t, this, material, -n, Vector2d::ZERO, true);
+            h.setSampleable(sampleable);
+            h.setEmission(emission);
             return true;
         }
         return false;
@@ -77,14 +84,16 @@ public:
         return (BoundPlane){center.z() - radius, center.z() + radius};
     }
 
+    inline int numObjects() override {return 1;}
+
     inline void print() override {
         std::cout << "===== Sphere =====\n";
         std::cout << "center: " << center << "\n";
         std::cout << "radius: " << radius << "\n";
         std::cout << "material: " << ref << "\n";
         material->print();
-        if (emmision != Vector3d::ZERO)
-            std::cout << "emmision: " << emmision << "\n";
+        if (emission != Vector3d::ZERO)
+            std::cout << "emission: " << emission << "\n";
         std::cout << "------------------\n";
     }
 

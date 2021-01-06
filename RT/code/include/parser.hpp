@@ -14,6 +14,7 @@
 #include "object/transform.hpp"
 #include "vecmath/vecmath.h"
 #include "image/ClmbsImg.hpp"
+#include "emitter.hpp"
 
 double degreeToRadian(const double &x) {return (M_PI * x) / 180.0;}
 
@@ -127,6 +128,8 @@ public:
 
     std::vector <Object3D*> getLights() {return lights;}
 
+    std::vector <Emitter*> getEmitters() {return emitters;}
+
     void dfs(const pugi::xml_node &node, int dep);
 
 private:
@@ -147,6 +150,7 @@ private:
     void parseTriangle(const pugi::xml_node &node, Triangle* &tri, const bool &isRoot);
     void parseMesh(const pugi::xml_node &node, Mesh* &m);
     void parseShape(const pugi::xml_node &node);
+    void parseEmitter(const pugi::xml_node &node, Emitter* &emitter);
     void parse(const pugi::xml_node &node);
     void concludeAllObjects() {
         int n = group->getGroupSize();
@@ -159,18 +163,7 @@ private:
         int n = group->getGroupSize();
         for (int i = 0; i < n; ++i) {
             Object3D* obj = group->getObj(i);
-            if (obj->getObjType() == Object3D::TRANSFORM) {
-                Transform* _obj = static_cast<Transform*>(obj);
-                assert(_obj->getObject()->getObjType() == Object3D::TRIANGLE);
-                Triangle* tri = static_cast<Triangle*>(_obj->getObject());
-                if (tri->getEmmision() != Vector3d::ZERO)
-                    lights.push_back(obj);
-            } else {
-                if (obj->getEmmision() != Vector3d::ZERO) {
-                    assert(obj->getObjType() == Object3D::TRIANGLE);
-                    lights.push_back(obj);
-                }
-            }
+            if (obj->isSampleable()) lights.push_back(obj);
         }
     }
     
@@ -184,6 +177,7 @@ private:
     std::unordered_map <std::string, ClmbsImg_Data*> imageMap;
     Group *group = new Group();
     std::vector <Object3D*> lights;
+    std::vector <Emitter*> emitters;
     Texture* tex05 = new Texture(Vector3d(0.5));
     Texture* tex1 = new Texture(Vector3d(1));
 };
@@ -366,7 +360,7 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
                         m->setSpecRefl(tex1);
                         m->setAlpha(0.1);
                         m->setExtEta(1);
-                    } else if (val == "dielectric" || val == "thindielectric") {
+                    } else if (val == "dielectric" || val == "thindielectric" || val == "roughdielectric") {
                         m = new Dielectric();
                         m->setType(Material::DIELECTRIC);
                         m->setSpecRefl(tex1);
@@ -496,7 +490,7 @@ void Parser::parseSphere(const pugi::xml_node &node, Sphere* &sph) {
     if (nname == "rgb") {
         std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
         if (result.first == "radiance")
-            sph->setEmmision(result.second);
+            sph->setEmission(result.second);
     }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
         parseSphere(child, sph);
@@ -510,12 +504,16 @@ void Parser::parseTriangle(const pugi::xml_node &node, Triangle* &tri, const boo
         tri->setNeedTransform(true);
         Transform* tran = new Transform();
         parseTransform(node, tran);
+        tri->setTransform(tran);
         tran->setObject(tri);
         group->addObject(tran);
         return;
     }
     if (nname == "ref") {
-        tri->setMatRef(node.first_attribute().value());
+        if (tri->getNeedTransform())
+            tri->getTransform()->setMatRef(node.first_attribute().value());
+        else
+            tri->setMatRef(node.first_attribute().value());
         return;
     }
     if (nname == "bsdf") {
@@ -523,13 +521,19 @@ void Parser::parseTriangle(const pugi::xml_node &node, Triangle* &tri, const boo
         Bump* obump = NULL;
         parseBsdf(node, m, 0, 0, false, obump);
         parseBsdf(node, m, 0, 1, false, obump);
-        tri->setMatRef(m->getId());
+        if (tri->getNeedTransform())
+            tri->getTransform()->setMatRef(m->getId());
+        else
+            tri->setMatRef(m->getId());
         return;
     }
     if (nname == "rgb") {
         std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
         if (result.first == "radiance")
-            tri->setEmmision(result.second);
+            if (tri->getNeedTransform())
+                tri->getTransform()->setEmission(result.second);
+            else
+                tri->setEmission(result.second);
     }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
         parseTriangle(child, tri);
@@ -558,12 +562,16 @@ void Parser::parseMesh(const pugi::xml_node &node, Mesh* &mesh) {
         mesh->setNeedTransform(true);
         Transform* tran = new Transform();
         parseTransform(node, tran);
+        mesh->setTransform(tran);
         tran->setObject(mesh);
         group->addObject(tran);
         return;
     }
     if (nname == "ref") {
-        mesh->setMatRef(node.first_attribute().value());
+        if (mesh->getNeedTransform())
+            mesh->getTransform()->setMatRef(node.first_attribute().value());
+        else
+            mesh->setMatRef(node.first_attribute().value());
         return;
     }
     if (nname == "bsdf") {
@@ -571,13 +579,19 @@ void Parser::parseMesh(const pugi::xml_node &node, Mesh* &mesh) {
         Bump* obump = NULL;
         parseBsdf(node, m, 0, 0, false, obump);
         parseBsdf(node, m, 0, 1, false, obump);
-        mesh->setMatRef(m->getId());
+        if (mesh->getNeedTransform())
+            mesh->getTransform()->setMatRef(m->getId());
+        else
+            mesh->setMatRef(m->getId());
         return;
     }
     if (nname == "rgb") {
         std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
         if (result.first == "radiance")
-            mesh->setEmmision(result.second);
+            if (mesh->getNeedTransform())
+                mesh->getTransform()->setEmission(result.second);
+            else
+                mesh->setEmission(result.second);
     }
     if (nname == "boolean") {
         std::pair<std::string, std::string> result = parseString(node.first_attribute());
@@ -610,6 +624,22 @@ void Parser::parseShape(const pugi::xml_node &node) {
     }
 }
 
+void Parser::parseEmitter(const pugi::xml_node &node, Emitter* &emitter) {
+    std::string nname = node.name();
+    if (nname == "emitter") {
+        pugi::xml_attribute attr = node.first_attribute();
+        std::string type = attr.value();
+        if (type == "constant") emitter = new ConstEmitter();
+    }
+    if (nname == "rgb") {
+        std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
+        if (result.first == "radiance")
+            emitter->setRadiance(result.second);
+    }
+    for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
+        parseEmitter(child, emitter);
+}
+
 void Parser::parse(const pugi::xml_node &node) {
     std::string nname = node.name();
     if (nname == "integrator") {
@@ -632,6 +662,12 @@ void Parser::parse(const pugi::xml_node &node) {
         Bump* obump = NULL;
         parseBsdf(node, m, 0, 0, false, obump);
         parseBsdf(node, m, 0, 1, false, obump);
+        return;
+    }
+    if (nname == "emitter") {
+        Emitter* emitter = NULL;
+        parseEmitter(node, emitter);
+        emitters.push_back(emitter);
         return;
     }
     for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
