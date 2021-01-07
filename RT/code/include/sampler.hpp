@@ -9,6 +9,11 @@ public:
 
     inline double sampleDouble() {return erand48(Xi);}
 
+    inline Vector2d sampleDiskUniform() {
+        double r = sqrt(erand48(Xi)), theta = 2 * M_PI * erand48(Xi);
+        return Vector2d(r * cos(theta), r * sin(theta));
+    }
+
     inline Vector3d sampleThetaSphereUniform(const double &cosThMx) {
         double theta = acos(cosThMx + erand48(Xi) * (1 - cosThMx)),
                phi = 2 * M_PI * erand48(Xi);

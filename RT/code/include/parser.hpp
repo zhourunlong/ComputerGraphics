@@ -190,6 +190,10 @@ void Parser::parseSensor(const pugi::xml_node &node) {
             camera->setAngle(degreeToRadian(result.second));
         else if (result.first == "gamma")
             gamma = result.second;
+        else if (result.first == "focusdistance")
+            camera->setDistance(result.second);
+        else if (result.first == "apertureradius")
+            camera->setAperture(result.second);
         return;
     }
     if (nname == "transform") {

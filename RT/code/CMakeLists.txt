@@ -27,6 +27,8 @@ SET(RT_INCLUDES
         include/object/sphere.hpp
         include/object/transform.hpp
         include/object/triangle.hpp
+        include/object/curve.hpp
+        include/object/revsurface.hpp
         include/pugi/pugiconfig.hpp
         include/pugi/pugixml.hpp
         include/vecmath/Matrix2d.h

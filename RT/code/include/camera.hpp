@@ -1,8 +1,9 @@
 #pragma once
 
+#include <bits/stdc++.h>
 #include "ray.hpp"
 #include "vecmath/vecmath.h"
-#include <bits/stdc++.h>
+#include "sampler.hpp"
 
 class Camera {
 public:
@@ -11,11 +12,21 @@ public:
         target = Vector3d(0, 0, 1);
         up = Vector3d(0, 1, 0);
         fovAxis = "x";
+        aperture = 0;
+        distance = 1;
     }
 
     inline void setAngle(const double &_angle) {angle = _angle;}
 
     inline void setFovAxis(const std::string &_foxAxis) {fovAxis = _foxAxis;}
+
+    inline void setAperture(const double &_aperture) {
+        aperture = _aperture;
+    }
+
+    inline void setDistance(const double &_distance) {
+        distance = _distance;
+    }
 
     inline Vector3d getCenter() {return center;}
 
@@ -37,8 +48,9 @@ public:
         horizontal = Vector3d::cross(direction, up);
     }
 
-    inline Ray generateRay(const Vector2d &point) {
+    inline Ray generateRay(const Vector2d &point, Sampler* sampler) {
         Vector3d dir;
+
         if (fovAxis == "y")
             dir = tan(angle / 2) * (point.x() / height * 2 - 1.0 * width / height) * horizontal
                 + tan(angle / 2) * (point.y() / height * 2 - 1) * up
@@ -48,7 +60,12 @@ public:
                 + tan(angle / 2) * (point.x() / width * 2 - 1) * horizontal
                 + direction;
         
-        return Ray(this->center, dir.normalized());
+        double t = distance / Vector3d::dot(dir, direction);
+        Vector3d x = center + t * dir;
+        Vector2d dc = sampler->sampleDiskUniform();
+        Vector3d nc = center + aperture * dc.x() * up + aperture * dc.y() * horizontal;
+        
+        return Ray(nc, (x - nc).normalized());
     }
 
     inline void print() {
@@ -65,6 +82,6 @@ public:
 protected:
     Vector3d center, direction, target, up, horizontal;
     int width, height;
-    double angle;
+    double angle, aperture, distance;
     std::string fovAxis;
 };

@@ -22,6 +22,8 @@
 			<boolean name="banner" value="false" />
 			<rfilter type="tent" />
 		</film>
+        <float name="focusDistance" value="7"/>
+        <float name="apertureRadius" value="0.05"/>
 	</sensor>
 	<bsdf type="twosided" id="LeftWall" >
 		<bsdf type="diffuse" >

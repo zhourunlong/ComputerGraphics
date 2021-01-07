@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
                     for (int s = 0; s < samps; ++s) {
                         double r1 = 2 * erand48(Xi), dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
                         double r2 = 2 * erand48(Xi), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
-                        Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + 0.5 * dx + 0.5, y + 0.25 * sy + 0.5 * dy + 0.5));
+                        Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + 0.5 * dx + 0.5, y + 0.25 * sy + 0.5 * dy + 0.5), sampler);
                         //Ray camRay = camera->generateRay(Vector2d(x, y));
                         r = r + rayTracing(camRay, sampler);
                     }
