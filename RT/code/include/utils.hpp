@@ -34,6 +34,22 @@ inline Vector3d FresnelConductor(const double &cos,
     return 0.5 * (Rs + Rp);
 }
 
+inline bool normalFromRefraction(const Vector3d &wo, const Vector3d &wi,
+    Vector3d &wm, const double &eta) {
+    
+    double c = Vector3d::dot(wo, wi);
+    double coef = 1/ (eta * eta) + 1 + 2 * c / eta;
+    if (coef < 1e-9) return false;
+    double y = 1 / sqrt(coef);
+    double x = y / eta;
+    double t1 = x + c * y;
+    if (t1 < 0 || t1 > 1) return false;
+    double t2 = c * x + y;
+    if (t2 > 0 || t2 < -1) return false;
+    wm = x * wo + y * wi;
+    return true;
+}
+
 inline void computeBasis(const Vector3d &z, Vector3d &x, Vector3d &y) {
     x = Vector3d::cross(fabs(z.x()) > 0.1 ? Vector3d(0, 1, 0)
         : Vector3d(1, 0, 0), z).normalized();

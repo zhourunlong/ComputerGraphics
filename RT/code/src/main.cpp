@@ -132,8 +132,9 @@ int main(int argc, char *argv[]) {
                         double r2 = 2 * erand48(Xi), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
                         Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + 0.5 * dx + 0.5, y + 0.25 * sy + 0.5 * dy + 0.5));
                         //Ray camRay = camera->generateRay(Vector2d(x, y));
-                        r = r + rayTracing(camRay, sampler) / samps;
+                        r = r + rayTracing(camRay, sampler);
                     }
+                    r = r / samps;
                     finalColor = finalColor + Vector3d(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
                 }
             //std::cerr << x << " " << y << " " << finalColor << "\n";

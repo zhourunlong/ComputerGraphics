@@ -2,11 +2,7 @@ bin/
 build/
 output/
 
-images/
-saved_models/
-
 *.out
-*.bmp
 *.pfm
 
 .vscode/
