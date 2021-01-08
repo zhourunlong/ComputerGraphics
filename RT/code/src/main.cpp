@@ -101,7 +101,6 @@ int main(int argc, char *argv[]) {
     Parser parser(argv[1]);
     Camera *camera = parser.getCamera();
     baseGroup = parser.getGroup();
-    //baseGroup->print();
     lights = parser.getLights();
     emitters = parser.getEmitters();
 
