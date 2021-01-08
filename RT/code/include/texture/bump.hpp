@@ -39,7 +39,8 @@ public:
                dfdy1 = dfdy[x][y],
                dfdy2 = dfdy[x - 1][y];
         double bu = xr * dfdx2 + (1 - xr) * dfdx1,
-               bv = yr * dfdy2 + (1 - yr) * dfdy1;
+               bv = (1 - yr) * dfdy2 + yr * dfdy1;
+        //bu /= 2; bv /= 2;
         Vector3d pu, pv, n, shadeN = hit.getShadeNormal();
         hit.getTangent(pu, pv);
         n = (shadeN + Vector3d::cross(shadeN, bu * pv - bv * pu)).normalized();

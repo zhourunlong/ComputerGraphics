@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
         unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
         Sampler* sampler = new Sampler(Xi);
         for (int x = 0; x < w; ++x) {
-        //for (int x = 430; x < 550; ++x) {
+        //for (int x = 460; x < 500; ++x) {
             Vector3d finalColor(0);
             for (int sy = -1; sy < 2; sy += 2)
                 for (int sx = -1; sx < 2; sx += 2) {
