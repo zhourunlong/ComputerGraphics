@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
     filmGamma = parser.getGamma();
 
     fprintf(stderr, "started rendering\n");
-    #pragma omp parallel for collapse(1) schedule(dynamic, 1) num_threads(90)
+    #pragma omp parallel for collapse(1) schedule(dynamic, 1) num_threads(110)
     for (int y = 0; y < h; ++y) {
     //for (int y = 660; y < 730; ++y) {
         unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
