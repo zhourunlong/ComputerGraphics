@@ -5,5 +5,6 @@
 #include "conductor.hpp"
 #include "roughconductor.hpp"
 #include "dielectric.hpp"
+#include "thindielectric.hpp"
 #include "plastic.hpp"
 #include "roughplastic.hpp"

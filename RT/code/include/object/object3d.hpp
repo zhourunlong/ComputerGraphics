@@ -1,12 +1,12 @@
 #pragma once
 
-#include "ray.hpp"
-#include "hit.h"
-#include "hit.cpp"
+#include "../ray.hpp"
+#include "../hit.h"
+#include "../hit.cpp"
 #include "../vecmath/vecmath.h"
 #include "../utils.hpp"
 #include "../sampler.hpp"
-#include "parser.hpp"
+#include "../parser.hpp"
 #include <bits/stdc++.h>
 
 class Material;
@@ -68,7 +68,9 @@ public:
         TRIANGLE,
         MESH,
         GROUP,
-        TRANSFORM
+        TRANSFORM,
+        CURVE,
+        REVSURFACE
     };
 
     Object3D() : material(nullptr) {}

@@ -12,6 +12,8 @@
 #include "object/sphere.hpp"
 #include "object/triangle.hpp"
 #include "object/transform.hpp"
+#include "object/curve.hpp"
+#include "object/revsurface.hpp"
 #include "vecmath/vecmath.h"
 #include "image/ClmbsImg.hpp"
 #include "emitter.hpp"
@@ -149,6 +151,8 @@ private:
     void parseSphere(const pugi::xml_node &node, Sphere* &sph);
     void parseTriangle(const pugi::xml_node &node, Triangle* &tri, const bool &isRoot);
     void parseMesh(const pugi::xml_node &node, Mesh* &m);
+    void parseCurve(const pugi::xml_node &node, Curve* &cur);
+    void parseRevSurface(const pugi::xml_node &node, RevSurface* &rev);
     void parseShape(const pugi::xml_node &node);
     void parseEmitter(const pugi::xml_node &node, Emitter* &emitter);
     void parse(const pugi::xml_node &node);
@@ -300,8 +304,8 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
     if (nname == "string") {
         std::pair<std::string, std::string> result = parseString(node.first_attribute());
         if (result.first == "material" && deformat(result.second) != "none") {
-            std::cout << "[X] material name is not supported now\n";
-            std::cout << "[X] check https://pixelandpoly.com/ior.html and https://refractiveindex.info/\n";
+            std::cout << "[X] material name is not supported for now\n";
+            std::cout << "[X] check https://pixelandpoly.com/ior.html and https://github.com/tunabrain/tungsten/blob/master/src/core/bsdfs/ComplexIorData.hpp\n";
         }
     }
     
@@ -364,9 +368,17 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
                         m->setSpecRefl(tex1);
                         m->setAlpha(0.1);
                         m->setExtEta(1);
-                    } else if (val == "dielectric" || val == "thindielectric" || val == "roughdielectric") {
+                    } else if (val == "dielectric" || val == "roughdielectric") {
                         m = new Dielectric();
                         m->setType(Material::DIELECTRIC);
+                        m->setSpecRefl(tex1);
+                        m->setTran(tex1);
+                        m->setTwoSided(true);
+                        m->setIntIor(1.5046);
+                        m->setExtIor(1.000277);
+                    } else if (val == "thindielectric") {
+                        m = new ThinDielectric();
+                        m->setType(Material::THINDIELECTRIC);
                         m->setSpecRefl(tex1);
                         m->setTran(tex1);
                         m->setTwoSided(true);
@@ -405,18 +417,17 @@ void Parser::parseBsdf(const pugi::xml_node &node, Material* &m, int dep, int pa
 void Parser::parseTransform(const pugi::xml_node &node, Transform* &tran) {
     std::string nname = node.name();
     if (nname == "scale") {
-        std::string tmp = node.first_attribute().next_attribute().value();
+        std::string tmp = node.first_attribute().value();
         if (tmp.find(',') != -1) {
-            std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
-            Vector3d s = result.second;
+            Vector3d s = stringToV3d(tmp);
             tran->appendTransform(Matrix4d::scaling(s[0], s[1], s[2]));
         } else {
-            std::pair<std::string, double> result = parseDouble(node.first_attribute());
-            tran->appendTransform(Matrix4d::uniformScaling(result.second));
+            double s = node.first_attribute().as_double();
+            tran->appendTransform(Matrix4d::uniformScaling(s));
         }
     } else if (nname == "translate") {
-        std::pair<std::string, Vector3d> result = parseV3d(node.first_attribute());
-        tran->appendTransform(Matrix4d::translation(result.second));
+        Vector3d result = stringToV3d(node.first_attribute().value());
+        tran->appendTransform(Matrix4d::translation(result));
     } else if (nname == "rotate") {
         pugi::xml_attribute attr = node.first_attribute();
         Vector3d axis = stringToV3d(attr.value());
@@ -608,6 +619,63 @@ void Parser::parseMesh(const pugi::xml_node &node, Mesh* &mesh) {
         group->addObject(mesh);
 }
 
+void Parser::parseCurve(const pugi::xml_node &node, Curve* &cur) {
+    std::vector <Vector3d> controls;
+    for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling()) {
+        std::string tmp = child.first_attribute().as_string();
+        controls.push_back(stringToV3d(tmp));
+    }
+    std::string type = deformat(node.first_attribute().as_string());
+    if (type == "bezier") cur = new BezierCurve(controls);
+    else if (type == "bspline") cur = new BsplineCurve(controls);
+}
+
+void Parser::parseRevSurface(const pugi::xml_node &node, RevSurface* &rev) {
+    bool isRoot = false;
+    if (rev == NULL) {
+        isRoot = true;
+        rev = new RevSurface();
+    }
+    std::string nname = node.name();
+    if (nname == "transform") {
+        rev->setNeedTransform(true);
+        Transform* tran = new Transform();
+        parseTransform(node, tran);
+        rev->setTransform(tran);
+        tran->setObject(rev);
+        group->addObject(tran);
+        return;
+    }
+    if (nname == "ref") {
+        if (rev->getNeedTransform())
+            rev->getTransform()->setMatRef(node.first_attribute().value());
+        else
+            rev->setMatRef(node.first_attribute().value());
+        return;
+    }
+    if (nname == "bsdf") {
+        Material *m = NULL;
+        Bump* obump = NULL;
+        parseBsdf(node, m, 0, 0, false, obump);
+        parseBsdf(node, m, 0, 1, false, obump);
+        if (rev->getNeedTransform())
+            rev->getTransform()->setMatRef(m->getId());
+        else
+            rev->setMatRef(m->getId());
+        return;
+    }
+    if (nname == "curve") {
+        Curve* cur = NULL;
+        parseCurve(node, cur);
+        rev->setCurve(cur);
+        return;
+    }
+    for (pugi::xml_node child = node.first_child(); child; child = child.next_sibling())
+        parseRevSurface(child, rev);
+    if (isRoot && rev->getNeedTransform() == false)
+        group->addObject(rev);
+}
+
 void Parser::parseShape(const pugi::xml_node &node) {
     pugi::xml_attribute attr = node.first_attribute();
     std::string type = attr.value();
@@ -624,6 +692,10 @@ void Parser::parseShape(const pugi::xml_node &node) {
     } else if (type == "obj") {
         Mesh *mesh = NULL;
         parseMesh(node, mesh);
+        return;
+    } else if (type == "revsurface") {
+        RevSurface *rev = NULL;
+        parseRevSurface(node, rev);
         return;
     }
 }

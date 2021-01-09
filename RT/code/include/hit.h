@@ -18,8 +18,10 @@ public:
 
     ~Hit() = default;
 
+    void setT(const double &_t);
     double getT() const;
 
+    void setObject(Object3D* _o);
     Object3D* getObject() const;
 
     void setMaterial(Material* _m);
@@ -41,7 +43,7 @@ public:
 
     void set(double _t, Object3D* _o, Material* _m, const Vector3d &n,
         const Vector2d &_texCoor, const bool &_into);
-    
+
     Vector3d getColor() const;
     void setColor(const Vector3d &_color);
 

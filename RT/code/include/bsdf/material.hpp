@@ -19,6 +19,7 @@ public:
         CONDUCTOR,
         ROUGHCONDUCTOR,
         DIELECTRIC,
+        THINDIELECTRIC,
         PLASTIC,
         ROUGHPLASTIC
     };

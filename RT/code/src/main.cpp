@@ -66,6 +66,7 @@ Vector3d rayTracing(Ray r, Sampler* sampler) {
         }
 
         Object3D *o = hit.getObject();
+        //o->print();
         Material *m = hit.getMaterial();
         bool into = hit.getInto();
         Vector3d e = Vector3d::ZERO;
@@ -115,13 +116,12 @@ int main(int argc, char *argv[]) {
     filmGamma = parser.getGamma();
 
     fprintf(stderr, "started rendering\n");
+
     #pragma omp parallel for collapse(1) schedule(dynamic, 1) num_threads(110)
     for (int y = 0; y < h; ++y) {
-    //for (int y = 660; y < 730; ++y) {
         unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
         Sampler* sampler = new Sampler(Xi);
         for (int x = 0; x < w; ++x) {
-        //for (int x = 460; x < 500; ++x) {
             Vector3d finalColor(0);
             for (int sy = -1; sy < 2; sy += 2)
                 for (int sx = -1; sx < 2; sx += 2) {
@@ -130,13 +130,11 @@ int main(int argc, char *argv[]) {
                         double r1 = 2 * erand48(Xi), dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
                         double r2 = 2 * erand48(Xi), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
                         Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + 0.5 * dx + 0.5, y + 0.25 * sy + 0.5 * dy + 0.5), sampler);
-                        //Ray camRay = camera->generateRay(Vector2d(x, y));
                         r = r + rayTracing(camRay, sampler);
                     }
                     r = r / samps;
                     finalColor = finalColor + Vector3d(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
                 }
-            //std::cerr << x << " " << y << " " << finalColor << "\n";
             renderedImg.SetPixel(x, y, gammaCorrection(finalColor, filmGamma));
         }
         delete sampler;
@@ -148,10 +146,10 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "finished rendering, time = %5.2lf sec\n", omp_get_wtime() - timeStamp);
 
 /*
-    int x = 149, y = 239;
+    int x = 290, y = 45;
     unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
     Sampler* sampler = new Sampler(Xi);
-    Ray camRay = camera->generateRay(Vector2d(x, y));
+    Ray camRay = camera->generateRay(Vector2d(x, y), sampler);
     rayTracing(camRay, sampler);
     delete sampler;
 */

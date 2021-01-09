@@ -4,16 +4,6 @@
 #include "object3d.hpp"
 #include <algorithm>
 
-// transforms a 3D point using a matrix, returning a 3D point
-inline static Vector3d transformPoint(const Matrix4d &mat, const Vector3d &point) {
-    return (mat * Vector4d(point, 1)).xyz();
-}
-
-// transform a 3D directino using a matrix, returning a direction
-inline static Vector3d transformDirection(const Matrix4d &mat, const Vector3d &dir) {
-    return (mat * Vector4d(dir, 0)).xyz();
-}
-
 class Transform : public Object3D {
 public:
     Transform() {
@@ -43,9 +33,10 @@ public:
         Ray tr(trSource, trDirection);
         bool inter = o->intersect(tr, h, tmin, testLs);
         if (inter) {
+            if (testLs) return true;
             Vector3d shadeN = h.getShadeNormal(), pu, pv;
             h.getTangent(pu, pv);
-            h.set(h.getT(), h.getObject(), h.getMaterial(),
+            h.set(h.getT(), this, h.getMaterial(),
                 transformDirection(invTranspose, h.getGeoNormal()).normalized(),
                 h.getTexCoor(), h.getInto());
             h.setShadeNormal(transformDirection(invTranspose, shadeN).normalized());

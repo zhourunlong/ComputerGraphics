@@ -1,102 +1,158 @@
-#ifndef REVSURFACE_HPP
-#define REVSURFACE_HPP
+#pragma once
 
+#include <bits/stdc++.h>
 #include "object3d.hpp"
+#include "triangle.hpp"
+#include "mesh.hpp"
 #include "curve.hpp"
-#include <tuple>
 
 class RevSurface : public Object3D {
 
     Curve *pCurve;
 
 public:
-    RevSurface(Curve *pCurve, Material* material) : pCurve(pCurve), Object3D(material) {
-        // Check flat.
+    RevSurface() {
+        objType = REVSURFACE;
+        sampleable = false;
+    }
+
+    void setCurve(Curve* _pCurve) {
+        pCurve = _pCurve;
+        double mxx = 0;
+        planeY = (BoundPlane){1e38, -1e38};
         for (const auto &cp : pCurve->getControls()) {
             if (cp.z() != 0.0) {
                 printf("Profile of revSurface must be flat on xy plane.\n");
                 exit(0);
             }
+
+            mxx = max(mxx, abs(cp.x()));
+            planeY.coorMin = min(planeY.coorMin, cp.y());
+            planeY.coorMax = max(planeY.coorMax, cp.y());
         }
+        planeX = planeZ = (BoundPlane){-mxx, mxx};
+
+        buildMesh();
     }
 
-    ~RevSurface() override {
-        delete pCurve;
-    }
-
-    bool intersect(const Ray &r, Hit &h, float tmin) override {
-        
+    bool intersect(const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) override {
         /*
-        F(r,t,theta)=(p_x+r*v_x-f(t)_x*cos(theta), p_y+r*v_y-f(t)_y, p_z+r*v_z-f(t)_x*sin(theta))
-        J_F=[v_x, -cos(theta)*[f(t)_x]', sin(theta)*f(t)_x,
-             v_y, -[f(t)_y]',            0,
-             v_z, -sin(theta)*[f(t)_x]', -cos(theta)*f(t)_x]
+        F(t,s,theta)=(p_x+t*v_x-f(s)_x*cos(theta),
+                      p_y+t*v_y-f(s)_y,
+                      p_z+t*v_z-f(s)_x*sin(theta))
+        J_F=[v_x, -cos(theta)*[f(s)_x]', sin(theta)*f(s)_x,
+             v_y, -[f(s)_y]',            0,
+             v_z, -sin(theta)*[f(s)_x]', -cos(theta)*f(s)_x]
         */
+        Hit th = Hit();
+        th.setT(h.getT()); 
+        bool res = mesh->intersect(r, th, tmin);
+        if (!res) return false;
+
+        double t = th.getT(), s, theta = 0;
+        Vector3d p = r.pointAtParameter(t);
+        double s_xz = sqrt(p.x() * p.x() + p.z() * p.z()), mi = 1e9;
+        CurvePoint TP;
+        for (auto P: curvePoints) {
+            double err = abs(s_xz - abs(P.V.x())) + abs(p.y() - P.V.y());
+            if (err < mi) {
+                mi = err;
+                s = P.s;
+                TP = P;
+            }
+        }
+        if (s_xz > 1e-9) {
+            theta = acos(p.x() / s_xz);
+            if (p.z() * sin(theta) < 0) theta = -theta;
+            if (TP.V.x() < 0) theta += M_PI;
+        }
+
+        double initial = t;
+        double eta = 0.1;
+        for (int i = 0; i < NewtonSteps; ++i) {
+            CurvePoint fs = pCurve->evaluate(s);
+            Vector3d F(p.x() - fs.V.x() * cos(theta),
+                       p.y() - fs.V.y(),
+                       p.z() - fs.V.x() * sin(theta));
+            if (F.length() < eps) {
+                if (t >= tmin && t < h.getT()) {
+                    if (testLs) return true;
+                    Vector3d n(-fs.T.y() * cos(theta), fs.T.x(), -fs.T.y() * sin(theta));
+                    n.normalize();
+                    if (Vector3d::dot(r.getDirection(), n) < 0)
+                        h.set(t, this, material, n, Vector2d::ZERO, true);
+                    else
+                        h.set(t, this, material, -n, Vector2d::ZERO, false);
+                    return true;
+                }
+                return false;
+            }
+            
+            Matrix3d JF(r.getDirection().x(), -cos(theta) * fs.T.x(), sin(theta) * fs.V.x(),
+                        r.getDirection().y(), -fs.T.y(),              0,
+                        r.getDirection().z(), -sin(theta) * fs.T.x(), -cos(theta) * fs.V.x());
+            Vector3d delta = JF.inverse() * F;
+            t -= eta * delta.x(); s -= eta * delta.y(); theta -= eta * delta.z();
+            eta *= 0.99;
+            if (isnan(t) || isnan(s) || isnan(theta))
+                return false;
+        }
+        CurvePoint fs = pCurve->evaluate(s);
+        Vector3d F(p.x() - fs.V.x() * cos(theta),
+                       p.y() - fs.V.y(),
+                       p.z() - fs.V.x() * sin(theta));
         return false;
     }
 
-    void drawGL() override {
-        Object3D::drawGL();
+    inline BoundPlane getBoundPlaneX() override {return planeX;}
 
-        // Definition for drawable surface.
-        typedef std::tuple<unsigned, unsigned, unsigned> Tup3u;
-        // Surface is just a struct that contains vertices, normals, and
-        // faces.  VV[i] is the position of vertex i, and VN[i] is the normal
-        // of vertex i.  A face is a triple i,j,k corresponding to a triangle
-        // with (vertex i, normal i), (vertex j, normal j), ...
-        // Currently this struct is computed every time when canvas refreshes.
-        // You can store this as member function to accelerate rendering.
+    inline BoundPlane getBoundPlaneY() override {return planeY;}
 
-        struct Surface {
-            std::vector<Vector3f> VV;
-            std::vector<Vector3f> VN;
-            std::vector<Tup3u> VF;
-        } surface;
+    inline BoundPlane getBoundPlaneZ() override {return planeZ;}
 
-        std::vector<CurvePoint> curvePoints;
-        pCurve->discretize(30, curvePoints);
-        const int steps = 40;
+    inline int numObjects() override {return 1;}
+
+    inline void print() override {
+        std::cout << "===== Curve Revolving Body =====\n";
+        std::cout << "material: " << ref << "\n";
+        if (material) material->print();
+        pCurve->print();
+        std::cout << "--------------------------------\n";
+    }
+
+protected:
+    void buildMesh() {
+        struct TriangleIndex {int i, j, k;};
+        std::vector <TriangleIndex> VF;
+        std::vector <Vector3d> VV;
+        std::vector <Object3D*> triangles;
+        pCurve->discretize(resolution, curvePoints);
         for (unsigned int ci = 0; ci < curvePoints.size(); ++ci) {
             const CurvePoint &cp = curvePoints[ci];
             for (unsigned int i = 0; i < steps; ++i) {
-                float t = (float) i / steps;
-                Quat4f rot;
-                rot.setAxisAngle(t * 2 * 3.14159, Vector3f::UP);
-                Vector3f pnew = Matrix3f::rotation(rot) * cp.V;
-                Vector3f pNormal = Vector3f::cross(cp.T, -Vector3f::FORWARD);
-                Vector3f nnew = Matrix3f::rotation(rot) * pNormal;
-                surface.VV.push_back(pnew);
-                surface.VN.push_back(nnew);
+                double t = 1.0 * i / steps;
+                Quat4d rot;
+                rot.setAxisAngle(t * 2 * M_PI, Vector3d::UP);
+                Vector3d pnew = Matrix3d::rotation(rot) * cp.V;
+                VV.push_back(pnew);
                 int i1 = (i + 1 == steps) ? 0 : i + 1;
                 if (ci != curvePoints.size() - 1) {
-                    surface.VF.emplace_back((ci + 1) * steps + i, ci * steps + i1, ci * steps + i);
-                    surface.VF.emplace_back((ci + 1) * steps + i, (ci + 1) * steps + i1, ci * steps + i1);
+                    VF.push_back((TriangleIndex){(ci + 1) * steps + i, ci * steps + i1, ci * steps + i});
+                    VF.push_back((TriangleIndex){(ci + 1) * steps + i, (ci + 1) * steps + i1, ci * steps + i1});
                 }
             }
         }
-
-        glBegin(GL_TRIANGLES);
-        for (unsigned i = 0; i < surface.VF.size(); i++) {
-            glNormal3fv(surface.VN[std::get<0>(surface.VF[i])]);
-            glVertex3fv(surface.VV[std::get<0>(surface.VF[i])]);
-            glNormal3fv(surface.VN[std::get<1>(surface.VF[i])]);
-            glVertex3fv(surface.VV[std::get<1>(surface.VF[i])]);
-            glNormal3fv(surface.VN[std::get<2>(surface.VF[i])]);
-            glVertex3fv(surface.VV[std::get<2>(surface.VF[i])]);
+        for (int i = 0; i < VF.size(); ++i) {
+            Triangle* tri = new Triangle(VV[VF[i].i], VV[VF[i].j], VV[VF[i].k], NULL);
+            triangles.push_back(tri);
         }
-        glEnd();
-    }
-    BoundPlane getBoundPlaneX() override {
-        return (BoundPlane){-1e38, 1e38};
+        mesh = new Mesh();
+        mesh->setTriangles(triangles);
     }
 
-    BoundPlane getBoundPlaneY() override {
-        return (BoundPlane){-1e38, 1e38};
-    }
-
-    BoundPlane getBoundPlaneZ() override {
-        return (BoundPlane){-1e38, 1e38};
-    }
+    const double eps = 1e-2;
+    const int resolution = 100, steps = 100, NewtonSteps = 100;
+    BoundPlane planeX, planeY, planeZ;
+    Mesh* mesh;
+    std::vector <CurvePoint> curvePoints;
 };
-
-#endif //REVSURFACE_HPP

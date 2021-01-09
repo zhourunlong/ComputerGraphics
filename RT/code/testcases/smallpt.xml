@@ -11,7 +11,7 @@
 			<lookat origin="50, 52, 295.6" target="50, 51.957427, 294.600907" up="0, 0.999093, -0.042573"/>
 		</transform>
 		<sampler type="independent">
-			<integer name="sample_count" value="50000"/>
+			<integer name="sample_count" value="10000"/>
 		</sampler>
 		<film type="hdrfilm">
 			<integer name="width" value="1024"/>
@@ -48,9 +48,9 @@
 		<transform name="to_world">
 			<translate value="50, 40.8, -100000"/>
 		</transform>
-        <bsdf type="conductor">
-			<string name="material" value="none"/>
-			<rgb name="specular_reflectance" value="0.999, 0.999, 0.999"/>
+        <bsdf type="conductor"> <!--Mo-->
+			<rgb name="eta" value="4.4837010280, 3.5254578255, 2.7760769438"/>
+			<rgb name="k" value="4.1111307988, 3.4208716252, 3.1506031404"/>
 		</bsdf>
 	</shape>
 	<!--Front-->
@@ -89,9 +89,9 @@
 		<transform name="to_world">
 			<translate value="27, 16.5, 47"/>
 		</transform>
-		<bsdf type="conductor">
-			<string name="material" value="none"/>
-			<rgb name="specular_reflectance" value="0.999, 0.999, 0.999"/>
+		<bsdf type="conductor"> <!--Ag-->
+			<rgb name="eta" value="0.1552646489, 0.1167232965, 0.1383806959"/>
+			<rgb name="k" value="4.8283433224, 3.1222459278, 2.1469504455"/>
 		</bsdf>
 	</shape>
 	<!--Glass-->

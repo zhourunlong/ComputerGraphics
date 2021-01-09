@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<scene version="0.5.0">
+	<integrator type="path">
+		<integer name="maxDepth" value="15"/>
+	</integrator>
+	<sensor type="perspective">
+		<float name="fov" value="45"/>
+        <string name="fovAxis" value="y"/>
+		<transform name="to_world">
+			<lookat origin="0, 0, 12" target="0, 0, 11" up="0, 1, 0"/>
+		</transform>
+		<sampler type="independent">
+			<integer name="sample_count" value="20000"/>
+		</sampler>
+		<film type="hdrfilm">
+			<integer name="width" value="2000"/>
+			<integer name="height" value="2000"/>
+			<string name="fileFormat" value="pfm"/>
+			<string name="pixelFormat" value="rgb"/>
+			<boolean name="banner" value="false"/>
+			<rfilter type="tent"/>
+		</film>
+	</sensor>
+	<bsdf type="twosided" id="LeftWall" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.63, 0.065, 0.05"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="RightWall" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.14, 0.45, 0.091"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="Floor" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="Ceiling" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="BackWall" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="ShortBox" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="TallBox" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0.725, 0.71, 0.68"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="twosided" id="Light" >
+		<bsdf type="diffuse" >
+			<rgb name="reflectance" value="0, 0, 0"/>
+		</bsdf>
+	</bsdf>
+	<shape type="revsurface">
+        <transform name="toWorld" >
+			<rotate value="0, 0, 1" angle="15"/>
+            <translate value="1.7, 0, -2"/>
+        </transform>
+        <bsdf type="thindielectric">
+			<float name="int_ior" value="1.5"/>
+			<float name="ext_ior" value="1.0"/>
+		</bsdf>
+        <curve type="Bspline">
+            <vec value="0.000000, -0.459543, 0.0"/>
+            <vec value="0.000000, -0.459544, 0.0"/>
+            <vec value="0.000000, -0.459545, 0.0"/>
+            <vec value="-0.351882, -0.426747, 0.0"/>
+            <vec value="-0.848656, -0.278898, 0.0"/>
+            <vec value="-1.112097, 0.084005, 0.0"/>
+            <vec value="-1.164785, 1.105511, 0.0"/>
+            <vec value="-0.991667, 2.328629, 0.0"/>
+            <vec value="-1.029301, 2.503360, 0.0"/>
+            <vec value="-1.088800, 2.345600, 0.0"/>
+            <vec value="-1.278000, 1.162800, 0.0"/>
+            <vec value="-1.214800, 0.055200, 0.0"/>
+            <vec value="-0.915600, -0.381200, 0.0"/>
+            <vec value="-0.380400, -0.622000, 0.0"/>
+            <vec value="-0.144000, -0.968400, 0.0"/>
+            <vec value="-0.096800, -1.480000, 0.0"/>
+            <vec value="-0.128400, -2.112400, 0.0"/>
+            <vec value="-0.317200, -2.202800, 0.0"/>
+            <vec value="-0.994400, -2.262800, 0.0"/>
+            <vec value="-1.214800, -2.323200, 0.0"/>
+            <vec value="-1.199200, -2.398400, 0.0"/>
+            <vec value="-1.057600, -2.458800, 0.0"/>
+            <vec value="-0.711200, -2.458800, 0.0"/>
+            <vec value="0.000000, -2.458800, 0.0"/>
+            <vec value="0.000000, -2.458801, 0.0"/>
+            <vec value="0.000000, -2.458802, 0.0"/>
+        </curve>
+	</shape>
+    <shape type="revsurface"> 
+        <transform name="toWorld" >
+			<rotate value="0, 0, 1" angle="-8"/>
+            <translate value="-1.5, -0.5, -2"/>
+        </transform>
+        <bsdf type="dielectric">
+			<float name="int_ior" value="1.5"/>
+			<float name="ext_ior" value="1.0"/>
+		</bsdf>
+        <curve type="Bspline">
+            <vec value="0.000000, -0.459543, 0.0"/>
+            <vec value="0.000000, -0.459544, 0.0"/>
+            <vec value="0.000000, -0.459545, 0.0"/>
+            <vec value="-0.351882, -0.426747, 0.0"/>
+            <vec value="-0.848656, -0.278898, 0.0"/>
+            <vec value="-1.112097, 0.084005, 0.0"/>
+            <vec value="-1.164785, 1.105511, 0.0"/>
+            <vec value="-0.991667, 2.328629, 0.0"/>
+            <vec value="-1.029301, 2.503360, 0.0"/>
+            <vec value="-1.088800, 2.345600, 0.0"/>
+            <vec value="-1.278000, 1.162800, 0.0"/>
+            <vec value="-1.214800, 0.055200, 0.0"/>
+            <vec value="-0.915600, -0.381200, 0.0"/>
+            <vec value="-0.380400, -0.622000, 0.0"/>
+            <vec value="-0.144000, -0.968400, 0.0"/>
+            <vec value="-0.096800, -1.480000, 0.0"/>
+            <vec value="-0.128400, -2.112400, 0.0"/>
+            <vec value="-0.317200, -2.202800, 0.0"/>
+            <vec value="-0.994400, -2.262800, 0.0"/>
+            <vec value="-1.214800, -2.323200, 0.0"/>
+            <vec value="-1.199200, -2.398400, 0.0"/>
+            <vec value="-1.057600, -2.458800, 0.0"/>
+            <vec value="-0.711200, -2.458800, 0.0"/>
+            <vec value="0.000000, -2.458800, 0.0"/>
+            <vec value="0.000000, -2.458801, 0.0"/>
+            <vec value="0.000000, -2.458802, 0.0"/>
+        </curve>
+	</shape>
+    <shape type="rectangle" >
+		<transform name="toWorld" >
+			<rotate value="1, 0, 0" angle="90"/>
+            <scale value="10"/>
+            <translate value="0, -5, 0"/>
+        </transform>
+		<ref id="Floor" />
+	</shape>
+	<shape type="rectangle" >
+		<transform name="toWorld" >
+			<rotate value="-1, 0, 0" angle="90"/>
+            <scale value="10"/>
+            <translate value="0, 5, 0"/>
+        </transform>
+		<ref id="Ceiling" />
+	</shape>
+	<shape type="rectangle" >
+		<transform name="toWorld" >
+			<rotate value="0, 1, 0" angle="90"/>
+            <scale value="10"/>
+            <translate value="5, 0, 0"/>
+        </transform>
+		<ref id="RightWall" />
+	</shape>
+	<shape type="rectangle" >
+		<transform name="toWorld" >
+			<rotate value="0, -1, 0" angle="90"/>
+            <scale value="10"/>
+            <translate value="-5, 0, 0"/>
+        </transform>
+		<ref id="LeftWall" />
+	</shape>
+    <shape type="rectangle" >
+		<transform name="toWorld" >
+            <scale value="10"/>
+            <translate value="0, 0, -5"/>
+        </transform>
+		<ref id="BackWall" />
+	</shape>
+	<shape type="rectangle" >
+		<transform name="toWorld" >
+			<rotate value="1, 0, 0" angle="90"/>
+            <translate value="0, 4.9, -2"/>
+        </transform>
+		<ref id="Light" />
+		<emitter type="area" >
+			<rgb name="radiance" value="12, 12, 12"/>
+		</emitter>
+	</shape>
+</scene>

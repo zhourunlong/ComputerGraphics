@@ -19,8 +19,11 @@ inline Hit::Hit(double _t, Object3D* _o, Material* _m, const Vector3d &n,
     into = _into;
 }
 
+inline void Hit::setT(const double &_t) {t = _t;}
+
 inline double Hit::getT() const {return t;}
 
+inline void Hit::setObject(Object3D* _o) {o = _o;}
 inline Object3D* Hit::getObject() const {return o;}
 
 inline void Hit::setMaterial(Material* _m) {m = _m;}

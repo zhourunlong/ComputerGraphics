@@ -103,6 +103,11 @@ public:
         buildTree(rt, triangles, 0);
     }
 
+    inline void setTriangles(std::vector <Object3D*> _triangles) {
+        triangles = _triangles;
+        buildTree(rt, triangles, 0);
+    }
+
     inline void setFaceNorm(bool _faceNormals) {
         if (_faceNormals)
             for (int i = 0; i < triangles.size(); ++i) {
@@ -123,6 +128,7 @@ public:
     inline bool intersect(const Ray &r, Hit &h, const double &tmin, const bool &testLs = false) {
         bool ret = queryIntersect(rt, r, h, tmin, testLs);
         if (ret) {
+            h.setObject(this);
             h.setMaterial(material);
             h.setSampleable(sampleable);
             h.setEmission(emission);
@@ -133,7 +139,6 @@ public:
     inline void setEmission(const Vector3d &_emission) override {
         emission = _emission;
         sampleable = false;
-        std::cerr << ref << " " << emission << "\n";
     }
 
     inline BoundPlane getBoundPlaneX() override {

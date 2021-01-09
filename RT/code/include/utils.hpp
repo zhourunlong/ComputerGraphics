@@ -3,7 +3,19 @@
 #include <bits/stdc++.h>
 #include "vecmath/vecmath.h"
 
+inline double sqr(const double &x) {return x * x;}
+
 inline double clamp(const double &x) {return x < 0 ? 0 : (x > 1 ? 1 : x);}
+
+// transforms a 3D point using a matrix, returning a 3D point
+inline Vector3d transformPoint(const Matrix4d &mat, const Vector3d &point) {
+    return (mat * Vector4d(point, 1)).xyz();
+}
+
+// transform a 3D directino using a matrix, returning a direction
+inline Vector3d transformDirection(const Matrix4d &mat, const Vector3d &dir) {
+    return (mat * Vector4d(dir, 0)).xyz();
+}
 
 inline double gammaCorrection(const double &x, const double &filmGamma) {
     return pow(clamp(x), 1.0 / filmGamma);

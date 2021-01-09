@@ -22,4 +22,5 @@ mkdir -p output
 #bin/RT testcases/kitchen/scene.xml output/kitchen.bmp
 #bin/RT testcases/spaceship/scene.xml output/spaceship.bmp
 #bin/RT testcases/cornellbox2.xml output/cornellbox2.bmp
-bin/RT testcases/bathroom/scene.xml output/bathroom.bmp
+#bin/RT testcases/bathroom/scene.xml output/bathroom.bmp
+bin/RT testcases/spline.xml output/spline.bmp
