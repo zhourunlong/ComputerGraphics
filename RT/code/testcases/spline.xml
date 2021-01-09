@@ -11,7 +11,7 @@
 			<lookat origin="0, 0, 12" target="0, 0, 11" up="0, 1, 0"/>
 		</transform>
 		<sampler type="independent">
-			<integer name="sample_count" value="20000"/>
+			<integer name="sample_count" value="10000"/>
 		</sampler>
 		<film type="hdrfilm">
 			<integer name="width" value="2000"/>

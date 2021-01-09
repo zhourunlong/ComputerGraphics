@@ -11,19 +11,19 @@
             <matrix value="-1 0 0 0 0 1 0 1 0 0 -1 6.8 0 0 0 1"/>
         </transform>
 		<sampler type="sobol" >
-			<integer name="sampleCount" value="1000" />
+			<integer name="sampleCount" value="2000" />
 		</sampler>
 		<film type="ldrfilm" >
-			<integer name="width" value="1024" />
-			<integer name="height" value="1024" />
+			<integer name="width" value="2000" />
+			<integer name="height" value="2000" />
 			<string name="fileFormat" value="png" />
 			<string name="pixelFormat" value="rgb" />
 			<float name="gamma" value="2.2" />
 			<boolean name="banner" value="false" />
 			<rfilter type="tent" />
 		</film>
-        <float name="focusDistance" value="7"/>
-        <float name="apertureRadius" value="0.05"/>
+        <float name="focusDistance" value="8"/>
+        <float name="apertureRadius" value="0.07"/>
 	</sensor>
 	<bsdf type="twosided" id="LeftWall" >
 		<bsdf type="diffuse" >
