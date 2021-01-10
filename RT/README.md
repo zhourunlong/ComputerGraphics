@@ -193,6 +193,7 @@ inline Vector3d lightSampling(Material* m, const Vector3d &x,
 #### 粗糙塑料
 
 ![RoughPlastic](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/roughplastic.bmp)
+
 粗糙塑料模型即将塑料的电介质表层改为微表面。其漫反射项与塑料一致，只需在`getColor`函数中添加镜面反射项。镜面反射部分和粗糙导体实现方法相同。在BSDF采样中，等概率选择漫反射和镜面反射，概率密度函数取平均。
 
 ### 景深
