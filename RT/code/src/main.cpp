@@ -65,8 +65,6 @@ Vector3d rayTracing(Ray r, Sampler* sampler) {
             break;
         }
 
-        Object3D *o = hit.getObject();
-        //o->print();
         Material *m = hit.getMaterial();
         bool into = hit.getInto();
         Vector3d e = Vector3d::ZERO;
@@ -144,14 +142,5 @@ int main(int argc, char *argv[]) {
     }
     renderedImg.SaveImage(argv[2]);
     fprintf(stderr, "finished rendering, time = %5.2lf sec\n", omp_get_wtime() - timeStamp);
-
-/*
-    int x = 290, y = 45;
-    unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
-    Sampler* sampler = new Sampler(Xi);
-    Ray camRay = camera->generateRay(Vector2d(x, y), sampler);
-    rayTracing(camRay, sampler);
-    delete sampler;
-*/
     return 0;
 }
