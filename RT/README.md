@@ -12,7 +12,7 @@ $$L_o(x;w_o)=\frac{1}{N}\sum_{w_i} \frac{L_i(x;w_i) f(w;w_i\to w_o) \langle w_i,
 
 ### 坐标轴对齐包围盒
 
-判断光线和物体是否相交前，先判断光线是否与物体的坐标轴对齐包围盒$B=\{(x,y,z)\in [x_\min,x_\max]\times [y_\min,y_\max]\times [z_\min,z_\max]\}$相交。在解析场景时预处理好每个物体的包围盒，求交时转化为射线的每维分量与对应的一对平面求交，再将参数区间求并集。
+判断光线和物体是否相交前，先判断光线是否与物体的坐标轴对齐包围盒$B=[x_\min,x_\max]\times [y_\min,y_\max]\times [z_\min,z_\max]$相交。在解析场景时预处理好每个物体的包围盒，求交时转化为射线的每维分量与对应的一对平面求交，再将参数区间求并集。
 
 代码实现见`code/include/object/object3d.hpp`，19至59行。
 ```C++
@@ -194,3 +194,153 @@ inline Vector3d lightSampling(Material* m, const Vector3d &x,
 
 ![RoughPlastic](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/roughplastic.bmp)
 粗糙塑料模型即将塑料的电介质表层改为微表面。其漫反射项与塑料一致，只需在`getColor`函数中添加镜面反射项。镜面反射部分和粗糙导体实现方法相同。在BSDF采样中，等概率选择漫反射和镜面反射，概率密度函数取平均。
+
+### 景深
+
+将简单的小孔成像相机改为透镜成像相机，接受场景文件给定的光圈半径和成像距离（透镜到焦平面的距离）。对于原本图片上的一个像素点$p$，求射线$o+t(o-p)$与焦平面的交点$x$。在光圈上均匀随机采样得到点$o'$，最终使用射线$o'+t(x-o')$渲染。
+
+代码实现见`code/include/camera.hpp`，63至66行。
+```C++
+inline Ray generateRay(const Vector2d &point, Sampler* sampler) {
+    Vector3d dir;
+    if (fovAxis == "y")
+        dir = ...
+    else if (fovAxis == "x")
+        dir = ...
+    double t = distance / Vector3d::dot(dir, direction);
+    Vector3d x = center + t * dir;
+    Vector2d dc = sampler->sampleDiskUniform();
+    Vector3d nc = center + aperture * dc.x() * up + aperture * dc.y() * horizontal;
+    return Ray(nc, (x - nc).normalized());
+}
+```
+
+### 软阴影
+
+路径追踪算法是真实感渲染算法，在面积光源下自然有软阴影。
+
+### 抗锯齿
+
+在主算法中，每个像素点的颜色是其$2\times 2$子像素颜色的平均，实现了简单的抗锯齿。场景文件指定的`sampleCount`为该像素整体的采样次数，故每个子像素使用$\frac{1}{4}\text{sampleCount}$次采样。
+
+代码实现见`code/src/main.cpp`，124至135行。
+```C++
+for (int sy = -1; sy < 2; sy += 2)
+    for (int sx = -1; sx < 2; sx += 2) {
+        Vector3d r(0);
+        for (int s = 0; s < samps; ++s) {
+            double r1 = 2 * erand48(Xi), dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
+            double r2 = 2 * erand48(Xi), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
+            Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + 0.5 * dx + 0.5, y + 0.25 * sy + 0.5 * dy + 0.5), sampler);
+            r = r + rayTracing(camRay, sampler);
+        }
+        r = r / samps;
+        finalColor = finalColor + Vector3d(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
+    }
+```
+
+### 顶点法向、贴图和凹凸贴图
+
+由`.obj`文件给定三角形各顶点的顶点法向$vn_i$和纹理坐标$vt_i$。对于光线与三角形$ABC$相交的点$p$，求出其重心坐标$(\alpha,\beta)$，通过加权平均得到着色法向$sn=\alpha vn_A+\beta vn_B +(1-\alpha-\beta)vn_C$和纹理坐标$(x,y)=\alpha vt_A+\beta vt_B+(1-\alpha-\beta)vt_C$。
+
+贴图由场景文件给出，在$w\times h$的贴图中读取像素$(\lfloor xw\rfloor,\lfloor yh\rfloor)$的值作为该交点的颜色。如果还给定了凹凸贴图，则根据该像素点关于$x$和$y$的两个中心差分计算法向的扰动量。在此之前需要对每个三角形预处理两个在三角形平面中的向量$p_u$和$p_v$用作扰动，根据课本上的公式$n'=n+n\times (\text{d}u p_u-\text{d}v p_v)$计算得到新的法向。
+
+顶点法向代码实现见`code/include/object/triangle.hpp`，第102、107行。
+```C++
+h.setShadeNormal(((alpha * va + beta * vb + (size - alpha - beta) * vc) / size).normalized());
+```
+
+贴图代码实现见`code/include/texture/texture.cpp`，24至38行。
+```C++
+inline void Texture::albedo(Hit &hit) {
+    if (use_uniform) {
+        hit.setColor(uniform);
+        return;
+    }
+    
+    int w = bitmap->w, h = bitmap->h;
+    Vector2d texCoor = hit.getTexCoor();
+    int x = (int(texCoor.x() * w) % w + w) % w,
+        y = (int(texCoor.y() * h) % h + h) % h;
+    int r = bitmap->data[(y * bitmap->w + x) * bitmap->bpp],
+        g = bitmap->data[(y * bitmap->w + x) * bitmap->bpp + 1],
+        b = bitmap->data[(y * bitmap->w + x) * bitmap->bpp + 2];
+    hit.setColor(Vector3d(r / 256.0, g / 256.0, b / 256.0));
+}
+```
+
+凹凸贴图代码实现见`code/include/texture/bump.hpp`，36至47行。
+```C++
+double xr = texCoor.x() * w - x, yr = texCoor.y() * h - y;
+double dfdx1 = dfdx[x][y], 
+       dfdx2 = dfdx[x][y + 1],
+       dfdy1 = dfdy[x][y],
+       dfdy2 = dfdy[x - 1][y];
+double bu = xr * dfdx2 + (1 - xr) * dfdx1,
+       bv = (1 - yr) * dfdy2 + yr * dfdy1;
+Vector3d pu, pv, n, shadeN = hit.getShadeNormal();
+hit.getTangent(pu, pv);
+n = (shadeN + Vector3d::cross(shadeN, bu * pv - bv * pu)).normalized();
+if (Vector3d::dot(n, shadeN) < 0) n = -n;
+hit.setShadeNormal(n);
+```
+
+### 样条曲线旋转体解析法求交
+
+设直线参数为$t$，样条曲线旋转体的参数为$s$和$\theta$，得到非线性方程组
+
+$$F(t,s,\theta)=\left[\begin{matrix}
+p_x+tv_x-f(s)_x\cos\theta\\
+p_y+tv_y-f(s)_y\\
+p_z+tv_z-f(s)_x\sin\theta
+\end{matrix}\right]
+=\left[\begin{matrix}
+0\\0\\0\\
+\end{matrix}\right].$$
+
+计算其雅可比矩阵得到
+
+$$J_F=\left[\begin{matrix}
+v_x & -\cos\theta \cdot [f(s)_x]'& \sin\theta\cdot f(s)_x\\
+v_y & -[f(s)_y]' & 0\\
+v_z & -\sin\theta \cdot[f(s)_x]' & -\cos\theta\cdot f(s)_x
+\end{matrix}\right].$$
+
+于是由牛顿迭代法可以得到$(t_{k+1},s_{k+1},\theta_{k+1})=(t_k,s_k,\theta_k)-J_F^{-1} F$。在实现中我采用了类似机器学习中学习速率的概念。考虑到样条函数在定义区间以外$(-\infty,0)\cup(1,+\infty)$会剧烈波动，我还在求值时特判了这种情况，并用直线连接了$0$和$1$处，斜率分别为$0$和$1$处的导数，这样也可以避免$s$远离定义区间。
+
+代码实现见`code/include/object/revsurface.hpp`，71至99行。
+```C++
+double eta = 0.1;
+for (int i = 0; i < NewtonSteps; ++i) {
+    CurvePoint fs = pCurve->evaluate(s);
+    Vector3d F(p.x() - fs.V.x() * cos(theta),
+               p.y() - fs.V.y(),
+               p.z() - fs.V.x() * sin(theta));
+    if (F.length() < eps) {
+        if (t >= tmin && t < h.getT()) {
+            if (testLs) return true;
+            Vector3d n(-fs.T.y() * cos(theta), fs.T.x(), -fs.T.y() * sin(theta));
+            n.normalize();
+            if (Vector3d::dot(r.getDirection(), n) < 0)
+                h.set(t, this, material, n, Vector2d::ZERO, true);
+            else
+                h.set(t, this, material, -n, Vector2d::ZERO, false);
+            return true;
+        }
+        return false;
+    }
+    
+    Matrix3d JF(r.getDirection().x(), -cos(theta) * fs.T.x(), sin(theta) * fs.V.x(),
+                r.getDirection().y(), -fs.T.y(),              0,
+                r.getDirection().z(), -sin(theta) * fs.T.x(), -cos(theta) * fs.V.x());
+    Vector3d delta = JF.inverse() * F;
+    t -= eta * delta.x(); s -= eta * delta.y(); theta -= eta * delta.z();
+    eta *= 0.99;
+    if (isnan(t) || isnan(s) || isnan(theta))
+        return false;
+}
+```
+
+## 成果
+
+高清图在`gallery`下。

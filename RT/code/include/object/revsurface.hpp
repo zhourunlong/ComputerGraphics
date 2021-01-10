@@ -97,10 +97,6 @@ public:
             if (isnan(t) || isnan(s) || isnan(theta))
                 return false;
         }
-        CurvePoint fs = pCurve->evaluate(s);
-        Vector3d F(p.x() - fs.V.x() * cos(theta),
-                       p.y() - fs.V.y(),
-                       p.z() - fs.V.x() * sin(theta));
         return false;
     }
 
