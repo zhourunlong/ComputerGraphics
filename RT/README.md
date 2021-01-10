@@ -346,7 +346,8 @@ for (int i = 0; i < NewtonSteps; ++i) {
 高清图在`gallery`下。
 
 ### 软阴影、光源采样和渗色
-下面两张图同样采用1000spp渲染，时间相差不到$10\%$，而前者采用了光源采样，相对后者噪点显著减少。
+下面两张图同样采用1000spp渲染，时间相差不到$10\\%$，而前者采用了光源采样，相对后者噪点显著减少。
+
 ![cbox1ls](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/cornellbox1_ls_1000spp.bmp)
 ![cbox1pt](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/cornellbox1_pt_1000spp.bmp)
 
@@ -354,24 +355,30 @@ for (int i = 0; i < NewtonSteps; ++i) {
 
 ### 景深
 下图添加了景深效果，可以看出焦平面大致在高盒子的前表面上，因此矮盒子和背景墙的墙角均变模糊。
+
 ![cbox2](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/cornellbox2.bmp)
 
 ### 导体和电介质
 下图中，前面的球为完美电介质，后面的球为银材质，背景墙为钼材质。导体的折射率和吸收系数参考了[Tungsten](https://github.com/tunabrain/tungsten/blob/master/src/core/bsdfs/ComplexIorData.hpp)。
+
 ![smallpt](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/smallpt.bmp)
 
 ### 样条曲线旋转体和薄电介质
 下图中的两个杯子均用样条曲线旋转体绘制，左边为完美电介质，右边为薄电介质，可以看出薄电介质能模拟出中空的效果，且表面有多层反射。
+
 ![spline](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/spline.bmp)
 
 ### 顶点法向、塑料和粗糙塑料
 咖啡机的全部组件均在`.obj`文件中给出，顶点法向使得咖啡机看起来比较光滑。橙色杯体为塑料材质，黑色杯体和把手为粗糙塑料材质，反光效果各不相同。
+
 ![coffee](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/coffee.bmp)
 
 ### 粗糙导体
 飞船的船身为粗糙导体，发动机的倒影变得模糊。
+
 ![spaceship](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/spaceship.bmp)
 
 ### 加速、几乎所有的材质、贴图和凹凸贴图
 该场景有约150万个三角形，各种加速算法使得收敛效果较好。厨房中几乎涉及了所有的材质，毛巾、书籍、胡萝卜和收音机上均有贴图，面包箱表面为凹凸贴图。
+
 ![kitchen](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/kitchen.bmp)
