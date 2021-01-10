@@ -382,3 +382,7 @@ for (int i = 0; i < NewtonSteps; ++i) {
 该场景有约150万个三角形，各种加速算法使得收敛效果较好。厨房中几乎涉及了所有的材质，毛巾、书籍、胡萝卜和收音机上均有贴图，面包箱表面为凹凸贴图。
 
 ![kitchen](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/kitchen.bmp)
+
+## 后续
+
+可以关注我的[GitHub仓库](https://github.com/zhourunlong/ComputerGraphics)，后续可能会有细节上的修正和优化。
