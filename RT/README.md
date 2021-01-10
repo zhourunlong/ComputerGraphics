@@ -156,36 +156,41 @@ inline Vector3d lightSampling(Material* m, const Vector3d &x,
 
 #### 漫反射
 
-![Diffuse](???)
+![Diffuse](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/diffuse.bmp)
 
 入射光线在法线所在的半球面采样。实现中使用了重要性采样，即在半球上按照极角的余弦值为分布函数采样，这样与渲染方程中的内积项抵消，可以减少辐照度的方差。
 
 #### 导体
 
-![Conductor](???)
+![Conductor](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/conductor.bmp)
 
 入射光线为出射光线关于法线的共面镜像，其反射率（即光强）由夹角、折射率（$\eta$）和吸收系数（$k$）根据导体的菲涅尔公式计算得出。镜面反射材质可以通过设$\eta=0,\ k=1$来模拟。
 
 #### 粗糙导体
 
-![RoughConductor](???)
+![RoughConductor](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/roughconductor.bmp)
 
 粗糙导体的表面由大量微小的起伏微表面模拟，这些微表面与导体同材质。入射光线的采样本质上是微表面采样，这里使用了[GGX分布重要性采样](https://schuttejoe.github.io/post/ggximportancesamplingpart2/)，其概率密度函数则从[知乎](https://zhuanlan.zhihu.com/p/20119162)获得。
 
 #### 电介质
 
-![Dielectric](???)
+![Dielectric](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/dielectric.bmp)
 
 电介质即折射材质，反射率$r$和折射方向由夹角、材质两侧的折射率（$\eta_i,\ \eta_t$）由电介质的菲涅尔公式计算得出。采样时以$r$的概率反射、$1-r$的概率折射，若入射光为折射，根据能量和辐照度的关系，需要将辐照度乘以$\left(\frac{\eta_t}{\eta_i}\right)^2$。
 
 #### 薄电介质
 
-![ThinDielectric](???)
+![ThinDielectric](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/thindielectric.bmp)
 
 薄电介质模型假设电介质为非常薄的一层，两侧都视为其外部。在该假设下，可以用很简单的数学模型刻画在电介质层间的多次反射。由于电介质层很薄，所有的入射光都聚在出射点。若同材质的电介质有反射率$r$，则从出射光同侧射入的概率为$\frac{2r}{1-r}$，其余均为从材质另一侧射入。辐照度不需再乘以系数。
 
 #### 塑料
 
-![Plastic](???)
+![Plastic](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/plastic.bmp)
 
-塑料模型假设在漫反射面外层存在非常薄的电介质涂层。同样，所有的入射光都聚在出射点。
+塑料模型假设在漫反射面外层存在非常薄的电介质涂层。同样，所有的入射光都聚在出射点。该模型的实现基于[论文](https://hal.inria.fr/hal-01386157/document)。对于漫反射部分，需要知道在半球面上的入射光最后能折射的比例，这里采用大量随机取平均的做法简单求解近似值，但理论上应该存在很好的积分解。
+
+#### 粗糙塑料
+
+![RoughPlastic](https://github.com/zhourunlong/ComputerGraphics/raw/master/RT/doc_resource/roughplastic.bmp)
+粗糙塑料模型即将塑料的电介质表层改为微表面。其漫反射项与塑料一致，只需在`getColor`函数中添加镜面反射项。镜面反射部分和粗糙导体实现方法相同。在BSDF采样中，等概率选择漫反射和镜面反射，概率密度函数取平均。
