@@ -42,9 +42,11 @@ public:
                     Vector3d::dot(woo, y),
                     Vector3d::dot(woo, n)),
                  wm, wi;
-        wm = GgxVndf(wo, alpha,
-                     sampler->sampleDouble(),
-                     sampler->sampleDouble());
+        do {
+            wm = GgxVndf(wo, alpha,
+                         sampler->sampleDouble(),
+                         sampler->sampleDouble());
+        } while (abs(Vector3d::dot(wm, wo)) < 1e-9);
         wi = 2 * Vector3d::dot(wm, wo) * wm - wo;
         wii = wi.x() * x + wi.y() * y + wi.z() * n;
         double pdf = Smith_G1(wi, wm, alpha)

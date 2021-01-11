@@ -54,9 +54,11 @@ public:
                     Vector3d::dot(woo, n)),
                  wm, wi;
         if (sampler->sampleDouble() < 0.5) {
-            wm = GgxVndf(wo, alpha,
-                         sampler->sampleDouble(),
-                         sampler->sampleDouble());
+            do {
+                wm = GgxVndf(wo, alpha,
+                             sampler->sampleDouble(),
+                             sampler->sampleDouble());
+            } while (abs(Vector3d::dot(wm, wo)) < 1e-9);
             wi = 2 * Vector3d::dot(wm, wo) * wm - wo;
             // pdf1
         } else {

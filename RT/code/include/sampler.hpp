@@ -40,6 +40,10 @@ public:
         return Vector2d(1 - u, erand48(Xi) * u);
     }
 
+    inline void printSeed() {
+        std::cerr << Xi[0] << " " << Xi[1] << " " << Xi[2] << "\n";
+    }
+
 private:
     unsigned short *Xi;
 };

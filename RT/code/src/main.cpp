@@ -115,24 +115,33 @@ int main(int argc, char *argv[]) {
 
     fprintf(stderr, "started rendering\n");
 
-    #pragma omp parallel for collapse(1) schedule(dynamic, 1) num_threads(110)
+    #pragma omp parallel for collapse(1) schedule(dynamic, 1)// num_threads(110)
     for (int y = 0; y < h; ++y) {
+    //for (int y = 611; y < 612; ++y) {
         unsigned short Xi[3] = {0, 0, (unsigned short) (y * y * y)};
+        //unsigned short Xi[3] = {(unsigned short)46927, (unsigned short)22477, (unsigned short)63627};
         Sampler* sampler = new Sampler(Xi);
         for (int x = 0; x < w; ++x) {
+        //for (int x = 2239; x < 2240; ++x) {
             Vector3d finalColor(0);
             for (int sy = -1; sy < 2; sy += 2)
                 for (int sx = -1; sx < 2; sx += 2) {
                     Vector3d r(0);
                     for (int s = 0; s < samps; ++s) {
-                        double r1 = 2 * erand48(Xi), dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
-                        double r2 = 2 * erand48(Xi), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
+                        double r1 = 2 * sampler->sampleDouble(), dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
+                        double r2 = 2 * sampler->sampleDouble(), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
                         Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + 0.5 * dx + 0.5, y + 0.25 * sy + 0.5 * dy + 0.5), sampler);
-                        r = r + rayTracing(camRay, sampler);
+                        Vector3d rt = rayTracing(camRay, sampler);
+                        //if (isnan(rt.x()) || isnan(rt.y()) || isnan(rt.z()))
+                        //    std::cerr << sx << " " << sy << " " << s << "\n";
+                        //r = r + rayTracing(camRay, sampler);
+                        r = r + rt;
                     }
                     r = r / samps;
                     finalColor = finalColor + Vector3d(clamp(r.x()), clamp(r.y()), clamp(r.z())) / 4;
                 }
+            if (isnan(finalColor.x()) || isnan(finalColor.y()) || isnan(finalColor.z()))
+                std::cerr << x << " " << y << " " << finalColor << "\n";
             renderedImg.SetPixel(x, y, gammaCorrection(finalColor, filmGamma));
         }
         delete sampler;
@@ -140,6 +149,18 @@ int main(int argc, char *argv[]) {
         double load = 1.0 * (y + 1) / h, t = omp_get_wtime() - timeStamp;
         fprintf(stderr, "%5.2lf%%\t\tUsed time: %5.2lf sec\t\tRemaining time: %5.2lf sec\n", 100 * load, t, t / load * (1 - load));
     }
+
+/*
+    unsigned short Xi[3] = {(unsigned short)24214, (unsigned short)62368, (unsigned short)39344};
+    Sampler* sampler = new Sampler(Xi);
+    int x = 2239, y = 611, sx = -1, sy = -1, s = 2172;
+    double r1 = 2 * sampler->sampleDouble(), dx = r1 < 1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
+    double r2 = 2 * sampler->sampleDouble(), dy = r2 < 1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
+    Ray camRay = camera->generateRay(Vector2d(x + 0.25 * sx + 0.5 * dx + 0.5, y + 0.25 * sy + 0.5 * dy + 0.5), sampler);
+    Vector3d rt = rayTracing(camRay, sampler);
+    std::cerr << rt << "\n";
+    delete sampler;
+*/
     renderedImg.SaveImage(argv[2]);
     fprintf(stderr, "finished rendering, time = %5.2lf sec\n", omp_get_wtime() - timeStamp);
     return 0;
