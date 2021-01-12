@@ -111,10 +111,10 @@ Vector3d GgxVndf(Vector3d wo, const double &roughness,
     const double &u1, const double &u2) {
         
     double ttt = 1;
-    /*if (wo.z() < 0) {
+    if (wo.z() < 0) {
         wo = Vector3d(wo.x(), wo.y(), -wo.z());
         ttt = -1;
-    }*/
+    }
     Vector3d v = Vector3d(wo.x() * roughness,
                           wo.y() * roughness,
                           wo.z()).normalized(),
